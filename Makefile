@@ -62,4 +62,4 @@ package-light: clean
 	zip -9r $(KERNEL_NAME) META-INF system ramdisk recovery boot.img tmp
 
 install: $(KERNEL_NAME)
-	adb push $(KERNEL_NAME) /storage/sdcard1/$(KERNEL_NAME)
+	adb push $(KERNEL_NAME) /external_sd/$(KERNEL_NAME)
