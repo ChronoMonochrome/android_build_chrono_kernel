@@ -3,8 +3,8 @@ current_dir = $(shell pwd)
 SOURCE = $(current_dir)/../android_kernel
 BUILD = $(current_dir)/../obj
 PACKAGE = $(current_dir)
-VERSION = 3.0
-KERNEL_NAME=chrono_kernel_r$(VERSION).zip
+VERSION = $(shell git -C ../android_kernel/ describe --tags --exact-match --match 'R[0-9]*')
+KERNEL_NAME=chrono_kernel_$(VERSION).zip
 CC = /media/chrono/AMV/linux/gcc_4.9/bin/arm-eabi-
 
 AUTOLOAD_LIST = bfq-iosched cpufreq_interactive cpufreq_zenx cpufreq_ondemandplus logger
