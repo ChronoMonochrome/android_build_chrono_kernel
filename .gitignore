@@ -1,6 +1,8 @@
 ramdisk/modules/*.ko
 ramdisk/modules/autoload/*.ko
+ramdisk/modules/autoload/place_holder
 system/lib/modules/*.ko
 system/lib/modules/autoload/*.ko
+system/lib/modules/autoload/place_holder
 boot.img
 *.zip

@@ -1,9 +1,9 @@
 current_dir = $(shell pwd)
 
-SOURCE = $(current_dir)/../android_kernel
-BUILD = $(current_dir)/../obj
+SOURCE = ../android_kernel
+BUILD = ../obj
 PACKAGE = $(current_dir)
-VERSION = $(shell git -C ../android_kernel/ describe --tags --match 'r[0-9]*')
+VERSION = $(shell git -C $(SOURCE) describe --tags --match 'r[0-9]*')
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
 ARM_CC = /media/chrono/AMV/linux/gcc_4.9/bin/arm-eabi-
 
