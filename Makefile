@@ -3,9 +3,9 @@ current_dir = $(shell pwd)
 SOURCE = $(current_dir)/../android_kernel
 BUILD = $(current_dir)/../obj
 PACKAGE = $(current_dir)
-VERSION = $(shell git -C ../android_kernel/ describe --tags --exact-match --match 'R[0-9]*')
+VERSION = $(shell git -C ../android_kernel/ describe --tags --match 'R[0-9]*')
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
-CC = /media/chrono/AMV/linux/gcc_4.9/bin/arm-eabi-
+ARM_CC = /media/chrono/AMV/linux/gcc_4.9/bin/arm-eabi-
 
 AUTOLOAD_LIST = bfq-iosched cpufreq_interactive cpufreq_zenx cpufreq_ondemandplus logger
 
@@ -18,7 +18,7 @@ codina-light: build package-light
 build: $(SOURCE)
 	-mkdir $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(CC) -k
+	make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) CC="ccache $(ARM_CC)gcc" -k
 
 clean:
 	rm -fr system/lib/modules/*
