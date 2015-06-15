@@ -1,0 +1,1 @@
+/dev/block/mmcblk0p5                    /data               f2fs      rw,discard,nosuid,nodev,noatime,nodiratime,flush_merge,background_gc=off,inline_xattr,active_logs=2                    wait,nonremovable,encryptable=/efs/metadata

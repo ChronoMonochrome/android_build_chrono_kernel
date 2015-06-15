@@ -1,0 +1,55 @@
+assert(getprop("ro.product.device") == "codina" || getprop("ro.build.product") == "codina" || 
+       getprop("ro.product.device") == "i8160" || getprop("ro.build.product") == "i8160" || 
+       getprop("ro.product.device") == "GT-I8160" || getprop("ro.build.product") == "GT-I8160" ||
+       getprop("ro.product.device") == "codinap" || getprop("ro.build.product") == "codinap" || 
+       getprop("ro.product.device") == "i8160P" || getprop("ro.build.product") == "i8160P" || 
+       getprop("ro.product.device") == "GT-I8160P" || getprop("ro.build.product") == "GT-I8160P" ||
+       abort("This package is for \"codina(p),i8160(P),GT-I8160(P)\" devices; this is a \"" + getprop("ro.product.device") + "\"."););
+run_program("/sbin/busybox", "mkdir", "/ramdisk");
+package_extract_dir("tmp", "/tmp");
+set_perm(0, 0, 0777, "/tmp/check_ramdisk_partition.sh");
+run_program("/tmp/check_ramdisk_partition.sh");
+ui_print("");
+ui_print("Chrono kernel for codina");
+ui_print("Based on stock CM kernel by Team Canjica");
+show_progress(0.050000, 0);
+ui_print("-> Mounting system...");
+run_program("/sbin/busybox","mount","/system");
+set_progress(0.100000);
+ui_print("-> Removing old modules...");
+run_program("/tmp/remove_modules.sh");
+set_progress(0.200000);
+ui_print("-> Extracting recovery folder...");
+package_extract_dir("recovery", "/tmp");
+set_progress(0.300000);
+ui_print("-> Extracting genfstab folder...");
+package_extract_dir("genfstab", "/tmp");
+set_progress(0.400000);
+ui_print("-> Extracting osfiles folder...");
+package_extract_dir("osfiles", "/tmp");
+set_progress(0.500000);
+set_perm_recursive(0, 0, 0777, 0777, "/tmp");
+ui_print("-> Extracting ramdisk folder...");
+set_progress(0.600000);
+package_extract_dir("ramdisk", "/ramdisk");
+set_progress(0.650000);
+ui_print("-> Extracting system folder...");
+package_extract_dir("system", "/system");
+set_progress(0.600000);
+ui_print("-> Setting permissions...");
+run_program("/sbin/chmod", "755", "/system/etc/init.d/00autoload");
+run_program("/sbin/chmod", "755", "/system/etc/init.d/12disable_tracing");
+run_program("/sbin/chmod", "644", "/system/lib/modules/autoload/*");
+ui_print("-> Generating fstab...");
+run_program("/tmp/genfstab.sh");
+set_progress(0.650000);
+ui_print("-> Installing OS files...");
+run_program("/tmp/osfiles_install.sh");
+set_progress(0.700000);
+run_program("/tmp/recovery_install.sh");
+set_progress(0.700000);
+ui_print("-> Flashing kernel");
+package_extract_file("boot.img","/dev/block/mmcblk0p15");
+set_progress(1.000000);
+unmount("/system");
+ui_print("Done :)")

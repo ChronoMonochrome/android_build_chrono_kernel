@@ -1,0 +1,6 @@
+ramdisk/modules/*.ko
+ramdisk/modules/autoload/*.ko
+system/lib/modules/*.ko
+system/lib/modules/autoload/*.ko
+boot.img
+*.zip
