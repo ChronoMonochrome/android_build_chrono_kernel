@@ -18,6 +18,7 @@ set -x
 
 FSTAB=/ramdisk/fstab
 
+# FIXME: use variable below instead of hardcoded value
 #F2FS_MAGIC=$'\x10\x20\xF5\xF2'
 
 # partition "pattern"
@@ -70,25 +71,28 @@ PART_FLAGS_F2FS=(
 OUTPUT=$FSTAB".tmp"
 rm -f $OUTPUT ; touch $OUTPUT
 
-# check whether we should add /preload partition to fstab file
-mount /system
-VERSION=$(cat /system/build.prop | grep "ro.build.version.release" | awk -F'=' '{print $2}')
-
-
 LEN=$(( ${#MNT_PT[@]} - 1 ))
 for i in $( seq 0 $LEN) 
 do
 
      NEW_PART[$i]=$( cat $FSTAB | grep -e "$PART_PTRN ${MNT_PT[$i]}" | awk '{print $1}' )
-     # use default partition scheme if there's problems with parsing existinf fstab file
+     # use default partition scheme if there's problems with parsing existing fstab file
 
      if [ -z ${NEW_PART[$i]} ] ; then
             NEW_PART[$i]="/dev/block/mmcblk0p${PART_NUM[$i]}"
-            #echo ${NEW_PART[$i]}
      fi
 
      dd if=${NEW_PART[$i]} of=/tmp/tmp count=1 bs=1036
      is_part_f2fs=$(grep -c $'\x10\x20\xF5\xF2' /tmp/tmp)  
+     if [ ${MNT_PT[$i]} == "/system" ] ; then
+          # check whether we should add /preload partition to fstab file
+          if [ $is_part_f2fs == 0 ] ; then
+                 mount -t ext4 ${NEW_PART[$i]} /system ;
+          else
+                 mount -t f2fs ${NEW_PART[$i]} /system
+          fi
+          VERSION=$(cat /system/build.prop | grep "ro.build.version.release" | awk -F'=' '{print $2}')
+     fi
 
      # skip /preload for non-stock ROMs
      if [ $VERSION != "4.1.2" ] && [ ${MNT_PT[$i]} == "/preload" ] ; then
@@ -106,7 +110,14 @@ done
 
 # vold-managed devices
 
-cat $FSTAB | grep -e "/devices/sdi[0-9]/mmc_host/mmc[0-9]/mmc[0-9]" >> $OUTPUT
+VOLD_DEV=$( cat $FSTAB | grep -e "/devices/sdi[0-9]/mmc_host/mmc[0-9]/mmc[0-9]" )
+
+if [ -z "$VOLD_DEV" ] ; then
+        echo "/devices/sdi2/mmc_host/mmc0/mmc0 auto auto defaults voldmanaged=sdcard0:8,nonremovable,noemulatedsd" >> $OUTPUT
+       echo "/devices/sdi0/mmc_host/mmc1/mmc1 auto auto defaults voldmanaged=sdcard1:auto" >> $OUTPUT
+else
+      echo $VOLD_DEV >> $OUTPUT ;
+fi
  
 # recovery
    
