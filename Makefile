@@ -3,8 +3,9 @@ current_dir = $(shell pwd)
 SOURCE = ../android_kernel
 BUILD = ../obj
 PACKAGE = $(current_dir)
-#VERSION = $(shell git -C $(SOURCE) describe --tags --match 'r[0-9]*')
-KERNEL_NAME=chrono_kernel_R3.0.1.zip
+
+VERSION = $(shell git -C $SOURCE describe --tags --exact-match --match 'R[0-9]*')
+KERNEL_NAME=chrono_kernel_$(VERSION).zip
 
 AUTOLOAD_LIST = bfq-iosched cpufreq_interactive cpufreq_zenx cpufreq_ondemandplus logger
 
