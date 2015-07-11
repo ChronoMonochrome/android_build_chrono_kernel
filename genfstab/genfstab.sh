@@ -1,4 +1,4 @@
-#!/sbin/sh
+#!/system/bin/sh
 
 # 
 # Copyright (c) 2015, Shilin Victor <chrono.monochrome@gmail.com>
@@ -110,13 +110,15 @@ done
 
 # vold-managed devices
 
-VOLD_DEV=$( cat $FSTAB | grep -e "/devices/sdi[0-9]/mmc_host/mmc[0-9]/mmc[0-9]" )
+VOLD_DEV0=$( cat $FSTAB | grep "/devices/sdi2/mmc_host/mmc0/mmc0" )
+VOLD_DEV1=$( cat $FSTAB | grep "/devices/sdi0/mmc_host/mmc1/mmc1" )
 
-if [ -z "$VOLD_DEV" ] ; then
-        echo "/devices/sdi2/mmc_host/mmc0/mmc0 auto auto defaults voldmanaged=sdcard0:8,nonremovable,noemulatedsd\n" >> $OUTPUT
+if [ -z "$VOLD_DEV0" ] || [ -z "$VOLD_DEV1" ] ; then
+        echo "/devices/sdi2/mmc_host/mmc0/mmc0 auto auto defaults voldmanaged=sdcard0:8,nonremovable,noemulatedsd" >> $OUTPUT
        echo "/devices/sdi0/mmc_host/mmc1/mmc1 auto auto defaults voldmanaged=sdcard1:auto" >> $OUTPUT
 else
-      echo $VOLD_DEV >> $OUTPUT ;
+      echo $VOLD_DEV0 >> $OUTPUT
+      echo $VOLD_DEV1 >> $OUTPUT
 fi
  
 # recovery
