@@ -113,7 +113,7 @@ done
 VOLD_DEV=$( cat $FSTAB | grep -e "/devices/sdi[0-9]/mmc_host/mmc[0-9]/mmc[0-9]" )
 
 if [ -z "$VOLD_DEV" ] ; then
-        echo "/devices/sdi2/mmc_host/mmc0/mmc0 auto auto defaults voldmanaged=sdcard0:8,nonremovable,noemulatedsd" >> $OUTPUT
+        echo "/devices/sdi2/mmc_host/mmc0/mmc0 auto auto defaults voldmanaged=sdcard0:8,nonremovable,noemulatedsd\n" >> $OUTPUT
        echo "/devices/sdi0/mmc_host/mmc1/mmc1 auto auto defaults voldmanaged=sdcard1:auto" >> $OUTPUT
 else
       echo $VOLD_DEV >> $OUTPUT ;
