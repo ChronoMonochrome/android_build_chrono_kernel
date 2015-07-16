@@ -19,7 +19,7 @@ codina-light: build package-light
 build: $(SOURCE)
 	-mkdir $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) -k -j2
+	make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) -k -j5
 
 clean:
 	rm -fr system/lib/modules/*
