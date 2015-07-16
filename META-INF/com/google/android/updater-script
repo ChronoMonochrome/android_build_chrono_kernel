@@ -38,7 +38,6 @@ package_extract_dir("system", "/system");
 set_progress(0.600000);
 ui_print("-> Setting permissions...");
 run_program("/sbin/chmod", "755", "/system/etc/init.d/00autoload");
-run_program("/sbin/chmod", "755", "/system/etc/init.d/12disable_tracing");
 run_program("/sbin/chmod", "644", "/system/lib/modules/autoload/*");
 ui_print("-> Generating fstab...");
 run_program("/tmp/genfstab.sh");

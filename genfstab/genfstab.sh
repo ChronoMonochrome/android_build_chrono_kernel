@@ -1,4 +1,4 @@
-#!/system/bin/sh
+#!/tmp/sh
 
 # 
 # Copyright (c) 2015, Shilin Victor <chrono.monochrome@gmail.com>
