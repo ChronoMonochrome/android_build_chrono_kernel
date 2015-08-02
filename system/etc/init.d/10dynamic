@@ -1,0 +1,43 @@
+#/system/bin/sh
+
+set -x
+
+curr_profile="performance"
+#curr_profile="default"
+
+profile_list=("default" "performance")
+input_boost_ms=( 100             250 )
+input_boost_freq=( 400000     600000 )
+oc_freq_boost_ms=( 1500         4000 )
+
+len=${#profile_list[@]}
+
+get_index()
+{
+
+    for i in $( seq 0 $len )
+    do
+        if [ "${profile_list[$i]}" == "$1" ] ; then
+             echo $i
+             return
+        fi
+    done
+
+    echo -1
+}
+
+set_profile()
+{
+    local index=$( get_index $1 )
+
+    if [ $index == -1 ] || [ $index -eq $len ] ; then
+         echo "wrong index, bailing out"
+         return
+    fi
+
+    echo ${input_boost_ms[$index]} > /sys/devices/system/cpu/cpufreq/dynamic/input_boost_ms
+    echo ${input_boost_freq[$index]} > /sys/devices/system/cpu/cpufreq/dynamic/input_boost_freq
+    echo ${oc_freq_boost_ms[$index]} > /sys/devices/system/cpu/cpufreq/dynamic/oc_freq_boost_ms
+}
+
+set_profile $curr_profile
