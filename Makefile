@@ -8,7 +8,7 @@ VERSION = $(shell git -C $(SOURCE) describe --tags --exact-match --match 'r[0-9]
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
 ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
 
-AUTOLOAD_LIST = bfq-iosched cpufreq_interactive cpufreq_zenx cpufreq_ondemandplus logger
+AUTOLOAD_LIST = bfq-iosched cpufreq_zenx cpufreq_ondemandplus logger
 
 all: codina
 
@@ -60,7 +60,7 @@ package-light: clean
 
 	rm -f $(KERNEL_NAME);
 
-	zip -9r $(KERNEL_NAME) META-INF system ramdisk recovery boot.img tmp
+	zip -9r $(KERNEL_NAME) META-INF system ramdisk boot.img tmp
 
 install: $(KERNEL_NAME)
 	adb push $(KERNEL_NAME) /storage/sdcard0/$(KERNEL_NAME)
