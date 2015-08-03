@@ -4,7 +4,10 @@ assert(getprop("ro.product.device") == "codina" || getprop("ro.build.product") =
        getprop("ro.product.device") == "codinap" || getprop("ro.build.product") == "codinap" || 
        getprop("ro.product.device") == "i8160P" || getprop("ro.build.product") == "i8160P" || 
        getprop("ro.product.device") == "GT-I8160P" || getprop("ro.build.product") == "GT-I8160P" ||
-       abort("This package is for \"codina(p),i8160(P),GT-I8160(P)\" devices; this is a \"" + getprop("ro.product.device") + "\"."););
+getprop("ro.product.device") == "codinal" || getprop("ro.build.product") == "codinal" || 
+       getprop("ro.product.device") == "i8160L" || getprop("ro.build.product") == "i8160L" || 
+       getprop("ro.product.device") == "GT-I8160L" || getprop("ro.build.product") == "GT-I8160L" ||
+       abort("This package is for \"codina/p/l,i8160/P/L,GT-I8160/P/L\" devices; this is a \"" + getprop("ro.product.device") + "\"."););
 run_program("/sbin/busybox", "mkdir", "/ramdisk");
 package_extract_dir("tmp", "/tmp");
 set_perm(0, 0, 0777, "/tmp/check_ramdisk_partition.sh");
@@ -28,11 +31,15 @@ set_progress(0.400000);
 ui_print("-> Extracting osfiles folder...");
 package_extract_dir("osfiles", "/tmp");
 set_progress(0.500000);
+ui_print("-> Extracting init.d folder...");
+package_extract_dir("init.d", "/tmp");
 set_perm_recursive(0, 0, 0777, 0777, "/tmp");
 ui_print("-> Extracting ramdisk folder...");
 set_progress(0.600000);
 package_extract_dir("ramdisk", "/ramdisk");
 set_progress(0.650000);
+run_program("/sbin/chmod", "755", "/ramdisk/00userinit");
+run_program("/sbin/chmod", "755", "/ramdisk/00recovery");
 ui_print("-> Extracting system folder...");
 package_extract_dir("system", "/system");
 set_progress(0.600000);
@@ -40,13 +47,17 @@ ui_print("-> Setting permissions...");
 run_program("/sbin/chmod", "755", "/system/etc/init.d/00autoload");
 run_program("/sbin/chmod", "644", "/system/lib/modules/autoload/*");
 ui_print("-> Generating fstab...");
-run_program("/tmp/genfstab.sh");
+run_program("/tmp/genfstab.sh", "/ramdisk/fstab");
+# TODO: recovery has its own genfstab
+run_program("/tmp/genfstab/genfstab.sh");
 set_progress(0.650000);
 ui_print("-> Installing OS files...");
 run_program("/tmp/osfiles_install.sh");
 set_progress(0.700000);
 run_program("/tmp/recovery_install.sh");
-set_progress(0.700000);
+set_progress(0.800000);
+run_program("/tmp/initd_install.sh");
+set_progress(0.900000);
 ui_print("-> Flashing kernel");
 package_extract_file("boot.img","/dev/block/mmcblk0p15");
 set_progress(1.000000);

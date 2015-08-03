@@ -43,7 +43,7 @@ package-full: clean
 
 	rm -f $(KERNEL_NAME);
 
-	zip -9r $(KERNEL_NAME) META-INF system ramdisk genfstab osfiles recovery boot.img tmp
+	zip -9r $(KERNEL_NAME) META-INF system ramdisk genfstab osfiles recovery boot.img tmp init.d
 
 package-light: clean
 	make -C $(SOURCE) O=$(BUILD) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
@@ -60,7 +60,7 @@ package-light: clean
 
 	rm -f $(KERNEL_NAME);
 
-	zip -9r $(KERNEL_NAME) META-INF system ramdisk boot.img tmp
+	zip -9r $(KERNEL_NAME) META-INF system ramdisk boot.img tmp init.d
 
 install: $(KERNEL_NAME)
 	adb push $(KERNEL_NAME) /storage/sdcard0/$(KERNEL_NAME)

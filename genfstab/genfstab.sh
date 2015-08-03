@@ -16,7 +16,7 @@
 
 set -x
 
-FSTAB=/ramdisk/fstab
+FSTAB=$1
 
 # FIXME: use variable below instead of hardcoded value
 #F2FS_MAGIC=$'\x10\x20\xF5\xF2'
