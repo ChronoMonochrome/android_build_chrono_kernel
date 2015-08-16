@@ -1,4 +1,4 @@
-#!/tmp/sh
+#!/sbin/sh
 
 set -x
 

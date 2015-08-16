@@ -6,7 +6,7 @@ PACKAGE = $(current_dir)
 
 VERSION = $(shell git -C $(SOURCE) describe --tags --exact-match --match 'r[0-9]*')
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
-ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
+ARM_CC = /media/chrono/AMV/linux/gcc_4.9/bin/arm-eabi-
 
 AUTOLOAD_LIST = bfq-iosched cpufreq_zenx cpufreq_ondemandplus logger
 
@@ -19,7 +19,7 @@ codina-light: build package-light
 build: $(SOURCE)
 	-mkdir $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) -k -j5
+	make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) -k
 
 clean:
 	rm -fr system/lib/modules/*

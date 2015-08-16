@@ -4,9 +4,9 @@ set -x
 
 if test -f /ramdisk/recovery.cpio.gz ; then
     # replace philz
-    if [ $(md5sum /ramdisk/recovery.cpio.gz | grep -c "643368bcd111612f8128e7e53170eff7" ) -eq 0 ] ; then
-     	exit
-    fi
+    #if [ $(md5sum /ramdisk/recovery.cpio.gz | grep -c "643368bcd111612f8128e7e53170eff7" ) -eq 0 ] ; then
+    # 	exit
+    #fi
 fi
 
 if  test -f /ramdisk/recovery.cpio ; then

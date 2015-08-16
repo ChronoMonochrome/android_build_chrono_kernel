@@ -1,4 +1,4 @@
-#!/tmp/sh
+#!/sbin/sh
 
 # 
 # Copyright (c) 2015, Shilin Victor <chrono.monochrome@gmail.com>
@@ -25,48 +25,46 @@ FSTAB=$1
 PART_PTRN="mmcblk[01]p[1-9]*[ \t]*"
 
 # mount points
-MNT_PT=("/system" "/cache" "/modemfs" "/efs" "/data" "/preload")
+MNT_PT[0]="/system" 
+MNT_PT[1]="/cache"
+MNT_PT[2]="/modemfs"
+MNT_PT[3]="/efs"
+MNT_PT[4]="/data" 
+MNT_PT[5]="/preload"
 
 # default partition scheme. Below only numbers - should match with order above. These only used if ones can't be read from existing fstab file.
-PART_NUM=(3 4 2 7 5 9)
+PART_NUM[0]=3 
+PART_NUM[1]=4 
+PART_NUM[2]=2 
+PART_NUM[3]=7 
+PART_NUM[4]=5 
+PART_NUM[5]=9
 
-PART_FLAGS_EXT4=(
 # system
-"ext4 ro,noatime,errors=panic wait"\ 
-
+PART_FLAGS_EXT4[0]="ext4 ro,noatime,errors=panic wait"
 # cache
-"ext4 noatime,nosuid,nodev,errors=panic wait,check"\ 
-
+PART_FLAGS_EXT4[1]="ext4 noatime,nosuid,nodev,errors=panic wait,check"
 # modemfs
-"ext4 noatime,nosuid,nodev,errors=panic                            wait,check"\ 
-
+PART_FLAGS_EXT4[2]="ext4 noatime,nosuid,nodev,errors=panic                            wait,check"
 # efs
-"ext4  noatime,nosuid,nodev,errors=panic                            wait,check"\
-
+PART_FLAGS_EXT4[3]="ext4  noatime,nosuid,nodev,errors=panic                            wait,check"
 # data
-"ext4 noatime,nosuid,nodev,discard,noauto_da_alloc,errors=panic wait,check,encryptable=/efs/metadata"\ 
-
+PART_FLAGS_EXT4[4]="ext4 noatime,nosuid,nodev,discard,noauto_da_alloc,errors=panic wait,check,encryptable=/efs/metadata"
 # preload
-"ext4 ro,noatime,errors=panic wait")
+PART_FLAGS_EXT4[5]="ext4 ro,noatime,errors=panic wait"
 
-PART_FLAGS_F2FS=(
 # system
-"f2fs ro wait"\ 
-
+PART_FLAGS_F2FS[0]="f2fs ro wait"
 # cache
-"f2fs rw,discard,nosuid,nodev,noatime,nodiratime,flush_merge,background_gc=off,inline_xattr,active_logs=2 wait "\ 
-
+PART_FLAGS_F2FS[1]="f2fs rw,discard,nosuid,nodev,noatime,nodiratime,flush_merge,background_gc=off,inline_xattr,active_logs=2 wait "
 # modemfs
-"f2fs noatime,nosuid,nodev,errors=panic                            wait,check"\ 
-
+PART_FLAGS_F2FS[2]="f2fs noatime,nosuid,nodev,errors=panic                            wait,check"
 # efs
-"f2fs noatime,nosuid,nodev,errors=panic                            wait,check"\ 
-
+PART_FLAGS_F2FS[3]="f2fs noatime,nosuid,nodev,errors=panic                            wait,check"
 # data
-"f2fs rw,discard,nosuid,nodev,noatime,nodiratime,flush_merge,background_gc=off,inline_xattr,active_logs=2 wait,nonremovable,encryptable=/efs/metadata"\ 
-
+PART_FLAGS_F2FS[4]="f2fs rw,discard,nosuid,nodev,noatime,nodiratime,flush_merge,background_gc=off,inline_xattr,active_logs=2 wait,nonremovable,encryptable=/efs/metadata"
 # preload
-"f2fs ro,noatime,errors=panic wait" )
+PART_FLAGS_F2FS[5]="f2fs ro,noatime,errors=panic wait"
 
 OUTPUT=$FSTAB".tmp"
 rm -f $OUTPUT ; touch $OUTPUT
