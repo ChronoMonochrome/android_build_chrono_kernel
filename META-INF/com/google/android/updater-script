@@ -47,9 +47,9 @@ ui_print("-> Setting permissions...");
 run_program("/sbin/chmod", "755", "/system/etc/init.d/00autoload");
 run_program("/sbin/chmod", "644", "/system/lib/modules/autoload/*");
 ui_print("-> Generating fstab...");
-run_program("/tmp/genfstab.sh", "/ramdisk/fstab");
+run_program("/tmp/genfstab");
 # TODO: recovery has its own genfstab
-run_program("/tmp/genfstab/genfstab.sh");
+run_program("/tmp/genfstab_twrp/genfstab.sh");
 set_progress(0.650000);
 ui_print("-> Installing OS files...");
 run_program("/tmp/osfiles_install.sh");
