@@ -7,7 +7,11 @@ PACKAGE = $(current_dir)
 VERSION = $(shell git -C $(SOURCE) describe --tags --exact-match --match 'r[0-9]*')
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
 #ARM_CC = /media/chrono/AMV/linux/gcc_4.9/bin/arm-eabi-
-ARM_CC = /media/chrono/Other/cross/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
+#ARM_CC = ../gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
+#ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_i686/bin/armv7a-linux-gnueabihf-
+ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-linaro-gcc-4.9.4/bin/armv7a-linux-gnueabihf-
+#ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
+#ARM_CC = ../gcc-linaro-4.9-2015.05-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 
 AUTOLOAD_LIST = bfq-iosched cpufreq_zenx cpufreq_ondemandplus logger
 
@@ -20,7 +24,7 @@ codina-light: build package-light
 build: $(SOURCE)
 	-mkdir $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) -k
+	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) -j5 -k
 
 clean:
 	rm -fr system/lib/modules/*
@@ -44,7 +48,7 @@ package-full: clean
 
 	rm -f $(KERNEL_NAME);
 
-	zip -9r $(KERNEL_NAME) META-INF system ramdisk genfstab osfiles recovery boot.img tmp init.d
+	zip -9r $(KERNEL_NAME) META-INF system ramdisk osfiles recovery boot.img tmp init.d
 
 package-light: clean
 	-make -C $(SOURCE) O=$(BUILD) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
@@ -69,3 +73,6 @@ modules:
 
 install: $(KERNEL_NAME)
 	adb push $(KERNEL_NAME) /storage/sdcard0/$(KERNEL_NAME)
+
+upload: $(KERNEL_NAME)
+	../../u.sh $(KERNEL_NAME)

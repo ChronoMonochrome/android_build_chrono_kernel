@@ -5,8 +5,16 @@ set -x
 mount /system
 
 DEVICE=$(cat /system/build.prop | grep "ro.product.device=" | cut -d "=" -f2)
+BUILD_ID=$(cat /system/build.prop | grep "ro.build.display.id=" | cut -d "=" -f2)
 DEV_SCRIPT="init.samsungcodina.rc"
 DEF_PROP="recovery_default.prop"
+
+# skip osfiles installation on omni
+IS_OMNI=$(echo $BUILD_ID | grep -c omni)
+
+if [ $IS_OMNI == 1 ] ; then
+	exit
+fi 
 
 VERSION_LINE=$(cat /system/build.prop | grep "ro.build.version.release" | cut -d "=" -f2)
 VX=$(echo $VERSION_LINE | cut -d "." -f1)
