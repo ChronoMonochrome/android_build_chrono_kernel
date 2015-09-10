@@ -3,10 +3,10 @@
 set -x
 
 if test -f /ramdisk/recovery.cpio.gz ; then
-    # replace twrp 2.8.6.0
-    if [ $(md5sum /ramdisk/recovery.cpio.gz | grep -c "db5e1c30dbf08f03a6156f1a9e39a760" ) -eq 0 ] ; then
-     	exit
-    fi
+    # replace philz
+    #if [ $(md5sum /ramdisk/recovery.cpio.gz | grep -c "643368bcd111612f8128e7e53170eff7" ) -eq 0 ] ; then
+    # 	exit
+    #fi
 fi
 
 if  test -f /ramdisk/recovery.cpio ; then

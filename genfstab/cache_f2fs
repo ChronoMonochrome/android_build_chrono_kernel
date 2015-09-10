@@ -1,0 +1,1 @@
+/dev/block/mmcblk0p4                    /cache              f2fs      rw,discard,nosuid,nodev,noatime,nodiratime,flush_merge,background_gc=off,inline_xattr,active_logs=2                                      wait

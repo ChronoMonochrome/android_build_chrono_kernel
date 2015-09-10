@@ -1,0 +1,1 @@
+ /dev/block/mmcblk0p3                    /system             ext4      ro,noatime,errors=panic                                                           wait
