@@ -40,7 +40,6 @@ package_extract_dir("ramdisk", "/ramdisk");
 set_progress(0.650000);
 run_program("/sbin/chmod", "755", "/ramdisk/00userinit");
 run_program("/sbin/chmod", "755", "/ramdisk/00recovery");
-run_program("/ramdisk/genfstab");
 ui_print("-> Extracting system folder...");
 package_extract_dir("system", "/system");
 set_progress(0.600000);

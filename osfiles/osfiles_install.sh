@@ -5,6 +5,15 @@ set -x
 mount /system
 
 DEVICE=$(cat /system/build.prop | grep "ro.product.device=" | cut -d "=" -f2)
+
+if [ "$DEVICE" == "GT-I8160" ] ; then
+        DEVICE=codina
+fi
+
+if [ "$DEVICE" == "GT-I8160P" ] ; then
+        DEVICE=codinap
+fi
+
 BUILD_ID=$(cat /system/build.prop | grep "ro.build.display.id=" | cut -d "=" -f2)
 DEV_SCRIPT="init.samsungcodina.rc"
 DEF_PROP="recovery_default.prop"
