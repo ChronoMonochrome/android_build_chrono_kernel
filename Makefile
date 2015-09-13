@@ -31,9 +31,11 @@ build: $(SOURCE)
 
 clean:
 	rm -fr system/lib/modules/*
-	mkdir system/lib/modules/autoload
+	mkdir -p system/lib/modules/autoload
+	touch system/lib/modules/autoload/.placeholder
 	rm -fr ramdisk/modules/*
-	mkdir ramdisk/modules/autoload
+	mkdir -p ramdisk/modules/autoload
+	touch system/lib/modules/autoload/.placeholder
 	rm -f boot.img
 	
 package-full: clean
