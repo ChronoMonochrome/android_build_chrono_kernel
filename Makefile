@@ -35,7 +35,7 @@ clean:
 	touch system/lib/modules/autoload/.placeholder
 	rm -fr ramdisk/modules/*
 	mkdir -p ramdisk/modules/autoload
-	touch system/lib/modules/autoload/.placeholder
+	touch ramdisk/modules/autoload/.placeholder
 	rm -f boot.img
 	
 package-full: clean
@@ -55,7 +55,7 @@ package-full: clean
 
 	rm -f $(KERNEL_NAME);
 
-	zip -9r $(KERNEL_NAME) META-INF system ramdisk osfiles recovery boot.img tmp init.d
+	zip -9r $(KERNEL_NAME) META-INF system genfstab ramdisk osfiles recovery boot.img tmp init.d
 
 package-light: clean
 	-make -C $(SOURCE) O=$(BUILD) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
