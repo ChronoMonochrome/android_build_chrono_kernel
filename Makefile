@@ -25,9 +25,9 @@ codina-light: build package-light
 build: $(SOURCE)
 	mkdir -p $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	git -C $(SOURCE) checkout 77be6cb arch/arm/crypto
+	-git -C $(SOURCE) checkout 77be6cb arch/arm/crypto/Makefile
 	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) -k
-	git -C $(SOURCE) checkout HEAD arch/arm/crypto
+	-git -C $(SOURCE) checkout HEAD arch/arm/crypto/Makefile
 
 clean:
 	rm -fr system/lib/modules/*
@@ -63,6 +63,9 @@ package-light: clean
 	rm -f $(PACKAGE)/system/lib/modules/ecryptfs.ko
 	cp -f $(PACKAGE)/system/lib/modules/param.ko $(PACKAGE)/ramdisk/modules/param.ko
 	cp -f $(PACKAGE)/system/lib/modules/j4fs.ko $(PACKAGE)/ramdisk/modules/j4fs.ko
+	cp -f $(PACKAGE)/system/lib/modules/exfat.ko $(PACKAGE)/ramdisk/modules/exfat.ko
+	cp -f $(PACKAGE)/system/lib/modules/f2fs.ko $(PACKAGE)/ramdisk/modules/f2fs.ko
+
 
 	$(foreach module,$(AUTOLOAD_LIST), \
 			mv $(PACKAGE)/system/lib/modules/$(module).ko \
