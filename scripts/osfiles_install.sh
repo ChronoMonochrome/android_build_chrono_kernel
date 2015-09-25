@@ -22,6 +22,7 @@ DEF_PROP="recovery_default.prop"
 IS_OMNI=$(echo $BUILD_ID | grep -c omni)
 
 if [ $IS_OMNI == 1 ] ; then
+	echo "Omni ROM has been detected, skip ramdisk installation" >> /tmp/kernel_log.txt
 	exit
 fi 
 

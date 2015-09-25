@@ -1,4 +1,4 @@
-#!sbin/sh
+#!/sbin/sh
 
 umount /ramdisk
 
