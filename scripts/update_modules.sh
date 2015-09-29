@@ -1,18 +1,27 @@
 #!/sbin/sh
 
-for i in $( ls /system/lib/modules/*.ko )
+set -x
+
+cd /ramdisk/modules/
+
+for i in $( ls *.ko )
 do
-	busybox rm $i
+	if ! test -f /system/lib/modules/$i ; then
+		busybox rm $i
+	else
+		busybox cp /system/lib/modules/$i $i
+	fi
 done
 
-for i in $( ls /ramdisk/modules/*.ko )
-do
-	busybox rm $i
-done
+cd autoload
 
-for i in $( ls /ramdisk/modules/autoload/*.ko )
+for i in $( ls *.ko )
 do
-        busybox rm $i
+	if ! test -f /system/lib/modules/$i ; then
+	      busybox rm $i
+	else
+          busybox cp /system/lib/modules/$i $i
+	fi
 done
 
 AUTOLOAD=/system/lib/modules/autoload

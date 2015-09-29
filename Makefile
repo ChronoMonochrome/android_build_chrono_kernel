@@ -9,12 +9,14 @@ KERNEL_NAME=chrono_kernel_$(VERSION).zip
 #ARM_CC = /media/chrono/AMV/linux/gcc_4.9/bin/arm-eabi-
 #ARM_CC = ../gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
 #ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_i686/bin/armv7a-linux-gnueabihf-
-ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-linaro-gcc-4.9.4/bin/armv7a-linux-gnueabihf-
+#ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-linaro-gcc-4.9.4/bin/armv7a-linux-gnueabihf-
 #ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
 #ARM_CC = ../gcc-linaro-4.9-2015.05-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 #ARM_CC = /media/chrono/Other/cross/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
+ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_isl_bin/bin/armv7a-linux-gnueabihf-
 
-AUTOLOAD_LIST = bfq-iosched cpufreq_zenx cpufreq_ondemandplus logger
+AUTOLOAD_LIST = bfq-iosched cpufreq_zenx cpufreq_ondemandplus logger 
+#lowmemorykiller_sony
 
 all: codina
 
@@ -48,7 +50,7 @@ package-full: clean
 	cp -f $(PACKAGE)/system/lib/modules/f2fs.ko $(PACKAGE)/ramdisk/modules/f2fs.ko
 
 	$(foreach module,$(AUTOLOAD_LIST), \
-			mv $(PACKAGE)/system/lib/modules/$(module).ko \
+			cp $(PACKAGE)/system/lib/modules/$(module).ko \
 			 $(PACKAGE)/ramdisk/modules/autoload/$(module).ko;)
 
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
@@ -75,7 +77,8 @@ package-light: clean
 
 	rm -f $(KERNEL_NAME);
 
-	zip -9r $(KERNEL_NAME) META-INF system ramdisk boot.img scripts init.d
+	zip -9r $(KERNEL_NAME) META-INF system ramdisk boot.img scripts/main.sh \
+		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
 modules:
 	-make -C $(SOURCE) O=$(BUILD) CROSS_COMPILE=$(ARM_CC) modules

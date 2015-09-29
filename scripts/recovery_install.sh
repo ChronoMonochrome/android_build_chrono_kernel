@@ -2,12 +2,7 @@
 
 set -x
 
-if test -f /ramdisk/twrp.fstab ; then
-	fstab=$(cat /ramdisk/twrp.fstab)
-	if [ "$fstab" == "" ] ; then 
-		cp /tmp/twrp.fstab /ramdisk/twrp.fstab
-	fi
-fi
+cp /tmp/twrp.fstab /ramdisk/twrp.fstab
 
 if test -f /ramdisk/recovery.cpio.gz ; then
 	exit

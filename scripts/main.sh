@@ -73,10 +73,16 @@ if [ "$1" == "check_ramdisk_partition" ] ; then
     logged_execute /tmp/check_ramdisk_partition.sh
 fi
 
+if [ "$1" == "remove_modules" ] ; then
+    echo "Removing old modules..." >> /tmp/kernel_log.txt
+    #ui_print "Removing old modules..."
+    logged_execute /tmp/remove_modules.sh
+fi
+
 if [ "$1" == "update_modules" ] ; then
     echo "Updating modules..." >> /tmp/kernel_log.txt
-    ui_print "Updating modules..."
-    logged_execute /tmp/check_ramdisk_partition.sh
+    #ui_print "Updating modules..."
+    logged_execute /tmp/update_modules.sh
 fi
 
 if [ "$1" == "fstab" ] ; then
