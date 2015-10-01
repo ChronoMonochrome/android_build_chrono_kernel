@@ -1,7 +1,7 @@
 current_dir = $(shell pwd)
 
 SOURCE = ../chrono_kernel
-BUILD = ../obj
+BUILD = ../obj_janice
 PACKAGE = $(current_dir)
 
 VERSION = $(shell git -C $(SOURCE) describe --tags --exact-match --match 'r[0-9]*')
