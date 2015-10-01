@@ -13,20 +13,20 @@ KERNEL_NAME=chrono_kernel_$(VERSION).zip
 #ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
 #ARM_CC = ../gcc-linaro-4.9-2015.05-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 #ARM_CC = /media/chrono/Other/cross/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
-ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_isl_bin/bin/armv7a-linux-gnueabihf-
+ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnueabihf-
 
 AUTOLOAD_LIST = bfq-iosched cpufreq_zenx cpufreq_ondemandplus logger 
 #lowmemorykiller_sony
 
-all: codina
+all: janice
 
-codina: build package-full
+janice: build package-full
 
-codina-light: build package-light
+janice-light: build package-light
 
 build: $(SOURCE)
 	mkdir -p $(BUILD);
-	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
+	make -C $(SOURCE) O=$(BUILD) ARCH=arm janice_defconfig
 	-git -C $(SOURCE) checkout 77be6cb arch/arm/crypto/Makefile
 	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) -j5 -k
 	-git -C $(SOURCE) checkout HEAD arch/arm/crypto/Makefile
