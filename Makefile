@@ -4,16 +4,17 @@ SOURCE = ../chrono_kernel
 BUILD = ../obj
 PACKAGE = $(current_dir)
 
-VERSION = $(shell git -C $(SOURCE) describe --tags --exact-match --match 'r[0-9]*')
-KERNEL_NAME=chrono_kernel_$(VERSION).zip
-#ARM_CC = /media/chrono/AMV/linux/gcc_4.9/bin/arm-eabi-
-#ARM_CC = ../gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
 #ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_i686/bin/armv7a-linux-gnueabihf-
-#ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-linaro-gcc-4.9.4/bin/armv7a-linux-gnueabihf-
-#ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
-#ARM_CC = ../gcc-linaro-4.9-2015.05-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 #ARM_CC = /media/chrono/Other/cross/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
-ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_isl_bin/bin/armv7a-linux-gnueabihf-
+#ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnueabihf-
+ARM_CC = ../LinaroMod-arm-eabi-5.1/bin/arm-eabi-
+
+VERSION=$(shell git -C $(SOURCE) describe --tags --exact-match --match 'r[0-9]*')
+ifeq ("$(VERSION)", "")
+   VERSION=$(shell git -C $(SOURCE) tag | grep "r3" | tail -n 1 )
+endif
+KERNEL_NAME=chrono_kernel_$(VERSION).zip
+
 
 AUTOLOAD_LIST = bfq-iosched cpufreq_zenx cpufreq_ondemandplus logger 
 #lowmemorykiller_sony
