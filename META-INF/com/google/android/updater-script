@@ -40,6 +40,7 @@ package_extract_dir("ramdisk", "/ramdisk");
 set_progress(0.550000);
 run_program("/sbin/chmod", "755", "/ramdisk/00userinit");
 run_program("/sbin/chmod", "755", "/ramdisk/00recovery");
+run_program("/sbin/chmod", "755", "/ramdisk/00lpm");
 ui_print("-> Removing old modules...");
 run_program("/tmp/main.sh", "remove_modules");
 ui_print("-> Extracting system folder...");
