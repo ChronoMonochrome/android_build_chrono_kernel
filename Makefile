@@ -18,9 +18,10 @@ ifeq ("$(VERSION)", "")
 endif
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
 KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-nodebug.zip
+KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
 AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger 
-#lowmemorykiller_sony
+SYSTEM_MODULE_LIST = param j4fs exfat f2fs startup_reason display-ws2401_dpi display-s6d27a1_dpi
 
 all: codina upload codina-nodebug upload-nodebug
 
@@ -29,6 +30,12 @@ codina: build package-full
 codina-light: build-light package-light
 codina-nodebug: build-nodebug package-full-nodebug
 codina-nodebug-light: build-light-nodebug package-light-nodebug
+codina-private: update-private-config build-private package-private
+
+update-private-config: $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig
+	cp $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig $(SOURCE)/arch/arm/configs/private_defconfig
+	sed -ie "s,CONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MIN=[0-9]*,# bootup min freq\nCONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MIN=1200000," $(SOURCE)/arch/arm/configs/private_defconfig
+	sed -ie "s,CONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MAX=[0-9]*,# bootup max freq\nCONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MAX=1200000," $(SOURCE)/arch/arm/configs/private_defconfig
 
 build-light: $(SOURCE)
 	mkdir -p $(BUILD);
@@ -39,6 +46,12 @@ build-light-nodebug: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm codina_nodebug_defconfig
 	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC) -j5 -k
+
+build-private: $(SOURCE)
+	mkdir -p $(BUILD_NODEBUG);
+	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm private_defconfig
+	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC) -j5 -k
+
 
 build: $(SOURCE)
 	mkdir -p $(BUILD);
@@ -59,96 +72,50 @@ clean:
 	touch ramdisk/modules/autoload/.placeholder
 	rm -f boot.img
 	
-package-full: clean
+
+modules-install:
 	-make -C $(SOURCE) O=$(BUILD) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
 
-	rm -f $(PACKAGE)/system/lib/modules/ecryptfs.ko
-	cp -f $(PACKAGE)/system/lib/modules/param.ko $(PACKAGE)/ramdisk/modules/param.ko
-	cp -f $(PACKAGE)/system/lib/modules/j4fs.ko $(PACKAGE)/ramdisk/modules/j4fs.ko
-	cp -f $(PACKAGE)/system/lib/modules/exfat.ko $(PACKAGE)/ramdisk/modules/exfat.ko
-	cp -f $(PACKAGE)/system/lib/modules/f2fs.ko $(PACKAGE)/ramdisk/modules/f2fs.ko
-	#cp -f $(PACKAGE)/system/lib/modules/tmd2672.ko $(PACKAGE)/ramdisk/modules/tmd2672.ko
-	cp -f $(PACKAGE)/system/lib/modules/startup_reason.ko $(PACKAGE)/ramdisk/modules/startup_reason.ko
-	cp -f $(PACKAGE)/system/lib/modules/display-ws2401_dpi.ko $(PACKAGE)/ramdisk/modules/display-ws2401_dpi.ko
-	cp -f $(PACKAGE)/system/lib/modules/display-s6d27a1_dpi.ko $(PACKAGE)/ramdisk/modules/display-s6d27a1_dpi.ko
-
-	$(foreach module,$(AUTOLOAD_LIST), \
-			cp $(PACKAGE)/system/lib/modules/$(module).ko \
-			 $(PACKAGE)/ramdisk/modules/autoload/$(module).ko;)
-
-	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
-
-	rm -f $(KERNEL_NAME);
-
-	zip -9r $(KERNEL_NAME) META-INF system genfstab ramdisk osfiles recovery boot.img scripts init.d
-
-package-full-nodebug: clean
+modules-install-nodebug:
 	-make -C $(SOURCE) O=$(BUILD_NODEBUG) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
 
-	rm -f $(PACKAGE)/system/lib/modules/ecryptfs.ko
-	cp -f $(PACKAGE)/system/lib/modules/param.ko $(PACKAGE)/ramdisk/modules/param.ko
-	cp -f $(PACKAGE)/system/lib/modules/j4fs.ko $(PACKAGE)/ramdisk/modules/j4fs.ko
-	cp -f $(PACKAGE)/system/lib/modules/exfat.ko $(PACKAGE)/ramdisk/modules/exfat.ko
-	cp -f $(PACKAGE)/system/lib/modules/f2fs.ko $(PACKAGE)/ramdisk/modules/f2fs.ko
-	#cp -f $(PACKAGE)/system/lib/modules/tmd2672.ko $(PACKAGE)/ramdisk/modules/tmd2672.ko
-	cp -f $(PACKAGE)/system/lib/modules/startup_reason.ko $(PACKAGE)/ramdisk/modules/startup_reason.ko
-	cp -f $(PACKAGE)/system/lib/modules/display-ws2401_dpi.ko $(PACKAGE)/ramdisk/modules/display-ws2401_dpi.ko
-	cp -f $(PACKAGE)/system/lib/modules/display-s6d27a1_dpi.ko $(PACKAGE)/ramdisk/modules/display-s6d27a1_dpi.ko
+package-modules:
+	$(foreach module,$(SYSTEM_MODULE_LIST), \
+                        cp $(PACKAGE)/system/lib/modules/$(module).ko \
+                         $(PACKAGE)/ramdisk/modules/$(module).ko;)
 
 	$(foreach module,$(AUTOLOAD_LIST), \
-			cp $(PACKAGE)/system/lib/modules/$(module).ko \
-			 $(PACKAGE)/ramdisk/modules/autoload/$(module).ko;)
+                        cp $(PACKAGE)/system/lib/modules/$(module).ko \
+                         $(PACKAGE)/ramdisk/modules/autoload/$(module).ko;)
 
-	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
-
+package-full: clean modules-install-full package-modules
+	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
+	zip -9r $(KERNEL_NAME) META-INF system genfstab ramdisk osfiles recovery boot.img scripts init.d
 
+
+package-full-nodebug: clean modules-install-nodebug package-modules
+	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
+	rm -f $(KERNEL_NAME);
 	zip -9r $(KERNEL_NAME_NODEBUG) META-INF system genfstab ramdisk osfiles recovery boot.img scripts init.d
 
-package-light: clean
-	-make -C $(SOURCE) O=$(BUILD) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
-
-	rm -f $(PACKAGE)/system/lib/modules/ecryptfs.ko
-	cp -f $(PACKAGE)/system/lib/modules/param.ko $(PACKAGE)/ramdisk/modules/param.ko
-	cp -f $(PACKAGE)/system/lib/modules/j4fs.ko $(PACKAGE)/ramdisk/modules/j4fs.ko
-	cp -f $(PACKAGE)/system/lib/modules/exfat.ko $(PACKAGE)/ramdisk/modules/exfat.ko
-	cp -f $(PACKAGE)/system/lib/modules/f2fs.ko $(PACKAGE)/ramdisk/modules/f2fs.ko
-
-	$(foreach module,$(AUTOLOAD_LIST), \
-			mv $(PACKAGE)/system/lib/modules/$(module).ko \
-			 $(PACKAGE)/ramdisk/modules/autoload/$(module).ko;)
-
+package-light: clean modules-install-full package-modules
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
-
 	rm -f $(KERNEL_NAME);
-
 	zip -9r $(KERNEL_NAME) META-INF system ramdisk boot.img scripts/main.sh \
 		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
 
-package-light-nodebug: clean
-	-make -C $(SOURCE) O=$(BUILD_NODEBUG) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
-
-	rm -f $(PACKAGE)/system/lib/modules/ecryptfs.ko
-	cp -f $(PACKAGE)/system/lib/modules/param.ko $(PACKAGE)/ramdisk/modules/param.ko
-	cp -f $(PACKAGE)/system/lib/modules/j4fs.ko $(PACKAGE)/ramdisk/modules/j4fs.ko
-	cp -f $(PACKAGE)/system/lib/modules/exfat.ko $(PACKAGE)/ramdisk/modules/exfat.ko
-	cp -f $(PACKAGE)/system/lib/modules/f2fs.ko $(PACKAGE)/ramdisk/modules/f2fs.ko
-	#cp -f $(PACKAGE)/system/lib/modules/tmd2672.ko $(PACKAGE)/ramdisk/modules/tmd2672.ko
-	cp -f $(PACKAGE)/system/lib/modules/startup_reason.ko $(PACKAGE)/ramdisk/modules/startup_reason.ko
-	cp -f $(PACKAGE)/system/lib/modules/display-ws2401_dpi.ko $(PACKAGE)/ramdisk/modules/display-ws2401_dpi.ko
-	cp -f $(PACKAGE)/system/lib/modules/display-s6d27a1_dpi.ko $(PACKAGE)/ramdisk/modules/display-s6d27a1_dpi.ko
-
-
-	$(foreach module,$(AUTOLOAD_LIST), \
-			mv $(PACKAGE)/system/lib/modules/$(module).ko \
-			 $(PACKAGE)/ramdisk/modules/autoload/$(module).ko;)
-
+package-light-nodebug: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
-
 	rm -f $(KERNEL_NAME_NODEBUG);
-
 	zip -9r $(KERNEL_NAME_NODEBUG) META-INF system ramdisk boot.img scripts/main.sh \
+		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+
+package-private: clean modules-install-nodebug package-modules
+	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
+	rm -f $(KERNEL_NAME_PRIVATE);
+	zip -9r $(KERNEL_NAME_PRIVATE) META-INF system ramdisk boot.img scripts/main.sh \
 		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
 modules:
@@ -169,3 +136,5 @@ upload: $(KERNEL_NAME)
 upload-nodebug: $(KERNEL_NAME_NODEBUG)
 	../../u.sh $(KERNEL_NAME_NODEBUG)
 
+upload-private: $(KERNEL_NAME_PRIVATE)
+	../../u.sh $(KERNEL_NAME_PRIVATE)
