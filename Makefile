@@ -99,7 +99,7 @@ package-full-nodebug: clean modules-install-nodebug package-modules
 	rm -f $(KERNEL_NAME);
 	zip -9r $(KERNEL_NAME_NODEBUG) META-INF system genfstab ramdisk osfiles recovery boot.img scripts init.d
 
-package-light: clean modules-install-full package-modules
+package-light: clean modules-install package-modules
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
 	zip -9r $(KERNEL_NAME) META-INF system ramdisk boot.img scripts/main.sh \
