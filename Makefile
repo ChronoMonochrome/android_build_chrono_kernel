@@ -20,7 +20,7 @@ KERNEL_NAME=chrono_kernel_$(VERSION).zip
 KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-nodebug.zip
 KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
-AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger 
+AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger zram pn544
 SYSTEM_MODULE_LIST = param j4fs exfat f2fs startup_reason display-ws2401_dpi display-s6d27a1_dpi
 
 all: codina upload codina-nodebug upload-nodebug
