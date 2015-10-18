@@ -7,9 +7,10 @@ PACKAGE = $(current_dir)
 
 #ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_i686/bin/armv7a-linux-gnueabihf-
 #ARM_CC = /media/chrono/Other/cross/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
-ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnueabihf-
+#ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnueabihf-
 #ARM_CC = ../LinaroMod-arm-eabi-5.1/bin/arm-eabi-
 #ARM_CC = ../arm-cortex_a9-linux-gnueabihf-linaro_4.9.4-2015.06/bin/arm-eabi-
+ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
 
 VERSION=$(shell git -C $(SOURCE) describe --tags --exact-match --match 'r[0-9]*')
 ifeq ("$(VERSION)", "")
@@ -40,28 +41,28 @@ update-private-config: $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig
 build-light: $(SOURCE)
 	mkdir -p $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) -j5 -k
+	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -k
 
 build-light-nodebug: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm codina_nodebug_defconfig
-	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC) -j5 -k
+	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -k
 
 build-private: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm private_defconfig
-	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC) -j5 -k
+	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -k
 
 
 build: $(SOURCE)
 	mkdir -p $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC) -j5 -k
+	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -k
 
 build-nodebug: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm codina_nodebug_defconfig
-	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC) -j5 -k
+	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -k
 
 clean:
 	rm -fr system/lib/modules/*
@@ -128,7 +129,10 @@ modules_nodebug:
 
 
 install: $(KERNEL_NAME)
-	adb push $(KERNEL_NAME) /storage/sdcard0/$(KERNEL_NAME)
+	adb push $(KERNEL_NAME) /storage/sdcard0/
+
+install-private: $(KERNEL_NAME_PRIVATE)
+	adb push $(KERNEL_NAME_PRIVATE) /storage/sdcard0/
 
 upload: $(KERNEL_NAME)
 	../../u.sh $(KERNEL_NAME)
