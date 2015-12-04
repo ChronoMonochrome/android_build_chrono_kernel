@@ -17,3 +17,5 @@ mount -o remount /system
 
 install_if_not_exists 00autoload
 install_if_not_exists 10dynamic
+cp /tmp/60zram /system/etc/init.d/60zram
+chmod 755 /system/etc/init.d/60zram

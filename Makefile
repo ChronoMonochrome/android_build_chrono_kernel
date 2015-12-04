@@ -1,16 +1,16 @@
 current_dir = $(shell pwd)
 
-SOURCE = ../chrono_kernel
+SOURCE = ../ck
 BUILD = ../obj
 BUILD_NODEBUG=../obj_nodebug
 PACKAGE = $(current_dir)
 
 #ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_i686/bin/armv7a-linux-gnueabihf-
 #ARM_CC = /media/chrono/Other/cross/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
-#ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnueabihf-
+ARM_CC = ../armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnueabihf-
 #ARM_CC = ../LinaroMod-arm-eabi-5.1/bin/arm-eabi-
 #ARM_CC = ../arm-cortex_a9-linux-gnueabihf-linaro_4.9.4-2015.06/bin/arm-eabi-
-ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
+#ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
 
 VERSION=$(shell git -C $(SOURCE) describe --tags --exact-match --match 'r[0-9]*')
 ifeq ("$(VERSION)", "")
@@ -21,7 +21,7 @@ KERNEL_NAME=chrono_kernel_$(VERSION).zip
 KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-nodebug.zip
 KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
-AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger zram pn544
+AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544
 SYSTEM_MODULE_LIST = param j4fs exfat f2fs startup_reason display-ws2401_dpi display-s6d27a1_dpi
 
 all: codina upload codina-nodebug upload-nodebug
@@ -41,28 +41,28 @@ update-private-config: $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig
 build-light: $(SOURCE)
 	mkdir -p $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -k
+	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j1 -k
 
 build-light-nodebug: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm codina_nodebug_defconfig
-	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -k
+	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j1 -k
 
 build-private: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm private_defconfig
-	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -k
+	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j1 -k
 
 
 build: $(SOURCE)
 	mkdir -p $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -k
+	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j1 -k
 
 build-nodebug: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm codina_nodebug_defconfig
-	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -k
+	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j1 -k
 
 clean:
 	rm -fr system/lib/modules/*
@@ -135,10 +135,10 @@ install-private: $(KERNEL_NAME_PRIVATE)
 	adb push $(KERNEL_NAME_PRIVATE) /storage/sdcard0/
 
 upload: $(KERNEL_NAME)
-	../../u.sh $(KERNEL_NAME)
+	u $(KERNEL_NAME)
 
 upload-nodebug: $(KERNEL_NAME_NODEBUG)
-	../../u.sh $(KERNEL_NAME_NODEBUG)
+	u $(KERNEL_NAME_NODEBUG)
 
 upload-private: $(KERNEL_NAME_PRIVATE)
-	../../u.sh $(KERNEL_NAME_PRIVATE)
+	u $(KERNEL_NAME_PRIVATE)

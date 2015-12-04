@@ -4,6 +4,9 @@ set -x
 
 cd /ramdisk/modules/
 
+rm -f /ramdisk/modules/zram.ko
+rm -f /ramdisk/modules/autoload/zram.ko
+
 for i in $( ls *.ko )
 do
 	if ! test -f /system/lib/modules/$i ; then
