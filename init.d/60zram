@@ -1,0 +1,21 @@
+set -x
+
+SIZE=600
+echo 1 > /sys/module/zram_num_devices_ctl/parameters/zram_num_devices
+echo 0 > /proc/sys/vm/page-cluster
+echo 100 > /proc/sys/vm/swappiness 
+
+
+if test -d /sys/module/zram; then
+       echo "Error: module zram already loaded!"
+       exit;
+fi
+
+insmod /system/lib/modules/zram.ko
+
+echo $(( $SIZE * 1024 * 1024 )) > /sys/devices/virtual/block/zram0/disksize 
+
+echo 2 > /sys/devices/virtual/block/zram0/max_comp_streams
+
+mkswap /dev/block/zram0 
+swapon /dev/block/zram0
