@@ -1,6 +1,6 @@
 current_dir = $(shell pwd)
 
-SOURCE = ../ck
+SOURCE = ../k
 BUILD = ../obj
 BUILD_NODEBUG=../obj_nodebug
 PACKAGE = $(current_dir)
@@ -14,7 +14,7 @@ ARM_CC = ../armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnuea
 
 VERSION=$(shell git -C $(SOURCE) describe --tags --exact-match --match 'r[0-9]*')
 ifeq ("$(VERSION)", "")
-   VERSION=$(shell git -C $(SOURCE) tag | grep "r3" | tail -n 1 )
+   VERSION=$(shell git -C $(SOURCE) tag | grep "r3.1" | tail -n 1 )
    OUT=$(shell git -C $(SOURCE) tag $(VERSION) -f )
 endif
 KERNEL_NAME=chrono_kernel_$(VERSION).zip

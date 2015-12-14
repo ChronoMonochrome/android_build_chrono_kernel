@@ -1,6 +1,8 @@
-chmod 0644 /sys/module/lowmemorykiller/parameters/adj
+chmod 0644 /sys/module/lowmemorykiller/parameters/adj 
 echo "0,3,6,10,12,15" > /sys/module/lowmemorykiller/parameters/adj
-chmod 0644 /sys/module/lowmemorykiller/parameters/minfre
-echo "512,1024,4096,7280,8244,9040" > /sys/module/lowmemorykiller/parameters/minfree; 
-chmod 0444 /sys/module/lowmemorykiller/parameters/adj
+
+chmod 0644 /sys/module/lowmemorykiller/parameters/minfree
+echo "1024,3048,8120,12280,14244,17040" > /sys/module/lowmemorykiller/parameters/minfree;
+
+chmod 0444 /sys/module/lowmemorykiller/parameters/adj 
 chmod 0444 /sys/module/lowmemorykiller/parameters/minfree
