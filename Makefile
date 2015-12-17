@@ -4,6 +4,7 @@ SOURCE = ../k
 BUILD = ../obj
 BUILD_NODEBUG=../obj_nodebug
 BUILD_SELINUX=../obj_selinux
+BUILD_CM13=../obj_cm13
 
 PACKAGE = $(current_dir)
 
@@ -22,6 +23,7 @@ endif
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
 KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-nodebug.zip
 KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip
+KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-cm13.zip
 KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
 AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544
@@ -35,6 +37,8 @@ codina-nodebug: build-nodebug package-full-nodebug
 codina-nodebug-light: build-nodebug package-light-nodebug
 codina-selinux: build-selinux package-full-selinux
 codina-selinux-light: build-selinux package-light-selinux
+codina-cm13: build-cm13 package-full-cm13
+codina-cm13: build-cm13 package-light-cm13
 codina-private: update-private-config build-private package-private
 
 update-private-config: $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig
@@ -61,6 +65,11 @@ build-selinux: $(SOURCE)
 	mkdir -p $(BUILD_SELINUX);
 	make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm codina_selinux_defconfig
 	-make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j1 -k
+
+build-cm13: $(SOURCE)
+	mkdir -p $(BUILD_CM13);
+	make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm codina_cm13_defconfig
+	-make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j1 -k
 
 clean:
 	rm -fr system/lib/modules/*
@@ -97,6 +106,11 @@ package-full-selinux: clean modules-install package-modules
 	rm -f $(KERNEL_NAME_SELINUX);
 	zip -9r $(KERNEL_NAME_SELINUX) META-INF system genfstab ramdisk osfiles recovery boot.img scripts init.d
 
+package-full-cm13: clean modules-install package-modules
+	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
+	rm -f $(KERNEL_NAME_CM13);
+	zip -9r $(KERNEL_NAME_CM13) META-INF system genfstab ramdisk osfiles recovery boot.img scripts init.d
+
 package-full-nodebug: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
@@ -118,6 +132,12 @@ package-light-selinux: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_SELINUX)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_SELINUX);
 	zip -9r $(KERNEL_NAME_SELINUX) META-INF system ramdisk boot.img scripts/main.sh \
+		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+
+package-light-cm13: clean modules-install-nodebug package-modules
+	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
+	rm -f $(KERNEL_NAME_CM13);
+	zip -9r $(KERNEL_NAME_CM13) META-INF system ramdisk boot.img scripts/main.sh \
 		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
 package-private: clean modules-install-nodebug package-modules
@@ -149,6 +169,9 @@ upload-nodebug: $(KERNEL_NAME_NODEBUG)
 
 upload-selinux: $(KERNEL_NAME_SELINUX)
 	u $(KERNEL_NAME_SELINUX)
+
+upload-cm13: $(KERNEL_NAME_CM13)
+	u $(KERNEL_NAME_CM13)
 
 upload-private: $(KERNEL_NAME_PRIVATE)
 	u $(KERNEL_NAME_PRIVATE)
