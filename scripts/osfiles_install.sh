@@ -34,6 +34,15 @@ ramdisk_path="/tmp/"
 os=""
 dev_files="/tmp/"$DEVICE
 
+if [ $VX == 6 ] ; then
+	if [ $VY == 0 ] ; then
+		echo "6.0"
+		os="6.0.x"
+        fi
+
+	ramdisk_path=/tmp/$os/$os.cpio.gz
+fi
+
 if [ $VX == 5 ] ; then
 	if [ $VY == 0 ] ; then
 		echo "5.0"
