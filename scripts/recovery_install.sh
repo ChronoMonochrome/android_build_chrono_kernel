@@ -12,4 +12,7 @@ if  test -f /ramdisk/recovery.cpio ; then
 	exit
 fi
 
+cd /tmp
+gzip -9r recovery.cpio.gz recovery.cpio
+rm /tmp/recovery.cpio
 cp /tmp/recovery.cpio.gz /ramdisk/recovery.cpio.gz
