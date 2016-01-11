@@ -113,9 +113,7 @@ if [ $VX == 4 ] ; then
 	fi
 fi
 
-if test -f /ramdisk/boot.cpio.bak ; then
-	rm /ramdisk/boot.cpio.bak
-fi
+rm -f /ramdisk/boot.cpio.bak
 
 #if test -f /ramdisk/boot.cpio ; then
 #	mv -f /ramdisk/boot.cpio /ramdisk/boot.cpio.bak
@@ -125,8 +123,6 @@ fi
 #	mv -f /ramdisk/boot.cpio /ramdisk/boot.cpio.bak
 #fi
 
-if test -f /ramdisk/boot.cpio.gz ; then
-	rm boot.cpio.gz
-fi
+rm -f /ramdisk/boot.cpio.gz
 
 cp $ramdisk_path /ramdisk/boot.cpio

@@ -13,6 +13,6 @@ if  test -f /ramdisk/recovery.cpio ; then
 fi
 
 cd /tmp
-gzip -9r recovery.cpio.gz recovery.cpio
-rm /tmp/recovery.cpio
+gzip -9 recovery.cpio
 cp /tmp/recovery.cpio.gz /ramdisk/recovery.cpio.gz
+rm /tmp/recovery.cpio.gz
