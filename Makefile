@@ -29,6 +29,11 @@ KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip
 KERNEL_NAME_CM13=chrono_kernel_$(VERSION)-cm13.zip
 KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
+ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z 7za modules.7z scripts init.d
+ZIP_LINE_LIGHT=META-INF modules.7z boot.img scripts/main.sh \
+		scripts/remove_modules.sh scripts/unpack_modules.sh scripts/update_modules.sh \
+		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+
 AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544
 SYSTEM_MODULE_LIST = param j4fs exfat f2fs startup_reason display-ws2401_dpi display-s6d27a1_dpi
 
@@ -82,6 +87,8 @@ clean:
 	mkdir -p ramdisk/modules/autoload
 	touch ramdisk/modules/autoload/.placeholder
 	rm -f boot.img
+	rm -f modules.7z
+	rm -f ramdisk.7z
 	
 
 modules-install:
@@ -113,52 +120,47 @@ package-ramdisk:
 package-full: clean modules-install package-modules package-ramdisk
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
-	zip -9r $(KERNEL_NAME) META-INF genfstab boot.img ramdisk.7z modules.7z 7za scripts init.d
+	zip -9r $(KERNEL_NAME) $(ZIP_LINE_FULL)
 
 package-full-selinux: clean modules-install-selinux package-modules package-ramdisk
 	cp -f $(BUILD_SELINUX)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_SELINUX);
-	zip -9r $(KERNEL_NAME_SELINUX) META-INF genfstab boot.img ramdisk.7z 7za modules.7z scripts init.d
+	zip -9r $(KERNEL_NAME_SELINUX) $(ZIP_LINE_FULL)
 
 package-full-cm13: clean modules-install-cm13 package-modules package-ramdisk
 	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_CM13);
-	zip -9r $(KERNEL_NAME_CM13) META-INF genfstab boot.img ramdisk.7z 7za modules.7z scripts init.d
+	zip -9r $(KERNEL_NAME_CM13) $(ZIP_LINE_FULL)
 
 package-full-nodebug: clean modules-install-nodebug package-modules package-ramdisk
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
-	zip -9r $(KERNEL_NAME_NODEBUG) META-INF genfstab boot.img ramdisk.7z 7za modules.7z scripts init.d
+	zip -9r $(KERNEL_NAME_NODEBUG) $(ZIP_LINE_FULL)
 
 package-light: clean modules-install package-modules
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
-	zip -9r $(KERNEL_NAME) META-INF modules.7z boot.img scripts/main.sh \
-		scripts/remove_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+	zip -9r $(KERNEL_NAME) $(ZIP_LINE_LIGHT)
 
 package-light-nodebug: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_NODEBUG);
-	zip -9r $(KERNEL_NAME_NODEBUG) META-INF modules.7z boot.img scripts/main.sh \
-		scripts/remove_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+	zip -9r $(KERNEL_NAME_NODEBUG) $(ZIP_LINE_LIGHT)
 
 package-light-selinux: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_SELINUX)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_SELINUX);
-	zip -9r $(KERNEL_NAME_SELINUX) META-INF modules.7z boot.img scripts/main.sh \
-		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+	zip -9r $(KERNEL_NAME_SELINUX) $(ZIP_LINE_LIGHT)
 
 package-light-cm13: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_CM13);
-	zip -9r $(KERNEL_NAME_CM13) META-INF modules.7z boot.img scripts/main.sh \
-		scripts/remove_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+	zip -9r $(KERNEL_NAME_CM13) $(ZIP_LINE_LIGHT)
 
 package-private: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_PRIVATE);
-	zip -9r $(KERNEL_NAME_PRIVATE) META-INF modules.7z boot.img scripts/update_modules.sh scripts/main.sh \
-		scripts/remove_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+	zip -9r $(KERNEL_NAME_PRIVATE) $(ZIP_LINE_LIGHT)
 
 modules:
 	-make -C $(SOURCE) O=$(BUILD) CROSS_COMPILE=$(ARM_CC) modules
