@@ -1,4 +1,4 @@
-current_dir = $(shell pwd)
+current_dir := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 SOURCE = ../ck
 BUILD = ../obj
@@ -29,6 +29,10 @@ ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z 7za modules.7z scripts init.
 ZIP_LINE_LIGHT=META-INF modules.7z boot.img scripts/main.sh \
 		scripts/remove_modules.sh scripts/unpack_modules.sh scripts/update_modules.sh \
 		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+
+HIDE=@
+
+PACKAGE_COMPLETED_LINE="Package is completed and installed to"
 
 AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544
 SYSTEM_MODULE_LIST = param j4fs exfat f2fs startup_reason display-ws2401_dpi display-s6d27a1_dpi
@@ -117,46 +121,56 @@ package-full: clean modules-install package-modules package-ramdisk
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
 	zip -9r $(KERNEL_NAME) $(ZIP_LINE_FULL)
+	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME)"
 
 package-full-selinux: clean modules-install-selinux package-modules package-ramdisk
 	cp -f $(BUILD_SELINUX)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_SELINUX);
 	zip -9r $(KERNEL_NAME_SELINUX) $(ZIP_LINE_FULL)
+	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_SELINUX)"
 
 package-full-cm13: clean modules-install-cm13 package-modules package-ramdisk
 	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_CM13);
 	zip -9r $(KERNEL_NAME_CM13) $(ZIP_LINE_FULL)
+	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_CM13)"
 
 package-full-nodebug: clean modules-install-nodebug package-modules package-ramdisk
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
 	zip -9r $(KERNEL_NAME_NODEBUG) $(ZIP_LINE_FULL)
+	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_NODEBUG)"
 
 package-light: clean modules-install package-modules
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
 	zip -9r $(KERNEL_NAME) $(ZIP_LINE_LIGHT)
+	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME)"
 
 package-light-nodebug: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_NODEBUG);
 	zip -9r $(KERNEL_NAME_NODEBUG) $(ZIP_LINE_LIGHT)
+	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_NODEBUG)"
 
 package-light-selinux: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_SELINUX)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_SELINUX);
+	KERNEL_NAME_ACTUAL=$(KERNEL_NAME_SELINUX)
 	zip -9r $(KERNEL_NAME_SELINUX) $(ZIP_LINE_LIGHT)
+	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_SELINUX)"
 
 package-light-cm13: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_CM13);
 	zip -9r $(KERNEL_NAME_CM13) $(ZIP_LINE_LIGHT)
+	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_CM13)"
 
-package-private: clean modules-install-nodebug package-modules
+package-private: clean modules-install-nodebug package-modules package_completed
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_PRIVATE);
 	zip -9r $(KERNEL_NAME_PRIVATE) $(ZIP_LINE_LIGHT)
+	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_PRIVATE)"
 
 modules:
 	-make -C $(SOURCE) O=$(BUILD) CROSS_COMPILE=$(ARM_CC) modules
