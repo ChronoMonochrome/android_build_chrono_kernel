@@ -18,11 +18,7 @@ ARM_CC = ../armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnuea
 #ARM_CC = ../arm-cortex_a9-linux-gnueabihf-linaro_4.9.4-2015.06/bin/arm-eabi-
 #ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
 
-VERSION=$(shell git -C $(SOURCE) describe --tags --exact-match --match 'r[0-9]*')
-ifeq ("$(VERSION)", "")
-   VERSION=$(shell git -C $(SOURCE) tag | grep "r4" | tail -n 1 )
-   OUT=$(shell git -C $(SOURCE) tag $(VERSION) -f )
-endif
+VERSION=$(shell git -C $(SOURCE) tag | grep 'r[0-9].[0-9]' | sort -V | tail -n1)
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
 KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-nodebug.zip
 KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip
