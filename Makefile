@@ -134,13 +134,13 @@ package-light: clean modules-install package-modules
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
 	zip -9r $(KERNEL_NAME) META-INF modules.7z boot.img scripts/main.sh \
-		scripts/remote_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+		scripts/remove_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
 package-light-nodebug: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_NODEBUG);
 	zip -9r $(KERNEL_NAME_NODEBUG) META-INF modules.7z boot.img scripts/main.sh \
-		scripts/remote_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+		scripts/remove_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
 package-light-selinux: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_SELINUX)/arch/arm/boot/zImage $(PACKAGE)/boot.img
@@ -152,13 +152,13 @@ package-light-cm13: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_CM13);
 	zip -9r $(KERNEL_NAME_CM13) META-INF modules.7z boot.img scripts/main.sh \
-		scripts/remote_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+		scripts/remove_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
 package-private: clean modules-install-nodebug package-modules
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_PRIVATE);
 	zip -9r $(KERNEL_NAME_PRIVATE) META-INF modules.7z boot.img scripts/update_modules.sh scripts/main.sh \
-		scripts/remote_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
+		scripts/remove_modules.sh scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
 modules:
 	-make -C $(SOURCE) O=$(BUILD) CROSS_COMPILE=$(ARM_CC) modules
