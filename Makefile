@@ -25,8 +25,8 @@ KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip
 KERNEL_NAME_CM13=chrono_kernel_$(VERSION)-cm13.zip
 KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
-ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z 7za modules.7z scripts init.d
-ZIP_LINE_LIGHT=META-INF boot.img modules.7z scripts/main.sh \
+ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z 7za modules-$(VERSION).img scripts init.d
+ZIP_LINE_LIGHT=META-INF boot.img modules-$(VERSION).img scripts/main.sh \
 		scripts/remove_modules.sh scripts/unpack_modules.sh scripts/update_modules.sh \
 		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
@@ -80,42 +80,48 @@ build-cm13: $(SOURCE)
 	-make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j1 -k
 
 clean:
-	rm -fr system/lib/modules/*
-	mkdir -p system/lib/modules/autoload
-	touch system/lib/modules/autoload/.placeholder
-	rm -fr ramdisk/modules/*
-	mkdir -p ramdisk/modules/autoload
-	touch ramdisk/modules/autoload/.placeholder
+	rm -fr modules/*
+	mkdir -p modules/autoload
+	touch modules/autoload/.placeholder
 	rm -f boot.img
-	rm -f modules.7z
+	rm -f modules-$(VERSION).img
 	rm -f ramdisk.7z
 	
 
 modules-install:
-	-make -C $(SOURCE) O=$(BUILD) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
+	-make -C $(SOURCE) O=$(BUILD) modules_install INSTALL_MOD_PATH=$(PACKAGE)
+	mv $(PACKAGE)/lib/modules/* $(PACKAGE)/modules
+	rm -fr lib
 
 modules-install-nodebug:
-	-make -C $(SOURCE) O=$(BUILD_NODEBUG) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
+	-make -C $(SOURCE) O=$(BUILD_NODEBUG) modules_install INSTALL_MOD_PATH=$(PACKAGE)
+	mv $(PACKAGE)/lib/modules/* $(PACKAGE)/modules
+	rm -fr lib
 
 modules-install-selinux:
-	-make -C $(SOURCE) O=$(BUILD_SELINUX) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
+	-make -C $(SOURCE) O=$(BUILD_SELINUX) modules_install INSTALL_MOD_PATH=$(PACKAGE)
+	mv $(PACKAGE)/lib/modules/* $(PACKAGE)/modules
+	rm -fr lib
 
 modules-install-cm13:
-	-make -C $(SOURCE) O=$(BUILD_CM13) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
+	-make -C $(SOURCE) O=$(BUILD_CM13) modules_install INSTALL_MOD_PATH=$(PACKAGE)
+	mv $(PACKAGE)/lib/modules/* $(PACKAGE)/modules
+	rm -fr lib
 
 package-modules:
-	$(foreach module,$(SYSTEM_MODULE_LIST), \
-                        cp $(PACKAGE)/system/lib/modules/$(module).ko \
-                         $(PACKAGE)/ramdisk/modules/$(module).ko;)
-
 	$(foreach module,$(AUTOLOAD_LIST), \
-                        cp $(PACKAGE)/system/lib/modules/$(module).ko \
-                         $(PACKAGE)/ramdisk/modules/autoload/$(module).ko;)
+                        if test -f $(PACKAGE)/modules/$(module).ko; then \
+				mv $(PACKAGE)/modules/$(module).ko \
+                        	 $(PACKAGE)/modules/autoload/$(module).ko ; \
+			fi;)
 
-	7za a -t7z modules.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe ramdisk system
+	$(eval SIZE := $(shell du -sB K modules/ | cut -f1 | cut -d "K" -f1))
+	$(eval SIZE := $(shell expr $(SIZE) \+ 768))
+	genext2fs -b $(SIZE) -d modules modules-$(VERSION).img
+	
 
 package-ramdisk:
-	7za a -t7z ramdisk.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe osfiles recovery
+	7za a -t7z ramdisk.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe ramdisk osfiles recovery
 
 package-full: clean modules-install package-modules package-ramdisk
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
