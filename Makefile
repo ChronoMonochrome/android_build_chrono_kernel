@@ -88,7 +88,7 @@ clean:
 	mkdir -p modules/autoload
 	touch modules/autoload/.placeholder
 	rm -f boot.img
-	rm -f tmp/modules-$(VERSION).img
+	rm -f tmp/modules-*.img
 	rm -f ramdisk.7z
 	
 
