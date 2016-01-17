@@ -39,15 +39,19 @@ SYSTEM_MODULE_LIST = param fuse sdcardfs j4fs exfat f2fs startup_reason display-
 
 all: codina upload codina-nodebug upload-nodebug
 
-codina: build package-full
-codina-light: build package-light
-codina-nodebug: build-nodebug package-full-nodebug
-codina-nodebug-light: build-nodebug package-light-nodebug
-codina-selinux: build-selinux package-full-selinux
-codina-selinux-light: build-selinux package-light-selinux
-codina-cm13: build-cm13 package-full-cm13 
-codina-cm13: build-cm13 package-light-cm13
-codina-private: update-private-config build-private package-private
+codina: gen_version build package-full
+codina-light: gen_version build package-light
+codina-nodebug: gen_version build-nodebug package-full-nodebug
+codina-nodebug-light: gen_version build-nodebug package-light-nodebug
+codina-selinux: gen_version build-selinux package-full-selinux
+codina-selinux-light: gen_version build-selinux package-light-selinux
+codina-cm13: gen_version build-cm13 package-full-cm13 
+codina-cm13: gen_version build-cm13 package-light-cm13
+codina-private: gen_version update-private-config build-private package-private
+
+gen_version:
+	rm -f ramdisk/kernel_version
+	echo $(VERSION) > ramdisk/kernel_version
 
 update-private-config: $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig
 	cp $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig $(SOURCE)/arch/arm/configs/private_defconfig
@@ -84,7 +88,7 @@ clean:
 	mkdir -p modules/autoload
 	touch modules/autoload/.placeholder
 	rm -f boot.img
-	rm -f modules-$(VERSION).img
+	rm -f tmp/modules-$(VERSION).img
 	rm -f ramdisk.7z
 	
 
@@ -117,7 +121,8 @@ package-modules:
 
 	$(eval SIZE := $(shell du -sB K modules/ | cut -f1 | cut -d "K" -f1))
 	$(eval SIZE := $(shell expr $(SIZE) \+ 768))
-	genext2fs -b $(SIZE) -d modules modules-$(VERSION).img
+	mkdir -p tmp
+	genext2fs -b $(SIZE) -d modules tmp/modules-$(VERSION).img
 	
 
 package-ramdisk:

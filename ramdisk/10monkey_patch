@@ -12,4 +12,8 @@ if ! busybox grep -q bootmode=2 /proc/cmdline ; then
 
 	busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified,lower_fs=fat /mnt/media_rw/sdcard1 /storage/sdcard1\n    oneshot#" /init.samsungcodina.rc
 	busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified,lower_fs=fat /mnt/media_rw/sdcard0 /storage/sdcard0\n    oneshot#" /init.samsungcodina.rc
+
+	busybox sed -ie "s,mount_all /fstab.samsungcodina,#mount_all /fstab.samsungcodina,"
+
+	busybox sed -ie "s,/system/lib/modules,/ramdisk/modules," /*.rc
 fi

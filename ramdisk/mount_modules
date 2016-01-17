@@ -1,0 +1,6 @@
+VERSION=$(busybox cat /ramdisk/kernel_version)
+
+if ! mount | grep -q /ramdisk/modules; then
+	busybox mkdir -p /ramdisk/modules
+	busybox mount -o loop,rw -t ext2 /ramdisk/modules-$VERSION.img /ramdisk/modules
+fi

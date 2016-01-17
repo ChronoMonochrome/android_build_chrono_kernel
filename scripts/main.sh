@@ -84,15 +84,9 @@ if [ "$1" == "remove_modules" ] ; then
     logged_execute /tmp/remove_modules.sh
 fi
 
-if [ "$1" == "unpack_modules" ] ; then
-    echo "Unpacking modules file..." >> /tmp/kernel_log.txt
-    logged_execute /tmp/unpack_modules.sh
-fi
-
-if [ "$1" == "update_modules" ] ; then
-    echo "Updating modules..." >> /tmp/kernel_log.txt
-    #ui_print "Updating modules..."
-    logged_execute /tmp/update_modules.sh
+if [ "$1" == "set_perm" ] ; then
+    echo "Setting permissions..." >> /tmp/kernel_log.txt
+    logged_execute /tmp/set_perm.sh
 fi
 
 if [ "$1" == "fstab" ] ; then
