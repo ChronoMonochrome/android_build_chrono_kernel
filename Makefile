@@ -25,7 +25,7 @@ KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip
 KERNEL_NAME_CM13=chrono_kernel_$(VERSION)-cm13.zip
 KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
-ZIP_LINE_FULL=META-INF tmp ramdisk genfstab boot.img ramdisk.7z 7za modules-$(VERSION).img scripts init.d
+ZIP_LINE_FULL=META-INF tmp ramdisk genfstab boot.img ramdisk.7z 7za scripts init.d
 ZIP_LINE_LIGHT=META-INF tmp ramdisk boot.img scripts/main.sh \
 		scripts/set_perm.sh scripts/remove_modules.sh \
 		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
