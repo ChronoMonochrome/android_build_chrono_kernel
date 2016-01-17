@@ -26,7 +26,6 @@ show_progress(0.050000, 0);
 ui_print("-> Mounting system...");
 run_program("/sbin/busybox","mount","/system");
 
-
 ui_print("-> Extracting ramdisk...");
 package_extract_file("7za", "/tmp/7za");
 run_program("/sbin/chmod", "755", "/tmp/7za");
@@ -52,7 +51,8 @@ ui_print("-> Removing old modules...");
 run_program("/tmp/main.sh", "remove_modules");
 
 ui_print("-> Extracting modules...");
-package_extract_dir("tmp", "/ramdisk");
+run_program("/sbin/busybox","mount","/efs")
+package_extract_dir("tmp", "/efs");
 set_progress(0.750000);
 
 ui_print("-> Setting permissions...");

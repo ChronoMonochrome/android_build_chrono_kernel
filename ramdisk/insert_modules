@@ -2,42 +2,45 @@ VERSION=$(busybox cat /ramdisk/kernel_version)
 
 busybox mknod -m640 /dev/block/loop255 b 7 255
 
-busybox mkdir -p /ramdisk/modules
-/ramdisk/bin/bettermount -orw,loop=/dev/block/loop255 -t ext2 /ramdisk/modules-$VERSION.img /ramdisk/modules
+busybox mount -o remount,rw /
+busybox mkdir -p /modules
+busybox mkdir -p /efs
+busybox mount -t ext4 /dev/block/mmcblk0p7 /efs 
+/ramdisk/bin/bettermount -orw,loop=/dev/block/loop255 -t ext2 /efs/modules-$VERSION.img /modules
 
-busybox insmod /ramdisk/modules/startup_reason.ko
-busybox insmod /ramdisk/modules/exfat.ko
-busybox insmod /ramdisk/modules/fuse.ko
-busybox insmod /ramdisk/modules/sdcardfs.ko
-busybox insmod /ramdisk/modules/f2fs.ko
-busybox insmod /ramdisk/modules/snd-soc-ab8500_audio.ko
+busybox insmod /modules/startup_reason.ko
+busybox insmod /modules/exfat.ko
+busybox insmod /modules/fuse.ko
+busybox insmod /modules/sdcardfs.ko
+busybox insmod /modules/f2fs.ko
+busybox insmod /modules/snd-soc-ab8500_audio.ko
 
 if ! busybox grep -q bootmode=2 /proc/cmdline ; then
 
-	for i in /ramdisk/modules/autoload/*.ko
+	for i in /modules/autoload/*.ko
 	do
 		busybox insmod $i
 	done
 fi
 
 if busybox grep -q lcdtype=4 /proc/cmdline ; then
-	busybox insmod /ramdisk/modules/display-ws2401_dpi.ko
+	busybox insmod /modules/display-ws2401_dpi.ko
 fi
 
 if ! busybox grep -q lcdtype=4 /proc/cmdline ; then
-	busybox insmod /ramdisk/modules/display-s6d27a1_dpi.ko
+	busybox insmod /modules/display-s6d27a1_dpi.ko
 fi
 
 if busybox grep -q lcdtype=13 /proc/cmdline ; then
-	busybox insmod /ramdisk/modules/display-s6d27a1_dpi.ko
+	busybox insmod /modules/display-s6d27a1_dpi.ko
 fi
 
 if busybox grep -q bootmode=2 /proc/cmdline ; then
 	# since it's pain, load j4fs and param from separate partition
-	busybox insmod /ramdisk/modules/j4fs.ko
-	busybox insmod /ramdisk/modules/param.ko
+	busybox insmod /modules/j4fs.ko
+	busybox insmod /modules/param.ko
 	busybox mount -t j4fs /dev/block/mmcblk0p1 /mnt/.lfs
-	busybox umount /ramdisk/modules
+	busybox umount /modules
 fi
 
 if ! busybox grep -q bootmode=2 /proc/cmdline ; then
