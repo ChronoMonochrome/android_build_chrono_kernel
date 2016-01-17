@@ -4,6 +4,3 @@ if [ "$TYPE" == "1" ] ; then
 	busybox echo lcdclk=30720000 > /sys/kernel/mcde/lcdclk
 fi
 
-busybox umount /ramdisk/modules
-busybox mkdir -p /ramdisk/modules
-busybox mount -o loop,rw -t ext2 /ramdisk/modules-$(uname -r).img /ramdisk/modules
