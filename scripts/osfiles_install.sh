@@ -40,8 +40,12 @@ if [ $VX == 6 ] ; then
 		os="6.0.x"
         fi
 
-	if test -f /system/lib/modules/uid_cputime.ko ; then
-		mv /system/lib/modules/uid_cputime.ko /ramdisk/modules/autoload
+	mkdir -p /modules
+	mount -t ext4 /dev/block/mmcblk0p7 /efs
+	/ramdisk/bin/bettermount -orw,loop=/dev/block/loop255 -t ext2 /efs/modules-$VERSION.img /modules
+
+	if test -f /modules/uid_cputime.ko ; then
+		mv /modules/uid_cputime.ko /modules/autoload
 	fi
 	ramdisk_path=/tmp/$os/$os.cpio
 fi

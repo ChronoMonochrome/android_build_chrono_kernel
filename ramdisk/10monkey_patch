@@ -15,5 +15,5 @@ if ! busybox grep -q bootmode=2 /proc/cmdline ; then
 
 	busybox sed -ie "s,mount_all /fstab.samsungcodina,#mount_all /fstab.samsungcodina,"
 
-	busybox sed -ie "s,/system/lib/modules,/ramdisk/modules," /*.rc
+	busybox sed -ie "s,/system/lib/modules,/modules," /*.rc
 fi
