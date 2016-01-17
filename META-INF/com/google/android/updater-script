@@ -51,7 +51,7 @@ ui_print("-> Removing old modules...");
 run_program("/tmp/main.sh", "remove_modules");
 
 ui_print("-> Extracting modules...");
-run_program("/sbin/busybox","mount","/efs")
+run_program("/sbin/busybox","mount","/efs");
 package_extract_dir("tmp", "/efs");
 set_progress(0.750000);
 
