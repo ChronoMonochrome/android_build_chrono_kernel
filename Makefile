@@ -105,12 +105,16 @@ modules-install-cm13:
 
 package-modules:
 	$(foreach module,$(SYSTEM_MODULE_LIST), \
-                        cp $(PACKAGE)/system/lib/modules/$(module).ko \
-                         $(PACKAGE)/ramdisk/modules/$(module).ko;)
+                        if test -f $(PACKAGE)/system/lib/modules/$(module).ko; then \
+				cp $(PACKAGE)/system/lib/modules/$(module).ko \
+                         $(PACKAGE)/ramdisk/modules/$(module).ko; \
+			fi;)
 
 	$(foreach module,$(AUTOLOAD_LIST), \
-                        cp $(PACKAGE)/system/lib/modules/$(module).ko \
-                         $(PACKAGE)/ramdisk/modules/autoload/$(module).ko;)
+			if test -f $(PACKAGE)/system/lib/modules/$(module).ko; then \
+                        	cp $(PACKAGE)/system/lib/modules/$(module).ko \
+                         $(PACKAGE)/ramdisk/modules/autoload/$(module).ko; \
+	fi;)
 
 	7za a -t7z modules.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe ramdisk system
 
