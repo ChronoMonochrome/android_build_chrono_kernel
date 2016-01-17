@@ -7,4 +7,5 @@ chmod 755 /ramdisk/00lpm
 chmod 755 /ramdisk/10monkey_patch
 chmod 755 /ramdisk/kern_init
 chmod 755 /ramdisk/mount_modules
+chmod -R 755 /ramdisk/bin
 chmod 750 /ramdisk/init.kernel.rc

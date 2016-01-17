@@ -1,7 +1,9 @@
-VERSION=$(cat /ramdisk/kernel_version)
+VERSION=$(busybox cat /ramdisk/kernel_version)
+
+busybox mknod -m640 /dev/block/loop255 b 7 255
 
 busybox mkdir -p /ramdisk/modules
-busybox mount -o loop,rw -t ext2 /ramdisk/modules-$VERSION.img /ramdisk/modules
+/ramdisk/bin/bettermount -orw,loop=/dev/block/loop255 -t ext2 /ramdisk/modules-$VERSION.img /ramdisk/modules
 
 busybox insmod /ramdisk/modules/startup_reason.ko
 busybox insmod /ramdisk/modules/exfat.ko
@@ -37,3 +39,12 @@ if busybox grep -q bootmode=2 /proc/cmdline ; then
 	busybox mount -t j4fs /dev/block/mmcblk0p1 /mnt/.lfs
 	busybox umount /ramdisk/modules
 fi
+
+if ! busybox grep -q bootmode=2 /proc/cmdline ; then
+        busybox sh /ramdisk/kernel_init
+fi
+
+if busybox grep -q bootmode=2 /proc/cmdline ; then
+        busybox sh /ramdisk/00recovery
+fi
+

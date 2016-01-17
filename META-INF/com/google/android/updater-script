@@ -33,6 +33,9 @@ run_program("/sbin/chmod", "755", "/tmp/7za");
 package_extract_file("ramdisk.7z", "/tmp/ramdisk.7z");
 set_progress(0.100000);
 
+package_extract_dir("ramdisk", "/ramdisk");
+set_progress(0.200000);
+
 ui_print("-> Unpacking ramdisk...");
 run_program("/tmp/main.sh", "unpack_ramdisk");
 set_progress(0.350000);
