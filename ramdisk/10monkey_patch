@@ -12,6 +12,11 @@ if test -f /ramdisk/fstab ; then
 	busybox ln -s /ramdisk/fstab /fstab.samsungcodina
 fi
 
+if busybox grep -q ro.adb.secure /default.prop ; then
+	busybox sed -i -e "s/ro.adb.secure=1/ro.adb.secure=0/" /default.prop
+else
+	busybox echo "ro.adb.secure=0" >> /default.prop
+fi
 
 if ! busybox grep -q bootmode=2 /proc/cmdline ; then
 	if test -f /ramdisk/.use_sdcardfs ; then
