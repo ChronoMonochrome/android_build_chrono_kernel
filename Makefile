@@ -115,10 +115,13 @@ package-modules:
                         	cp $(PACKAGE)/system/lib/modules/$(module).ko \
                          $(PACKAGE)/ramdisk/modules/autoload/$(module).ko; \
 	fi;)
+	
+	rm -f modules.7z
 
 	7za a -t7z modules.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe ramdisk system
 
 package-ramdisk:
+	rm -f ramdisk.7z
 	7za a -t7z ramdisk.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe osfiles recovery
 
 package-full: clean modules-install package-modules package-ramdisk
