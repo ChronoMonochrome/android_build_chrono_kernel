@@ -1,18 +1,21 @@
-set -x
-
-SIZE=256
-
-if ! test -d /sys/module/vnswap; then
-       insmod /system/lib/modules/vnswap.ko
-fi
-
-NUMBLOCKS=1
-
-let "NUMBLOCKS=$NUMBLOCKS - 1"
-for i in $(seq 0 "$NUMBLOCKS")
-do
-    echo $(( $SIZE * 1024 * 1024 )) > /sys/devices/virtual/block/vnswap$i/disksize 
-    #echo 1 > /sys/devices/virtual/block/zram$i/max_comp_streams
-    mkswap /dev/block/vnswap$i
-    swapon /dev/block/vnswap$i
-done
+#set -x
+#
+#SIZE=75
+#NUMBLOCKS=3
+#echo $NUMBLOCKS > /sys/module/zram_num_devices_ctl/parameters/zram_num_devices
+#echo 0 > /proc/sys/vm/page-cluster
+#echo 100 > /proc/sys/vm/swappiness 
+#
+#
+#if ! test -d /sys/module/zram; then
+#       insmod /system/lib/modules/zram.ko
+#fi
+#
+#let "NUMBLOCKS=$NUMBLOCKS - 1"
+#for i in $(seq 0 "$NUMBLOCKS")
+#do
+#    echo $(( $SIZE * 1024 * 1024 )) > /sys/devices/virtual/block/zram$i/disksize 
+#    echo 1 > /sys/devices/virtual/block/zram$i/max_comp_streams
+#    mkswap /dev/block/zram$i
+#    swapon /dev/block/zram$i
+#done
