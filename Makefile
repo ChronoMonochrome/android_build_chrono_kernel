@@ -144,7 +144,7 @@ package-full-cm13: clean modules-install-cm13 package-modules package-ramdisk
 
 package-full-nodebug: clean modules-install-nodebug package-modules package-ramdisk
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
-	rm -f $(KERNEL_NAME);
+	rm -f $(KERNEL_NAME_NODEBUG);
 	zip -9r $(KERNEL_NAME_NODEBUG) $(ZIP_LINE_FULL)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_NODEBUG)"
 
