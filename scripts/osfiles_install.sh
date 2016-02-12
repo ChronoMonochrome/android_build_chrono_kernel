@@ -65,6 +65,8 @@ if [ $VX == 6 ] ; then
 		mv /system/lib/modules/uid_cputime.ko /ramdisk/modules/autoload
 	fi
 	ramdisk_path=/tmp/$os/$os.cpio
+
+	rm /ramdisk/.use_sdcardfs
 fi
 
 if [ $VX == 5 ] ; then
@@ -99,6 +101,8 @@ if [ $VX == 5 ] ; then
 	if ! test -f /system/etc/firmware/fw_bcmdhd_apsta.bin ; then
 		ln -s /system/vendor/firmware/fw_bcmdhd_apsta.bin /system/etc/firmware/fw_bcmdhd_apsta.bin
 	fi
+
+	touch /ramdisk/.use_sdcardfs
 fi
 
 if [ $VX == 4 ] ; then
@@ -133,6 +137,8 @@ if [ $VX == 4 ] ; then
 		cp -f /tmp/4.1.x/$DEV_SCRIPT /ramdisk
 		chmod 750 /ramdisk/$DEV_SCRIPT
 	fi
+
+	rm /ramdisk/.use_sdcardfs
 fi
 
 rm -f /ramdisk/boot.cpio.bak
