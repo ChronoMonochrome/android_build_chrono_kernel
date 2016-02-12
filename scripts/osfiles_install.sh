@@ -18,13 +18,7 @@ BUILD_ID=$(cat /system/build.prop | grep "ro.build.display.id=" | cut -d "=" -f2
 DEV_SCRIPT="init.samsungcodina.rc"
 DEF_PROP="recovery_default.prop"
 
-# skip osfiles installation on omni
 IS_OMNI=$(echo $BUILD_ID | grep -c omni)
-
-#if [ $IS_OMNI == 1 ] ; then
-#	echo "Omni ROM has been detected, skip ramdisk installation" >> /tmp/kernel_log.txt
-#	exit
-#fi 
 
 VERSION_LINE=$(cat /system/build.prop | grep "ro.build.version.release" | cut -d "=" -f2)
 VX=$(echo $VERSION_LINE | cut -d "." -f1)
@@ -55,8 +49,12 @@ if [ $VX == 5 ] ; then
 	if [ $VY == 1 ] ; then
 		echo "5.1"
 		os="5.1.x"
+		if [ $IS_OMNI == 1 ] ; then
+			echo "Omni ROM has been detected" >> /tmp/kernel_log.txt
+			os="5.1.x_omni"
+		fi 
 	fi
-	
+
 	ramdisk_path=/tmp/$os/$os.cpio
 	mv -f /ramdisk/$DEV_SCRIPT /ramdisk/$DEV_SCRIPT".bak"
 	mv -f /ramdisk/$DEF_PROP /ramdisk/$DEF_PROP".bak"
