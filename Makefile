@@ -38,6 +38,8 @@ AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544
 SYSTEM_MODULE_LIST = hw_random param fuse sdcardfs j4fs exfat f2fs startup_reason #\
 	             #display-ws2401_dpi display-s6d27a1_dpi
 
+NUMBER_JOBS?=2
+
 all: codina upload codina-nodebug upload-nodebug
 
 codina: build package-full
@@ -58,27 +60,27 @@ update-private-config: $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig
 build-private: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm private_defconfig
-	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j2 -k
+	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
 
 build: $(SOURCE)
 	mkdir -p $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j2 -k
+	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
 
 build-nodebug: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm codina_nodebug_defconfig
-	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j2 -k
+	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
 
 build-selinux: $(SOURCE)
 	mkdir -p $(BUILD_SELINUX);
 	make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm codina_selinux_defconfig
-	-make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j2 -k
+	-make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
 
 build-cm13: $(SOURCE)
 	mkdir -p $(BUILD_CM13);
 	make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm codina_cm13_defconfig
-	-make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j2 -k
+	-make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
 
 clean:
 	rm -fr system/lib/modules/*
