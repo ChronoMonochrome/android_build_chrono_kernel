@@ -25,6 +25,11 @@ VX=$(echo $VERSION_LINE | cut -d "." -f1)
 VY=$(echo $VERSION_LINE | cut -d "." -f2)
 os="$VX.$VY.x"
 
+if test -f /ramdisk/.dont_touch_ramdisk ; then
+	echo "file /ramdisk/.dont_touch_ramdisk found, not installing osfiles"
+	exit 0
+fi
+
 if [ $IS_OMNI == 1 ] && [ "$os" == "5.1.x" ] ; then
 		echo "Omni ROM has been detected" >> /tmp/kernel_log.txt
 		os="5.1.x_omni"
