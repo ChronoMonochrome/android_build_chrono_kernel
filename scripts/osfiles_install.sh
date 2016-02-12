@@ -23,14 +23,35 @@ IS_OMNI=$(echo $BUILD_ID | grep -c omni)
 VERSION_LINE=$(cat /system/build.prop | grep "ro.build.version.release" | cut -d "=" -f2)
 VX=$(echo $VERSION_LINE | cut -d "." -f1)
 VY=$(echo $VERSION_LINE | cut -d "." -f2)
+os="$VX.$VY.x"
+
+if [ $IS_OMNI == 1 ] && [ "$os" == "5.1.x" ] ; then
+		echo "Omni ROM has been detected" >> /tmp/kernel_log.txt
+		os="5.1.x_omni"
+fi
 
 ramdisk_path="/tmp/"
-os=""
 dev_files="/tmp/"$DEVICE
+
+
+##### Unpack ramdisk.7z #####
+
+cur_dir=$PWD
+
+cd /tmp
+rm -fr /tmp/4.*.x* /tmp/5.*.x* /tmp/6.*.x* /tmp/codina* /tmp/common
+rm -fr /tmp/osfiles
+/tmp/7za x ramdisk.7z osfiles/common osfiles/codina osfiles/codinap osfiles/$os
+mv osfiles/* .
+
+cd $cur_dir
+
+##### Unpack ramdisk.7z #####
+
+
 
 if [ $VX == 6 ] ; then
 	if [ $VY == 0 ] ; then
-		echo "6.0"
 		os="6.0.x"
         fi
 
@@ -43,16 +64,11 @@ fi
 if [ $VX == 5 ] ; then
 	if [ $VY == 0 ] ; then
 		echo "5.0"
-		os="5.0.x"
 	fi
 
 	if [ $VY == 1 ] ; then
 		echo "5.1"
 		os="5.1.x"
-		if [ $IS_OMNI == 1 ] ; then
-			echo "Omni ROM has been detected" >> /tmp/kernel_log.txt
-			os="5.1.x_omni"
-		fi 
 	fi
 
 	ramdisk_path=/tmp/$os/$os.cpio

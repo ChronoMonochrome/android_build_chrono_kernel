@@ -67,11 +67,6 @@ if [ "$1" == "wipe_log" ] ; then
 	exit
 fi
 
-if [ "$1" == "unpack_ramdisk" ] ; then
-	echo "Unpacking ramdisk file..." >> /tmp/kernel_log.txt
-    logged_execute /tmp/unpack_ramdisk.sh
-fi
-
 if [ "$1" == "check_ramdisk_partition" ] ; then
 	echo "Checking ramdisk partition..." >> /tmp/kernel_log.txt
     #ui_print "Checking ramdisk partition..."
