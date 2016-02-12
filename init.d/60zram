@@ -17,5 +17,5 @@ do
     echo $(( $SIZE * 1024 * 1024 )) > /sys/devices/virtual/block/zram$i/disksize 
     echo 1 > /sys/devices/virtual/block/zram$i/max_comp_streams
     mkswap /dev/block/zram$i
-    swapon /dev/block/zram$i
- done
+    swapon -p 5 /dev/block/zram$i
+done
