@@ -6,3 +6,7 @@ fi
 
 busybox chown 1000:1000 /sys/kernel/god_mode/god_mode
 
+busybox insmod /ramdisk/modules/j4fs.ko 
+busybox insmod /ramdisk/modules/param.ko
+busybox mkdir -p /mnt/.lfs
+busybox mount -t j4fs /dev/block/mmcblk0p1 /mnt/.lfs
