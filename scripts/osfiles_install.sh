@@ -40,9 +40,10 @@ cur_dir=$PWD
 
 cd /tmp
 rm -fr /tmp/4.*.x* /tmp/5.*.x* /tmp/6.*.x* /tmp/codina* /tmp/common
-rm -fr /tmp/osfiles
-/tmp/7za x ramdisk.7z osfiles/common osfiles/codina osfiles/codinap osfiles/$os
+rm -fr /tmp/osfiles /tmp/recovery /tmp/twrp.fstab
+/tmp/7za x ramdisk.7z osfiles/common osfiles/codina osfiles/codinap osfiles/$os recovery/twrp.fstab
 mv osfiles/* .
+mv /tmp/recovery/twrp.fstab /tmp/twrp.fstab
 
 cd $cur_dir
 
@@ -52,7 +53,7 @@ cd $cur_dir
 
 if [ $VX == 6 ] ; then
 	if [ $VY == 0 ] ; then
-		os="6.0.x"
+		echo "6.0"
         fi
 
 	if test -f /system/lib/modules/uid_cputime.ko ; then
@@ -68,7 +69,6 @@ if [ $VX == 5 ] ; then
 
 	if [ $VY == 1 ] ; then
 		echo "5.1"
-		os="5.1.x"
 	fi
 
 	ramdisk_path=/tmp/$os/$os.cpio
