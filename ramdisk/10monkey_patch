@@ -7,7 +7,7 @@ busybox cat /stage1/init.rc >> /init.rc
 
 busybox sed -i -e "s/ro.secure=1/ro.secure=0/" /default.prop
 
-if test -f /ramdisk/fstab ; then
+if test -f /ramdisk/fstab && test -f /ramdisk/.use_ramdisk_fstab ; then
 	busybox rm /fstab.samsungcodina
 	busybox ln -s /ramdisk/fstab /fstab.samsungcodina
 fi

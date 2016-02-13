@@ -67,6 +67,7 @@ if [ $VX == 6 ] ; then
 	ramdisk_path=/tmp/$os/$os.cpio
 
 	rm /ramdisk/.use_sdcardfs
+	rm /ramdisk/.use_ramdisk_fstab
 fi
 
 if [ $VX == 5 ] ; then
@@ -103,6 +104,7 @@ if [ $VX == 5 ] ; then
 	fi
 
 	touch /ramdisk/.use_sdcardfs
+	touch /ramdisk/.use_ramdisk_fstab
 fi
 
 if [ $VX == 4 ] ; then
@@ -139,6 +141,7 @@ if [ $VX == 4 ] ; then
 	fi
 
 	rm /ramdisk/.use_sdcardfs
+	touch /ramdisk/.use_ramdisk_fstab
 fi
 
 rm -f /ramdisk/boot.cpio.bak
