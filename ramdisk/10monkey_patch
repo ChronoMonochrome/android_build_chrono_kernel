@@ -9,6 +9,18 @@ busybox sed -i -e "s/ro.secure=1/ro.secure=0/" /default.prop
 
 if test -f /ramdisk/fstab && test -f /ramdisk/.use_ramdisk_fstab ; then
 	busybox rm /fstab.samsungcodina
+
+	if test -f /ramdisk/fstab_swap && test -f /ramdisk/.use_fstab_swap ; then
+		# swap /ramdisk/fstab_swap <---> /ramdisk/fstab
+
+		busybox mv /ramdisk/fstab_swap /ramdisk/fstab_swap1
+		busybox mv /ramdisk/fstab /ramdisk/fstab_swap
+		busybox mv /ramdisk/fstab_swap1 /ramdisk/fstab
+
+		busybox rm /ramdisk/.use_fstab_swap
+
+	fi
+
 	busybox ln -s /ramdisk/fstab /fstab.samsungcodina
 fi
 
