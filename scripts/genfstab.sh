@@ -99,7 +99,7 @@ fi
 cat $DIR/fstab2 >> $FSTAB
 cat $DIR/fstab2 >> /tmp/kernel_log.txt
 
-if [ "$USE_CACHE" == "1"] ; then
+if [ "$USE_CACHE" == "1" ] ; then
 	if [ $is_cache_f2fs == 0 ] ; then
 		echo $CACHE_EXT4 >> $FSTAB ;
 		echo $CACHE_EXT4 >> /tmp/kernel_log.txt
@@ -109,7 +109,7 @@ if [ "$USE_CACHE" == "1"] ; then
 	fi
 fi
 
-if [ "$USE_PRELOAD" == "1"] ; then
+if [ "$USE_PRELOAD" == "1" ] ; then
 	echo $PRELOAD_EXT4 >> $FSTAB
 	echo $PRELOAD_EXT4 >> /tmp/kernel_log.txt
 fi
