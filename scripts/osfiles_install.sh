@@ -19,6 +19,7 @@ DEV_SCRIPT="init.samsungcodina.rc"
 DEF_PROP="recovery_default.prop"
 
 IS_OMNI=$(echo $BUILD_ID | grep -c omni)
+IS_ULTI=$(echo $BUILD_ID | grep -c ulti)
 
 VERSION_LINE=$(cat /system/build.prop | grep "ro.build.version.release" | cut -d "=" -f2)
 VX=$(echo $VERSION_LINE | cut -d "." -f1)
@@ -33,6 +34,11 @@ fi
 if [ $IS_OMNI == 1 ] && [ "$os" == "5.1.x" ] ; then
 		echo "Omni ROM has been detected" >> /tmp/kernel_log.txt
 		os="5.1.x_omni"
+fi
+
+if [ $IS_ULTI == 1 ] && [ "$os" == "6.0.x" ] ; then
+		echo "Ultimate ROM has been detected" >> /tmp/kernel_log.txt
+		os="6.0.x_ulti"
 fi
 
 ramdisk_path="/tmp/"
