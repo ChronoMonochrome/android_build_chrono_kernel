@@ -207,16 +207,16 @@ install-private: $(KERNEL_NAME_PRIVATE)
 	adb push $(KERNEL_NAME_PRIVATE) /storage/sdcard0/
 
 upload: $(KERNEL_NAME)
-	u $(KERNEL_NAME)
+	up $(KERNEL_NAME)
 
 upload-nodebug: $(KERNEL_NAME_NODEBUG)
-	u $(KERNEL_NAME_NODEBUG)
+	up $(KERNEL_NAME_NODEBUG)
 
 upload-selinux: $(KERNEL_NAME_SELINUX)
-	u $(KERNEL_NAME_SELINUX)
+	up $(KERNEL_NAME_SELINUX)
 
 upload-cm13: $(KERNEL_NAME_CM13)
-	u $(KERNEL_NAME_CM13)
+	up $(KERNEL_NAME_CM13)
 
 upload-private: $(KERNEL_NAME_PRIVATE)
-	u $(KERNEL_NAME_PRIVATE)
+	up $(KERNEL_NAME_PRIVATE)
