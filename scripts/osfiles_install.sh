@@ -73,6 +73,7 @@ if [ $VX == 6 ] ; then
 	ramdisk_path=/tmp/$os/$os.cpio
 
 	rm /ramdisk/.use_sdcardfs
+	touch /ramdisk/.use_ramdisk_fstab
 fi
 
 if [ $VX == 5 ] ; then
