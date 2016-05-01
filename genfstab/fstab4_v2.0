@@ -1,6 +1,6 @@
 # Vold managed volumes
-/devices/sdi2/mmc_host/mmc0/mmc0*/mmcblk0        auto                auto      defaults                                                                          voldmanaged=sdcard0:8,nonremovable,noemulatedsd
-/devices/sdi0/mmc_host/mmc1/mmc1*/mmcblk1        auto                auto      defaults                                                                          voldmanaged=sdcard1:auto,noemulatedsd,encryptable=userdata
+/devices/sdi2/mmc_host/mmc0/mmc0*/mmcblk0        auto                vfat      defaults                                                                          voldmanaged=sdcard0:8,nonremovable,noemulatedsd
+/devices/sdi0/mmc_host/mmc1/mmc1*        auto                auto      defaults                                                                          voldmanaged=sdcard1:auto,encryptable=userdata
 
 # Recovery
 /dev/block/mmcblk0p15                   /boot               emmc      defaults                                                                          recoveryonly
