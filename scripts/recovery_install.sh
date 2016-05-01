@@ -2,7 +2,9 @@
 
 set -x
 
-cp /tmp/twrp.fstab /ramdisk/twrp.fstab
+if ! test -f /ramdisk/twrp.fstab
+	cp /tmp/twrp.fstab /ramdisk/twrp.fstab
+fi
 
 if test -f /ramdisk/recovery.cpio.gz ; then
 	exit
