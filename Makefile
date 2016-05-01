@@ -1,19 +1,19 @@
 current_dir := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-SOURCE = ../ck
-BUILD = ../obj
-BUILD_NODEBUG=../obj_nodebug
-BUILD_SELINUX=../obj_selinux
-BUILD_CM13=../obj_cm13
+SOURCE ?= ../ck
+BUILD ?= ../obj
+BUILD_NODEBUG ?=../obj_nodebug
+BUILD_SELINUX ?=../obj_selinux
+BUILD_CM13 ?=../obj_cm13
 
-PACKAGE = $(current_dir)
+PACKAGE ?= $(current_dir)
 
 export USE_CCACHE=1
 export CCACHE_DIR=../ck_ccache
 
 #ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_i686/bin/armv7a-linux-gnueabihf-
 #ARM_CC = /media/chrono/Other/cross/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
-ARM_CC = $${HOME}/../chrono/armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
+ARM_CC ?= $${HOME}/../chrono/armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
 #ARM_CC = ../LinaroMod-arm-eabi-5.1/bin/arm-eabi-
 #ARM_CC = ../arm-cortex_a9-linux-gnueabihf-linaro_4.9.4-2015.06/bin/arm-eabi-
 #ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
