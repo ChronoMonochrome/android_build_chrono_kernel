@@ -2,7 +2,7 @@
 
 set -x
 
-if ! test -f /ramdisk/twrp.fstab
+if ! test -f /ramdisk/twrp.fstab ; then
 	cp /tmp/twrp.fstab /ramdisk/twrp.fstab
 fi
 
