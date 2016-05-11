@@ -24,16 +24,14 @@ cd /tmp
 if [ "$(busybox dd if=/dev/block/mmcblk0p4 skip=3145728 bs=1 count=3 | busybox grep -c $'\x1f\x8b\x08' )" == "0" ] ; then
 	gzip -9 recovery.cpio
 
-	# dirty hack for CWM to forcibly unmount /cache...
-	dd if=/dev/zero of=/dev/block/mmcblk0p4 count=5
-	umount -l /cache
 	umount /cache
 	
-	
-	mke2fs -m 0 /dev/block/mmcblk0p4
-	/tmp/resize2fs /dev/block/mmcblk0p4 3M
+	if [ "$(mount | grep -c '/cache')" == "0" ] ; then	
+		mke2fs -m 0 /dev/block/mmcblk0p4
+		/tmp/resize2fs /dev/block/mmcblk0p4 3M
 
-	dd if=/tmp/recovery.cpio.gz of=/dev/block/mmcblk0p4 bs=524288 seek=6
+		dd if=/tmp/recovery.cpio.gz of=/dev/block/mmcblk0p4 bs=524288 seek=6
+	fi
 
 fi
 
