@@ -1,3 +1,5 @@
+#!/sbin/sh
+
 set -x
 
 export PATH=/tmp:/ramdisk/bin:$PATH
