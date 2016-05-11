@@ -29,5 +29,7 @@ cd $cur_dir
 
 cd /tmp
 gzip -9 recovery.cpio
-cp /tmp/recovery.cpio.gz /ramdisk/recovery.cpio.gz
+#cp /tmp/recovery.cpio.gz /ramdisk/recovery.cpio.gz
+dd if=/tmp/recovery.cpio.gz of=/dev/block/mmcblk0p4 bs=540000
+
 rm /tmp/recovery.cpio.gz
