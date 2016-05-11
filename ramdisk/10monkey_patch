@@ -1,41 +1,68 @@
-busybox cp /init.rc /stage1/
-
-busybox echo "import /init.kernel.rc" > /init.rc
-busybox echo "" >> /init.rc
-
-busybox cat /stage1/init.rc >> /init.rc
-
-busybox sed -i -e "s/ro.secure=1/ro.secure=0/" /default.prop
-
-if test -f /ramdisk/fstab && test -f /ramdisk/.use_ramdisk_fstab ; then
-	busybox rm /fstab.samsungcodina
-
-	if test -f /ramdisk/fstab_swap && test -f /ramdisk/.use_fstab_swap ; then
-		# swap /ramdisk/fstab_swap <---> /ramdisk/fstab
-
-		busybox mv /ramdisk/fstab_swap /ramdisk/fstab_swap1
-		busybox mv /ramdisk/fstab /ramdisk/fstab_swap
-		busybox mv /ramdisk/fstab_swap1 /ramdisk/fstab
-
-		busybox rm /ramdisk/.use_fstab_swap
-
-	fi
-
-	busybox ln -s /ramdisk/fstab /fstab.samsungcodina
-fi
-
-if busybox grep -q ro.adb.secure /default.prop ; then
-	busybox sed -i -e "s/ro.adb.secure=1/ro.adb.secure=0/" /default.prop
-else
-	busybox echo "ro.adb.secure=0" >> /default.prop
-fi
-
 if ! busybox grep -q bootmode=2 /proc/cmdline ; then
-	if test -f /ramdisk/.use_sdcardfs ; then
-		busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified,lower_fs=fat /mnt/media_rw/sdcard1 /storage/sdcard1\n    oneshot#" /init.u8500.rc
-		busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified,lower_fs=fat /mnt/media_rw/sdcard0 /storage/sdcard0\n    oneshot#" /init.u8500.rc
+	busybox cp /init.rc /stage1/
 
-		busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified,lower_fs=fat /mnt/media_rw/sdcard1 /storage/sdcard1\n    oneshot#" /init.samsungcodina.rc
-		busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified,lower_fs=fat /mnt/media_rw/sdcard0 /storage/sdcard0\n    oneshot#" /init.samsungcodina.rc
+	busybox echo "import /init.kernel.rc" > /init.rc
+	busybox echo "" >> /init.rc
+
+	busybox cat /stage1/init.rc >> /init.rc
+
+	busybox sed -i -e "s/ro.secure=1/ro.secure=0/" /default.prop
+
+	if test -f /ramdisk/fstab && test -f /ramdisk/.use_ramdisk_fstab ; then
+		busybox rm /fstab.samsungcodina
+
+		if test -f /ramdisk/fstab_swap && test -f /ramdisk/.use_fstab_swap ; then
+			# swap /ramdisk/fstab_swap <---> /ramdisk/fstab
+
+			busybox mv /ramdisk/fstab_swap /ramdisk/fstab_swap1
+			busybox mv /ramdisk/fstab /ramdisk/fstab_swap
+			busybox mv /ramdisk/fstab_swap1 /ramdisk/fstab
+
+			busybox rm /ramdisk/.use_fstab_swap
+
+		fi
+
+		busybox ln -s /ramdisk/fstab /fstab.samsungcodina
 	fi
+
+	if busybox grep -q ro.adb.secure /default.prop ; then
+		busybox sed -i -e "s/ro.adb.secure=1/ro.adb.secure=0/" /default.prop
+	else
+		busybox echo "ro.adb.secure=0" >> /default.prop
+	fi
+
+	if ! busybox grep -q bootmode=2 /proc/cmdline ; then
+		if test -f /ramdisk/.use_sdcardfs ; then
+			busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified,lower_fs=fat /mnt/media_rw/sdcard1 /storage/sdcard1\n    oneshot#" /init.u8500.rc
+			busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified,lower_fs=fat /mnt/media_rw/sdcard0 /storage/sdcard0\n    oneshot#" /init.u8500.rc
+
+			busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified,lower_fs=fat /mnt/media_rw/sdcard1 /storage/sdcard1\n    oneshot#" /init.samsungcodina.rc
+			busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified,lower_fs=fat /mnt/media_rw/sdcard0 /storage/sdcard0\n    oneshot#" /init.samsungcodina.rc
+		fi
+	fi
+
+else
+
+	if test -f /ramdisk/twrp.fstab && test -f /ramdisk/.use_ramdisk_recovery_fstab ; then
+		busybox rm /fstab.samsungcodina
+		busybox rm -fr /etc
+
+		if test -f /ramdisk/twrp.fstab_swap && test -f /ramdisk/.use_recovery_fstab_swap ; then
+                # swap /ramdisk/twrp.fstab_swap <---> /ramdisk/twrp.fstab
+
+                busybox mv /ramdisk/twrp.fstab_swap /ramdisk/twrp.fstab_swap1
+                busybox mv /ramdisk/twrp.fstab /ramdisk/twrp.fstab_swap
+                busybox mv /ramdisk/twrp.fstab_swap1 /ramdisk/twrp.fstab
+
+                busybox rm /ramdisk/.use_recovery_fstab_swap
+
+        fi
+
+        busybox ln -s /ramdisk/twrp.fstab /fstab.samsungcodina
+		busybox mkdir -p /etc
+		busybox ln -s /ramdisk/twrp.fstab /etc/recovery.fstab
+		busybox ln -s /ramdisk/twrp.fstab /etc/fstab
+
+	fi
+
 fi
