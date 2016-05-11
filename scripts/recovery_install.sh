@@ -21,7 +21,7 @@ md5="$(busybox dd if=/dev/block/mmcblk0p15 skip=8388608 bs=1 count=10 | md5sum |
 #is_gzip="$(busybox dd if=/dev/block/mmcblk0p15 skip=8388608 bs=1 count=3 | busybox grep -c $'\x1f\x8b\x08' )"
 
 #if [ "$md5" == "4f05c2785cbcd1f144c2db58ea33f92d" ] || [ "$is_gzip" == "0" ] ; then
-if [ "$md5" != "e86bd152ea495ae9c1f99004825f6bcd" ] ; then
+if [ "$md5" != "6f6ac06a62fe2fe01d3d51eaf22b4d88" ] ; then
 	dd if=/tmp/recovery.img of=/dev/block/mmcblk0p15 bs=524288 seek=16
 fi
 
