@@ -6,14 +6,6 @@ if ! test -f /ramdisk/twrp.fstab ; then
 	cp /tmp/twrp.fstab /ramdisk/twrp.fstab
 fi
 
-#if test -f /ramdisk/recovery.cpio.gz ; then
-#	exit
-#fi
-
-#if  test -f /ramdisk/recovery.cpio ; then
-#	exit
-#fi
-
 ##### Unpack ramdisk.7z #####
 
 cur_dir=$PWD
@@ -28,7 +20,6 @@ cd $cur_dir
 ##### Unpack ramdisk.7z #####
 
 cd /tmp
-#cp /tmp/recovery.cpio.gz /ramdisk/recovery.cpio.gz
 
 if [ "$(busybox dd if=/dev/block/mmcblk0p4 skip=3145728 bs=1 count=3 | busybox grep -c $'\x1f\x8b\x08' )" == "0" ] ; then
 	gzip -9 recovery.cpio
@@ -43,8 +34,6 @@ if [ "$(busybox dd if=/dev/block/mmcblk0p4 skip=3145728 bs=1 count=3 | busybox g
 	/tmp/resize2fs /dev/block/mmcblk0p4 3M
 
 	dd if=/tmp/recovery.cpio.gz of=/dev/block/mmcblk0p4 bs=524288 seek=6
-
-	rm /tmp/recovery.cpio.gz
 
 fi
 
@@ -68,3 +57,17 @@ dev_files="/tmp/"$DEVICE
 
 mv -f /ramdisk/$DEF_PROP /ramdisk/$DEF_PROP".bak"
 cp $dev_files/$DEF_PROP /ramdisk
+
+
+if test -f /ramdisk/recovery.cpio.gz ; then
+	exit
+fi
+
+if  test -f /ramdisk/recovery.cpio ; then
+	exit
+fi
+
+
+cp /tmp/recovery.cpio.gz /ramdisk/recovery.cpio.gz
+
+rm /tmp/recovery.cpio.gz

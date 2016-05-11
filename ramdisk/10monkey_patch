@@ -45,7 +45,7 @@ else
 
 	if test -f /ramdisk/twrp.fstab && test -f /ramdisk/.use_ramdisk_recovery_fstab ; then
 		busybox rm /fstab.samsungcodina
-		busybox rm -fr /etc
+		busybox rm /etc/twrp.fstab
 
 		if test -f /ramdisk/twrp.fstab_swap && test -f /ramdisk/.use_recovery_fstab_swap ; then
                 # swap /ramdisk/twrp.fstab_swap <---> /ramdisk/twrp.fstab
@@ -60,8 +60,7 @@ else
 
         busybox ln -s /ramdisk/twrp.fstab /fstab.samsungcodina
 		busybox mkdir -p /etc
-		busybox ln -s /ramdisk/twrp.fstab /etc/recovery.fstab
-		busybox ln -s /ramdisk/twrp.fstab /etc/fstab
+		busybox ln -s /ramdisk/twrp.fstab /etc/twrp.fstab
 
 	fi
 
