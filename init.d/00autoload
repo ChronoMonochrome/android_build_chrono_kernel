@@ -2,19 +2,20 @@
 
 ####### module autoload ######
 MODULES="/system/lib/modules/autoload"
+BB=/system/xbin/busybox
 
 rw_system() {
-mount -o remount,rw /system
+	$BB mount -o remount,rw /system
 }
 ro_system() {
-mount -o remount,ro /system
+	$BB mount -o remount,ro /system
 }
 
 rw_system
-chmod -R 755 $MODULES
+$BB chmod -R 755 $MODULES
 ro_system
 
-for i in $MODULES/*.ko
+for i in $( ls $MODULES/*.ko )
 do
-insmod $i
+	$BB insmod $MODULES/$i
 done
