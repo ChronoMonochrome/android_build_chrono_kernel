@@ -120,4 +120,10 @@ if [ "$1" == "init.d" ] ; then
 	logged_execute /tmp/initd_install.sh
 fi
 
+
+if [ "$1" == "freeze_ntapp" ] ; then
+	echo "Freezein NT App" >> /tmp/kernel_log.txt
+	logged_execute /tmp/freeze_ntapp.sh
+fi
+
 cp /tmp/kernel_log.txt /ramdisk/last_kernel_install.txt
