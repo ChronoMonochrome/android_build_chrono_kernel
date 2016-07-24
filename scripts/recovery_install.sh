@@ -21,17 +21,10 @@ cd $cur_dir
 
 cd /tmp
 
-if [ "$(busybox dd if=/dev/block/mmcblk0p4 skip=3145728 bs=1 count=3 | busybox grep -c $'\x1f\x8b\x08' )" == "0" ] ; then
+if [ "$(busybox dd if=/dev/block/mmcblk0p15 skip=8388608 bs=1 count=3 | busybox grep -c $'\x1f\x8b\x08' )" == "0" ] ; then
 	gzip -9 recovery.cpio
 
-	umount /cache
-	
-	if [ "$(mount | grep -c '/cache')" == "0" ] ; then	
-		mke2fs -m 0 /dev/block/mmcblk0p4
-		/tmp/resize2fs /dev/block/mmcblk0p4 3M
-
-		dd if=/tmp/recovery.cpio.gz of=/dev/block/mmcblk0p4 bs=524288 seek=6
-	fi
+	dd if=/tmp/recovery.cpio.gz of=/dev/block/mmcblk0p15 bs=524288 seek=16
 
 fi
 
