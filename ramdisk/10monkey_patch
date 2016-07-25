@@ -65,3 +65,6 @@ else
 	fi
 
 fi
+
+busybox sed -ie "s,PATH /sbin,PATH /ramdisk/bin:/sbin," /init.environ.rc
+busybox sed -ie "s,PATH /vendor,PATH /ramdisk/lib:/vendor," /init.environ.rc
