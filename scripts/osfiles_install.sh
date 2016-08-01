@@ -72,7 +72,7 @@ if [ $VX == 6 ] ; then
 	fi
 	ramdisk_path=/tmp/$os/$os.cpio
 
-	rm /ramdisk/.use_sdcardfs
+	touch /ramdisk/.use_sdcardfs
 	touch /ramdisk/.use_ramdisk_fstab
 fi
 
@@ -146,7 +146,7 @@ if [ $VX == 4 ] ; then
 		chmod 750 /ramdisk/$DEV_SCRIPT
 	fi
 
-	rm /ramdisk/.use_sdcardfs
+	touch /ramdisk/.use_sdcardfs
 	touch /ramdisk/.use_ramdisk_fstab
 fi
 
