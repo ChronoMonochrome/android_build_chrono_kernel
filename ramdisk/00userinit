@@ -5,4 +5,4 @@ if [ "$TYPE" == "1" ] ; then
 fi
 
 busybox chown 1000:1000 /sys/kernel/god_mode/god_mode
-busybox sh /ramdisk/20userscript
+

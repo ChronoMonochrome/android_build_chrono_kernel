@@ -46,7 +46,7 @@ ui_print("-> Updating modules...");
 run_program("/tmp/main.sh", "update_modules");
 set_progress(0.750000);
 ui_print("-> Setting permissions...");
-run_program("/sbin/chmod", "755", "/ramdisk/init.d/00autoload");
+run_program("/sbin/chmod", "755", "/system/etc/init.d/00autoload");
 run_program("/sbin/chmod", "644", "/system/lib/modules/autoload/*");
 ui_print("-> Generating fstab...");
 run_program("/tmp/main.sh", "fstab");

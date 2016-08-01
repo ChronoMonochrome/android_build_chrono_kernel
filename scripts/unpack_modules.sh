@@ -16,6 +16,4 @@ chmod 755 /ramdisk/00userinit
 chmod 755 /ramdisk/00recovery
 chmod 755 /ramdisk/00lpm
 chmod 755 /ramdisk/10monkey_patch
-chmod 755 /ramdisk/20userscript
-chmod 755 /ramdisk/init.d
 chmod 750 /ramdisk/init.kernel.rc

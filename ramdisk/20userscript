@@ -1,6 +1,0 @@
-set -x
-
-for i in $(busybox ls /ramdisk/init.d/* )
-do
-	busybox sh $i
-done 
