@@ -2,12 +2,12 @@ set -x
 
 BB=/system/xbin/busybox
 
-SIZE=75
-NUMBLOCKS=3
+SIZE=100
+NUMBLOCKS=4
 $BB echo $NUMBLOCKS > /sys/module/zram_num_devices_ctl/parameters/zram_num_devices
 $BB echo 0 > /proc/sys/vm/page-cluster
 $BB echo 100 > /proc/sys/vm/swappiness 
-
+$BB echo 2458 > /sys/module/zram/parameters/max_zpage_size
 
 if ! test -d /sys/module/zram; then
        $BB insmod /system/lib/modules/zram.ko
@@ -20,5 +20,5 @@ do
     $BB echo $(( $SIZE * 1024 * 1024 )) > /sys/devices/virtual/block/zram$i/disksize 
     $BB echo 1 > /sys/devices/virtual/block/zram$i/max_comp_streams
     $BB mkswap /dev/block/zram$i
-    $BB swapon -p 5 /dev/block/zram$i
+    $BB swapon -p $(( $i * 100 )) /dev/block/zram$i
 done

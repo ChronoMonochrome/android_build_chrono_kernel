@@ -1,11 +1,9 @@
+chmod 0644 /sys/module/lowmemorykiller/parameters/minfree
 chmod 0644 /sys/module/lowmemorykiller/parameters/adj 
-echo "0,3,6,10,12,15" > /sys/module/lowmemorykiller/parameters/adj
+echo "0,3,6,10,13,15" > /sys/module/lowmemorykiller/parameters/adj
 
 chmod 0644 /sys/module/lowmemorykiller/parameters/minfree
-echo "1024,3048,8120,15280,19244,24040" > /sys/module/lowmemorykiller/parameters/minfree;
-
-echo 40000 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
-echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+echo "4096,8048,10120,14280,18244,25000" > /sys/module/lowmemorykiller/parameters/minfree;
 
 chmod 0444 /sys/module/lowmemorykiller/parameters/adj 
 chmod 0444 /sys/module/lowmemorykiller/parameters/minfree
