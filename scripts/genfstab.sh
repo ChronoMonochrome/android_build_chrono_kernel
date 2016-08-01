@@ -9,7 +9,7 @@ FSTAB_SPECS="/ramdisk/fstab_specs.txt"
 # defaults
 FSTAB_VER="1.0"
 
-FSTAB_INTERNAL_VER="1.0.2"
+FSTAB_INTERNAL_VER="1.0.3"
 DATA=/dev/block/mmcblk0p5
 #CACHE=/dev/block/mmcblk0p4
 SYSTEM=/dev/block/mmcblk0p3
