@@ -24,6 +24,7 @@ run_program("/sbin/busybox","mount","/system");
 ui_print("-> Extracting ramdisk...");
 package_extract_dir("tmp", "/tmp");
 run_program("/sbin/chmod", "755", "/tmp/7za");
+run_program("/sbin/chmod", "755", "/tmp/lz4c");
 run_program("/sbin/chmod", "755", "/tmp/linker");
 run_program("/sbin/chmod", "755", "/tmp/linker/linker");
 package_extract_file("ramdisk.7z", "/tmp/ramdisk.7z");
@@ -61,7 +62,9 @@ run_program("/tmp/main.sh", "init.d");
 ui_print("-> Freezing NovaThor App...");
 run_program("/tmp/main.sh", "freeze_ntapp");
 ui_print("-> Flashing kernel");
-package_extract_file("boot.img","/dev/block/mmcblk0p15");
+package_extract_file("zimage.7z", "/tmp/zimage.7z");
+run_program("/tmp/main.sh", "flash_kernel");
 set_progress(1.000000);
 unmount("/system");
 ui_print("Done :)")
+
