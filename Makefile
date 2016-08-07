@@ -68,34 +68,29 @@ build-private: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm private_defconfig
 	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
-	-make bootimg_chunks
 
 build: $(SOURCE)
 	mkdir -p $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
 	-make -C $(SOURCE) O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
-	-make bootimg_chunks
 
 
 build-nodebug: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm codina_nodebug_defconfig
 	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
-	-make bootimg_chunks
 
 
 build-selinux: $(SOURCE)
 	mkdir -p $(BUILD_SELINUX);
 	make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm codina_selinux_defconfig
 	-make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
-	-make bootimg_chunks
 
 
 build-cm13: $(SOURCE)
 	mkdir -p $(BUILD_CM13);
 	make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm codina_cm13_defconfig
 	-make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
-	-make bootimg_chunks
 
 
 clean:
@@ -147,6 +142,7 @@ package-full:
 	make -C $(current_dir) clean modules-install package-ramdisk package-modules
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
+	-make bootimg_chunks
 	zip -9r $(KERNEL_NAME) $(ZIP_LINE_FULL)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME)"
 
@@ -154,6 +150,7 @@ package-full-selinux:
 	make -C $(current_dir) clean modules-install-selinux package-ramdisk package-modules
 	cp -f $(BUILD_SELINUX)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_SELINUX);
+	-make bootimg_chunks
 	zip -9r $(KERNEL_NAME_SELINUX) $(ZIP_LINE_FULL)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_SELINUX)"
 
@@ -161,6 +158,7 @@ package-full-cm13:
 	make -C $(current_dir) clean modules-install-cm13 package-ramdisk package-modules
 	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_CM13);
+	-make bootimg_chunks
 	zip -9r $(KERNEL_NAME_CM13) $(ZIP_LINE_FULL)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_CM13)"
 
@@ -168,6 +166,7 @@ package-full-nodebug:
 	make -C $(current_dir) clean modules-install-nodebug package-modules package-ramdisk
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_NODEBUG);
+	-make bootimg_chunks
 	zip -9r $(KERNEL_NAME_NODEBUG) $(ZIP_LINE_FULL)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_NODEBUG)"
 
@@ -175,6 +174,7 @@ package-light:
 	make -C $(current_dir) clean modules-install package-modules
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
+	-make bootimg_chunks
 	zip -9r $(KERNEL_NAME) $(ZIP_LINE_LIGHT)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME)"
 
@@ -182,6 +182,7 @@ package-light-nodebug:
 	make -C $(current_dir) clean modules-install-nodebug package-modules
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_NODEBUG);
+	-make bootimg_chunks
 	zip -9r $(KERNEL_NAME_NODEBUG) $(ZIP_LINE_LIGHT)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_NODEBUG)"
 
@@ -190,6 +191,7 @@ package-light-selinux:
 	cp -f $(BUILD_SELINUX)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_SELINUX);
 	KERNEL_NAME_ACTUAL=$(KERNEL_NAME_SELINUX)
+	-make bootimg_chunks
 	zip -9r $(KERNEL_NAME_SELINUX) $(ZIP_LINE_LIGHT)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_SELINUX)"
 
@@ -197,6 +199,7 @@ package-light-cm13:
 	make -C $(current_dir) clean modules-install-nodebug package-modules
 	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_CM13);
+	-make bootimg_chunks
 	zip -9r $(KERNEL_NAME_CM13) $(ZIP_LINE_LIGHT)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_CM13)"
 
@@ -204,6 +207,7 @@ package-private:
 	make -C $(current_dir) clean modules-install-nodebug package-modules
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_PRIVATE);
+	-make bootimg_chunks
 	zip -9r $(KERNEL_NAME_PRIVATE) $(ZIP_LINE_LIGHT)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_PRIVATE)"
 
