@@ -20,10 +20,10 @@ ro.build.type=userdebug
 ro.build.user=batlin
 ro.build.host=britannia
 ro.build.tags=test-keys
-ro.product.model=GT-I8160P
+ro.product.model=GT-I8160
 ro.product.brand=samsung
-ro.product.name=GT-I8160P
-ro.product.device=codinap
+ro.product.name=GT-I8160
+ro.product.device=codina
 ro.product.board=montblanc
 ro.product.cpu.abi=armeabi-v7a
 ro.product.cpu.abi2=armeabi
@@ -33,14 +33,14 @@ ro.product.locale.region=US
 ro.wifi.channels=
 ro.board.platform=montblanc
 # ro.build.product is obsolete; use ro.product.device
-ro.build.product=codinap
+ro.build.product=codina
 # Do not try to parse ro.build.description or .fingerprint
 ro.build.description=slim_codina-userdebug 4.3.1 JLS36I eng.batlin.20140908.191226 test-keys
 ro.build.fingerprint=samsung/slim_codina/codina:4.3.1/JLS36I/eng.batlin.20140908.191226:userdebug/test-keys
 ro.build.characteristics=default
 # end build properties
 #
-# system.prop for GT-I8160P
+# system.prop for GT-I8160
 #
 rild.libargs=-d /dev/ttyS0
 rild.libpath=/system/lib/libsec-ril.so
