@@ -21,6 +21,8 @@ if [ "$1" == "janice" ] ; then
  	#sed -i 's/\xed\xaf\x86\x57/\x88\x13\x00\x00/g' kernel
 	sed -i 's,androidboot.hardware=samsungcodina,androidboot.hardware=samsungjanice,' kernel
 fi
+
+/sbin/sh /tmp/gen_cmdline_script.sh kernel
 lz4c -l -c1 kernel kernel.lz4
 cat start_chunk  kernel.lz4 end_chunk > boot.img
 

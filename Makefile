@@ -28,15 +28,14 @@ KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 ZIP_LINE_FULL=META-INF zimage.7z genfstab ramdisk.7z tmp modules.7z scripts init.d
 ZIP_LINE_LIGHT=META-INF zimage.7z modules.7z tmp scripts/main.sh \
 		scripts/remove_modules.sh scripts/unpack_modules.sh scripts/update_modules.sh \
-		scripts/check_ramdisk_partition.sh scripts/initd_install.sh scripts/flash_kernel.sh init.d
+		scripts/check_ramdisk_partition.sh scripts/initd_install.sh scripts/gen_cmdline_script.sh scripts/flash_kernel.sh init.d
 
 HIDE=@
 
 PACKAGE_COMPLETED_LINE="Package is completed and installed to"
 
-AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544
-SYSTEM_MODULE_LIST = hw_random param fuse sdcardfs j4fs exfat f2fs startup_reason #\
-	             #display-ws2401_dpi display-s6d27a1_dpi
+AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger
+SYSTEM_MODULE_LIST = hw_random param fuse sdcardfs j4fs exfat f2fs startup_reason
 
 NUMBER_JOBS?=2
 
@@ -63,6 +62,9 @@ bootimg_chunks: boot.img
 	mkdir -p zimage
 	mv kernel start_chunk end_chunk zimage
 	7za a -t7z zimage.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe zimage
+
+gen_cmdline_script: bootimg_chunks
+	python gen_cmdline_script.py zimage/kernel scripts/gen_cmdline_script.sh tmp/cmdline.txt
 
 build-private: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
@@ -142,7 +144,8 @@ package-full:
 	make -C $(current_dir) clean modules-install package-ramdisk package-modules
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
-	-make bootimg_chunks
+	make bootimg_chunks
+	make gen_cmdline_script
 	zip -9r $(KERNEL_NAME) $(ZIP_LINE_FULL)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME)"
 
@@ -174,7 +177,8 @@ package-light:
 	make -C $(current_dir) clean modules-install package-modules
 	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME);
-	-make bootimg_chunks
+	make bootimg_chunks
+	make gen_cmdline_script
 	zip -9r $(KERNEL_NAME) $(ZIP_LINE_LIGHT)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME)"
 
