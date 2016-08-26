@@ -85,7 +85,7 @@ assert(
        getprop("ro.product.device") == "codinal" || getprop("ro.build.product") == "codinal" ||
        getprop("ro.product.device") == "i8160L" || getprop("ro.build.product") == "i8160L" ||
        getprop("ro.product.device") == "GT-I8160L" || getprop("ro.build.product") == "GT-I8160L" ||
-       run_program("/tmp/main.sh", "flash_kernel", "janice");
+       run_program("/tmp/main.sh", "flash_kernel_janice");
 );
 
 assert(
@@ -95,7 +95,7 @@ assert(
        getprop("ro.product.device") == "janicep" || getprop("ro.build.product") == "janicep" || 
        getprop("ro.product.device") == "I9070P" || getprop("ro.build.product") == "I9070P" || 
        getprop("ro.product.device") == "GT-I9070P" || getprop("ro.build.product") == "GT-I9070P" ||
-       run_program("/tmp/main.sh", "flash_kernel", "codina");
+       run_program("/tmp/main.sh", "flash_kernel_codina");
 );
 
 set_progress(1.000000);

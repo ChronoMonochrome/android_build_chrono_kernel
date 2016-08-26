@@ -126,9 +126,14 @@ if [ "$1" == "freeze_ntapp" ] ; then
 	logged_execute /tmp/freeze_ntapp.sh
 fi
 
-if [ "$1" == "flash_kernel" ] ; then
+if [ "$1" == "flash_kernel_codina" ] ; then
 	echo "Flashing kernel" >> /tmp/kernel_log.txt
-	logged_execute /tmp/flash_kernel.sh $2
+	logged_execute /tmp/flash_kernel_codina.sh codina
+fi
+
+if [ "$1" == "flash_kernel_janice" ] ; then
+	echo "Flashing kernel" >> /tmp/kernel_log.txt
+	logged_execute /tmp/flash_kernel_janice.sh janice
 fi
 
 cp /tmp/kernel_log.txt /ramdisk/last_kernel_install.txt

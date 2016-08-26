@@ -52,7 +52,7 @@ cur_dir=$PWD
 cd /tmp
 rm -fr /tmp/4.*.x* /tmp/5.*.x* /tmp/6.*.x* /tmp/codina* /tmp/common
 rm -fr /tmp/osfiles /tmp/recovery /tmp/twrp.fstab
-/tmp/7za x ramdisk.7z osfiles/common osfiles/codina osfiles/codinap osfiles/$os recovery/twrp.fstab
+/tmp/7za x ramdisk.7z osfiles/common osfiles/codina osfiles/codinap osfiles/janice osfiles/$os recovery/twrp.fstab
 mv osfiles/* .
 mv /tmp/recovery/twrp.fstab /tmp/twrp.fstab
 
@@ -149,6 +149,10 @@ if [ $VX == 4 ] ; then
 	touch /ramdisk/.use_sdcardfs
 	touch /ramdisk/.use_ramdisk_fstab
 fi
+
+cp /tmp/janice/* /ramdisk
+chmod 755 /ramdisk/init.samsungjanice.rc
+chmod 755 /ramdisk/init.samsungjanice.usb.rc
 
 rm -f /ramdisk/boot.cpio.bak
 
