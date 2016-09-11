@@ -63,6 +63,12 @@ bootimg_chunks: boot.img
 	mv kernel start_chunk end_chunk zimage
 	7za a -t7z zimage.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe zimage
 
+#get_cmdline: $(SOURCE)/arch/arm/configs/codina_defconfig
+#	cat $(SOURCE)/arch/arm/configs/codina_defconfig | grep "CONFIG_CMDLINE=" | sed 's,CONFIG_CMDLINE=,,' | tr -d '"' > /tmp/cmdline.txt
+
+#get_cmdline-nodebug: $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig
+#	cat $(SOURCE)/arch/arm/configs/codina_defconfig | grep "CONFIG_CMDLINE=" | sed 's,CONFIG_CMDLINE=,,' | tr -d '"' > /tmp/cmdline.txt
+
 gen_cmdline_script: bootimg_chunks
 	python gen_cmdline_script.py zimage/kernel scripts/gen_cmdline_script.sh tmp/cmdline.txt
 
@@ -154,6 +160,7 @@ package-full-selinux:
 	cp -f $(BUILD_SELINUX)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_SELINUX);
 	-make bootimg_chunks
+	make gen_cmdline_script
 	zip -9r $(KERNEL_NAME_SELINUX) $(ZIP_LINE_FULL)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_SELINUX)"
 
@@ -162,6 +169,7 @@ package-full-cm13:
 	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_CM13);
 	-make bootimg_chunks
+	make gen_cmdline_script
 	zip -9r $(KERNEL_NAME_CM13) $(ZIP_LINE_FULL)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_CM13)"
 
@@ -170,6 +178,7 @@ package-full-nodebug:
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_NODEBUG);
 	-make bootimg_chunks
+	make gen_cmdline_script
 	zip -9r $(KERNEL_NAME_NODEBUG) $(ZIP_LINE_FULL)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_NODEBUG)"
 
@@ -187,6 +196,7 @@ package-light-nodebug:
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_NODEBUG);
 	-make bootimg_chunks
+	make gen_cmdline_script
 	zip -9r $(KERNEL_NAME_NODEBUG) $(ZIP_LINE_LIGHT)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_NODEBUG)"
 
@@ -196,6 +206,7 @@ package-light-selinux:
 	rm -f $(KERNEL_NAME_SELINUX);
 	KERNEL_NAME_ACTUAL=$(KERNEL_NAME_SELINUX)
 	-make bootimg_chunks
+	make gen_cmdline_script
 	zip -9r $(KERNEL_NAME_SELINUX) $(ZIP_LINE_LIGHT)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_SELINUX)"
 
@@ -204,6 +215,7 @@ package-light-cm13:
 	cp -f $(BUILD_CM13)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_CM13);
 	-make bootimg_chunks
+	make gen_cmdline_script
 	zip -9r $(KERNEL_NAME_CM13) $(ZIP_LINE_LIGHT)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_CM13)"
 
@@ -212,6 +224,7 @@ package-private:
 	cp -f $(BUILD_NODEBUG)/arch/arm/boot/zImage $(PACKAGE)/boot.img
 	rm -f $(KERNEL_NAME_PRIVATE);
 	-make bootimg_chunks
+	make gen_cmdline_script
 	zip -9r $(KERNEL_NAME_PRIVATE) $(ZIP_LINE_LIGHT)
 	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(current_dir)/$(KERNEL_NAME_PRIVATE)"
 
