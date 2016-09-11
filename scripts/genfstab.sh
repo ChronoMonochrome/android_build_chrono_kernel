@@ -9,13 +9,14 @@ FSTAB_SPECS="/ramdisk/fstab_specs.txt"
 # defaults
 FSTAB_VER="1.0"
 
-FSTAB_INTERNAL_VER="1.0.2"
+FSTAB_INTERNAL_VER="1.1"
 DATA=/dev/block/mmcblk0p5
 #CACHE=/dev/block/mmcblk0p4
 SYSTEM=/dev/block/mmcblk0p3
 USE_CACHE=1
 USE_PRELOAD=0
 USE_SWAP=1
+USE_INTSDCARD=1
 
 VERSION_LINE=$(cat /system/build.prop | grep "ro.build.version.release" | cut -d "=" -f2)
 VX=$(echo $VERSION_LINE | cut -d "." -f1)
@@ -49,6 +50,7 @@ if ! test -f $FSTAB_SPECS ; then
 	#echo "use_cache_partition=1" >> $FSTAB_SPECS
 	echo "use_preload_partition="$USE_PRELOAD >> $FSTAB_SPECS
 	echo "use_swap="$USE_SWAP >> $FSTAB_SPECS
+	echo "use_intsdcard="$USE_INTSDCARD >> $FSTAB_SPECS
 else
 	DATA=$(cat $FSTAB_SPECS | grep "data=" | cut -d "=" -f2)
 	SYSTEM=$(cat $FSTAB_SPECS | grep "system=" | cut -d "=" -f2)
@@ -56,6 +58,7 @@ else
 	#USE_CACHE=$(cat $FSTAB_SPECS | grep "use_cache_partition=" | cut -d "=" -f2)
 	USE_PRELOAD=$(cat $FSTAB_SPECS | grep "use_preload_partition=" | cut -d "=" -f2)
 	USE_SWAP=$(cat $FSTAB_SPECS | grep "use_swap=" | cut -d "=" -f2)
+	USE_INTSDCARD=$(cat $FSTAB_SPECS | grep "use_intsdcard=" | cut -d "=" -f2)
 fi
 
 
@@ -131,5 +134,12 @@ cat $FSTAB > $FSTAB_SWAP
 cat $DIR/fstab4_v$FSTAB_VER >> $FSTAB
 cat $DIR/fstab4_v$FSTAB_VER >> /tmp/kernel_log.txt
 
-cat $DIR/fstab4_v$FSTAB_VER"_swap" >> $FSTAB_SWAP
+if [ "$USE_INTSDCARD" == "1" ] ; then
+	cat $DIR/fstab4_v$FSTAB_VER"_swap" >> $FSTAB_SWAP
+	cat $DIR/fstab4_v$FSTAB_VER"_swap" >> /tmp/kernel_log.txt
+else
+	cat $DIR/fstab4_v$FSTAB_VER"_swap_nointsdcard" >> $FSTAB_SWAP
+	cat $DIR/fstab4_v$FSTAB_VER"_swap_nointsdcard" >> /tmp/kernel_log.txt
+fi
+
 #cat $DIR/fstab4_v$FSTAB_VER"_swap" >> /tmp/kernel_log.txt
