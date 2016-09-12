@@ -17,4 +17,4 @@ fi
 
 printf %551s > /tmp/new_cmdline.txt
 dd conv=notrunc if=/ramdisk/cmdline.txt of=/tmp/new_cmdline.txt bs=551 count=1
-dd conv=notrunc if=/tmp/new_cmdline.txt of=$1 bs=1 seek=683228
+dd conv=notrunc if=/tmp/new_cmdline.txt of=$1 bs=1 seek=660524

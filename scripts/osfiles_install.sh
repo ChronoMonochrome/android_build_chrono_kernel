@@ -60,7 +60,19 @@ cd $cur_dir
 
 ##### Unpack ramdisk.7z #####
 
+if [ $VX == 7 ] ; then
+	if [ $VY == 0 ] ; then
+		echo "7.0"
+        fi
 
+	if test -f /system/lib/modules/uid_cputime.ko ; then
+		mv /system/lib/modules/uid_cputime.ko /ramdisk/modules/autoload
+	fi
+	ramdisk_path=/tmp/$os/$os.cpio
+
+	rm /ramdisk/.use_sdcardfs
+	touch /ramdisk/.use_ramdisk_fstab
+fi
 
 if [ $VX == 6 ] ; then
 	if [ $VY == 0 ] ; then
