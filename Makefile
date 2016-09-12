@@ -61,7 +61,7 @@ bootimg_chunks: boot.img
 	rm -fr zimage zimage.7z
 	mkdir -p zimage
 	mv kernel start_chunk end_chunk zimage
-	7za a -t7z zimage.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe zimage
+	7za a -t7z zimage.7z -m0=lzma2 -mx=2 -md=16m -m1=LZMA2:d=16m -mhe zimage
 
 #get_cmdline: $(SOURCE)/arch/arm/configs/codina_defconfig
 #	cat $(SOURCE)/arch/arm/configs/codina_defconfig | grep "CONFIG_CMDLINE=" | sed 's,CONFIG_CMDLINE=,,' | tr -d '"' > /tmp/cmdline.txt
@@ -113,10 +113,10 @@ clean:
 	rm -f ramdisk.7z
 	
 
-modules-install:
+modules-install: modules-net-order
 	-make -C $(SOURCE) O=$(BUILD) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
 
-modules-install-nodebug:
+modules-install-nodebug: modules-net-order-nodebug
 	-make -C $(SOURCE) O=$(BUILD_NODEBUG) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
 
 modules-install-selinux:
@@ -125,7 +125,22 @@ modules-install-selinux:
 modules-install-cm13:
 	-make -C $(SOURCE) O=$(BUILD_CM13) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
 
-package-modules:
+modules-net-order: $(BUILD)/net/modules.order
+	cp $(BUILD)/net/modules.order $(PACKAGE)/net_modules.order
+
+modules-net-order-nodebug: $(BUILD_NODEBUG)/net/modules.order
+	cp $(BUILD_NODEBUG)/net/modules.order $(PACKAGE)/net_modules.order
+
+get_module_list: $(PACKAGE)/net_modules.order
+	sh $(PACKAGE)/get_modules_list.sh $(PACKAGE)/net_modules.order $(PACKAGE)/ramdisk/modules_list.txt
+
+package-modules: get_module_list
+	$(foreach module,$(shell cat $(PACKAGE)/ramdisk/modules_list.txt), \
+                        if test -f $(PACKAGE)/system/lib/modules/$(module).ko; then \
+				cp $(PACKAGE)/system/lib/modules/$(module).ko \
+                         $(PACKAGE)/ramdisk/modules/$(module).ko; \
+			fi;)
+
 	$(foreach module,$(SYSTEM_MODULE_LIST), \
                         if test -f $(PACKAGE)/system/lib/modules/$(module).ko; then \
 				cp $(PACKAGE)/system/lib/modules/$(module).ko \
@@ -137,14 +152,14 @@ package-modules:
                         	cp $(PACKAGE)/system/lib/modules/$(module).ko \
                          $(PACKAGE)/ramdisk/modules/autoload/$(module).ko; \
 	fi;)
-	
+
 	rm -f modules.7z
 
-	7za a -t7z modules.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe ramdisk system
+	7za a -t7z modules.7z -m0=lzma2 -mx=2 -md=16m -m1=LZMA2:d=16m -mhe ramdisk system
 
 package-ramdisk:
 	rm -f ramdisk.7z
-	7za a -t7z ramdisk.7z -m0=lzma2 -mx=9 -aoa -mfb=64 -md=32m -ms=on -m1=LZMA2:d=128m -mhe osfiles recovery
+	7za a -t7z ramdisk.7z -m0=lzma2 -mx=2 -md=16m -m1=LZMA2:d=16m -mhe osfiles recovery
 
 package-full:
 	make -C $(current_dir) clean modules-install package-ramdisk package-modules

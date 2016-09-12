@@ -6,3 +6,9 @@ fi
 
 busybox chown 1000:1000 /sys/kernel/god_mode/god_mode
 
+if test -f /ramdisk/modules_list.txt && test -f /ramdisk/.use_ipv6; then
+	while read line
+	do
+		busybox insmod /ramdisk/modules/$line.ko
+	done < /ramdisk/modules_list.txt
+fi
