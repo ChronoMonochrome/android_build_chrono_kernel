@@ -3,7 +3,7 @@
 
 set -x
 
-if [  "$(stat /ramdisk/cmdline.txt | grep -c 551)" != "1" ] || ! test -f /ramdisk/cmdline.txt; then
+if [  "$(stat /ramdisk/cmdline.txt | grep -c 575)" != "1" ] || ! test -f /ramdisk/cmdline.txt; then
 	if ! test -f /tmp/cmdline.txt ; then
 		exit
 	fi
@@ -15,6 +15,6 @@ if test -f /ramdisk/.dont_use_ramdisk_cmdline ; then
 	exit
 fi
 
-printf %551s > /tmp/new_cmdline.txt
-dd conv=notrunc if=/ramdisk/cmdline.txt of=/tmp/new_cmdline.txt bs=551 count=1
-dd conv=notrunc if=/tmp/new_cmdline.txt of=$1 bs=1 seek=660524
+printf %575s > /tmp/new_cmdline.txt
+dd conv=notrunc if=/ramdisk/cmdline.txt of=/tmp/new_cmdline.txt bs=575 count=1
+dd conv=notrunc if=/tmp/new_cmdline.txt of=$1 bs=1 seek=699900

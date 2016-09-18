@@ -1,5 +1,15 @@
 #!/sbin/sh
 
+VERSION_LINE=$(cat /system/build.prop | grep "ro.build.version.release" | cut -d "=" -f2)
+VX=$(echo $VERSION_LINE | cut -d "." -f1)
+VY=$(echo $VERSION_LINE | cut -d "." -f2)
+
+
+if [ $VX != 4 ] && [ $VY != 4 ] ; then
+		echo "OS version is not 4.4.x, skipped"
+		exit
+fi
+
 APPS_PATHS="/system/priv-app /system/app /data/app"
 UNZIP="/system/xbin/unzip"
 NTAPP_ICON="res/drawable-hdpi-v4/novathor_icon.png"
