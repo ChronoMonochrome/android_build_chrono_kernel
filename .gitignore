@@ -5,4 +5,9 @@ system/lib/modules/*.ko
 system/lib/modules/autoload/*.ko
 system/lib/modules/autoload/.placeholder
 boot.img
+zimage.7z
+zimage/*
+tmp/cmdline.txt
+tmp/new_cmdline.txt
+scripts/gen_cmdline_script.sh
 *.zip
