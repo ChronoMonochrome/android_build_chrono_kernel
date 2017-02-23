@@ -68,6 +68,3 @@ fi
 
 busybox sed -ie "s,PATH /sbin,PATH /ramdisk/bin:/sbin," /init.environ.rc
 busybox sed -ie "s,PATH /vendor,PATH /ramdisk/lib:/vendor," /init.environ.rc
-busybox ln -s /ramdisk/init.samsungjanice.rc /init.samsungjanice.rc
-busybox ln -s /ramdisk/init.samsungjanice.usb.rc /init.samsungjanice.usb.rc
-busybox ln -s /ramdisk/fstab /fstab.samsungjanice

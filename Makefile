@@ -29,7 +29,7 @@ KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 ZIP_LINE_FULL=META-INF zimage.7z genfstab ramdisk.7z tmp modules.7z scripts init.d
 ZIP_LINE_LIGHT=META-INF zimage.7z modules.7z tmp scripts/main.sh \
 		scripts/remove_modules.sh scripts/unpack_modules.sh scripts/update_modules.sh \
-		scripts/check_ramdisk_partition.sh scripts/initd_install.sh scripts/gen_cmdline_script.sh scripts/flash_kernel_codina.sh scripts/flash_kernel_janice.sh init.d
+		scripts/check_ramdisk_partition.sh scripts/initd_install.sh scripts/gen_cmdline_script.sh scripts/flash_kernel.sh init.d
 
 HIDE=@
 
