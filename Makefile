@@ -26,10 +26,10 @@ KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip
 KERNEL_NAME_CM13=chrono_kernel_$(VERSION)-cm13.zip
 KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
-ZIP_LINE_FULL=META-INF zimage.7z genfstab ramdisk.7z tmp modules.7z scripts init.d
-ZIP_LINE_LIGHT=META-INF zimage.7z modules.7z tmp scripts/main.sh \
+ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z tmp modules.7z scripts init.d
+ZIP_LINE_LIGHT=META-INF boot.img modules.7z tmp scripts/main.sh \
 		scripts/remove_modules.sh scripts/unpack_modules.sh scripts/update_modules.sh \
-		scripts/check_ramdisk_partition.sh scripts/initd_install.sh scripts/flash_kernel.sh init.d
+		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
 HIDE=@
 
@@ -44,7 +44,7 @@ NUMBER_JOBS?=2
 all: codina upload codina-nodebug upload-nodebug
 
 codina: build package-full
-codina-light: build package-light 
+codina-light: build package-light
 codina-nodebug: build-nodebug package-full-nodebug
 codina-nodebug-light: build-nodebug package-light-nodebug
 codina-selinux: build-selinux package-full-selinux
@@ -58,51 +58,30 @@ update-private-config: $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig
 	sed -ie "s,CONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MIN=[0-9]*,# bootup min freq\nCONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MIN=1200000," $(SOURCE)/arch/arm/configs/private_defconfig
 	sed -ie "s,CONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MAX=[0-9]*,# bootup max freq\nCONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MAX=1200000," $(SOURCE)/arch/arm/configs/private_defconfig
 
-bootimg_chunks: boot.img
-	python get_bootimg_chunks.py boot.img
-	rm -fr zimage zimage.7z
-	mkdir -p zimage
-	mv kernel start_chunk end_chunk zimage
-	7za a -t7z zimage.7z -m0=lzma2 -mx=2 -md=16m -m1=LZMA2:d=16m -mhe zimage
-
-#get_cmdline: $(SOURCE)/arch/arm/configs/codina_defconfig
-#	cat $(SOURCE)/arch/arm/configs/codina_defconfig | grep "CONFIG_CMDLINE=" | sed 's,CONFIG_CMDLINE=,,' | tr -d '"' > /tmp/cmdline.txt
-
-#get_cmdline-nodebug: $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig
-#	cat $(SOURCE)/arch/arm/configs/codina_defconfig | grep "CONFIG_CMDLINE=" | sed 's,CONFIG_CMDLINE=,,' | tr -d '"' > /tmp/cmdline.txt
-
 build-private: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm private_defconfig
 	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
-	-make bootimg_chunks
 
 build: $(SOURCE)
 	mkdir -p $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
 	-make -C $(SOURCE) V=0 O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
 
-
 build-nodebug: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
 	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm codina_nodebug_defconfig
 	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
-	-make bootimg_chunks
-
 
 build-selinux: $(SOURCE)
 	mkdir -p $(BUILD_SELINUX);
 	make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm codina_selinux_defconfig
 	-make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
-	-make bootimg_chunks
-
 
 build-cm13: $(SOURCE)
 	mkdir -p $(BUILD_CM13);
 	make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm codina_cm13_defconfig
 	-make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
-	-make bootimg_chunks
-
 
 clean:
 	rm -fr system/lib/modules/*
