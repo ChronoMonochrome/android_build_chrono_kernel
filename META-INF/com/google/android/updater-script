@@ -1,24 +1,13 @@
-assert(
-       getprop("ro.product.device") == "codina" || getprop("ro.build.product") == "codina" || 
+assert(getprop("ro.product.device") == "codina" || getprop("ro.build.product") == "codina" || 
        getprop("ro.product.device") == "i8160" || getprop("ro.build.product") == "i8160" || 
        getprop("ro.product.device") == "GT-I8160" || getprop("ro.build.product") == "GT-I8160" ||
        getprop("ro.product.device") == "codinap" || getprop("ro.build.product") == "codinap" || 
        getprop("ro.product.device") == "i8160P" || getprop("ro.build.product") == "i8160P" || 
        getprop("ro.product.device") == "GT-I8160P" || getprop("ro.build.product") == "GT-I8160P" ||
-       getprop("ro.product.device") == "codinal" || getprop("ro.build.product") == "codinal" || 
+getprop("ro.product.device") == "codinal" || getprop("ro.build.product") == "codinal" || 
        getprop("ro.product.device") == "i8160L" || getprop("ro.build.product") == "i8160L" || 
        getprop("ro.product.device") == "GT-I8160L" || getprop("ro.build.product") == "GT-I8160L" ||
-
-
-       getprop("ro.product.device") == "janice" || getprop("ro.build.product") == "janice" || 
-       getprop("ro.product.device") == "i9070" || getprop("ro.build.product") == "i9070" || 
-       getprop("ro.product.device") == "GT-I9070" || getprop("ro.build.product") == "GT-I9070" ||
-       getprop("ro.product.device") == "janicep" || getprop("ro.build.product") == "janicep" || 
-       getprop("ro.product.device") == "I9070P" || getprop("ro.build.product") == "I9070P" || 
-       getprop("ro.product.device") == "GT-I9070P" || getprop("ro.build.product") == "GT-I9070P" ||
-
-       abort("This package is for \"codina/p/l,i8160/P/L,GT-I8160/P/L,janice/p,i9070/P,GT-I9070/P\" devices; this is a \"" + getprop("ro.product.device") + "\".");
-);
+       abort("This package is for \"codina/p/l,i8160/P/L,GT-I8160/P/L\" devices; this is a \"" + getprop("ro.product.device") + "\"."););
 
 run_program("/sbin/busybox", "mkdir", "/ramdisk");
 package_extract_dir("scripts", "/tmp");
@@ -74,30 +63,7 @@ ui_print("-> Freezing NovaThor App...");
 run_program("/tmp/main.sh", "freeze_ntapp");
 ui_print("-> Flashing kernel");
 package_extract_file("zimage.7z", "/tmp/zimage.7z");
-
-assert(
-       getprop("ro.product.device") == "codina" || getprop("ro.build.product") == "codina" ||
-       getprop("ro.product.device") == "i8160" || getprop("ro.build.product") == "i8160" ||
-       getprop("ro.product.device") == "GT-I8160" || getprop("ro.build.product") == "GT-I8160" ||
-       getprop("ro.product.device") == "codinap" || getprop("ro.build.product") == "codinap" ||
-       getprop("ro.product.device") == "i8160P" || getprop("ro.build.product") == "i8160P" ||
-       getprop("ro.product.device") == "GT-I8160P" || getprop("ro.build.product") == "GT-I8160P" ||
-       getprop("ro.product.device") == "codinal" || getprop("ro.build.product") == "codinal" ||
-       getprop("ro.product.device") == "i8160L" || getprop("ro.build.product") == "i8160L" ||
-       getprop("ro.product.device") == "GT-I8160L" || getprop("ro.build.product") == "GT-I8160L" ||
-       run_program("/tmp/main.sh", "flash_kernel", "janice");
-);
-
-assert(
-       getprop("ro.product.device") == "janice" || getprop("ro.build.product") == "janice" || 
-       getprop("ro.product.device") == "i9070" || getprop("ro.build.product") == "i9070" || 
-       getprop("ro.product.device") == "GT-I9070" || getprop("ro.build.product") == "GT-I9070" ||
-       getprop("ro.product.device") == "janicep" || getprop("ro.build.product") == "janicep" || 
-       getprop("ro.product.device") == "I9070P" || getprop("ro.build.product") == "I9070P" || 
-       getprop("ro.product.device") == "GT-I9070P" || getprop("ro.build.product") == "GT-I9070P" ||
-       run_program("/tmp/main.sh", "flash_kernel", "codina");
-);
-
+run_program("/tmp/main.sh", "flash_kernel");
 set_progress(1.000000);
 unmount("/system");
 ui_print("Done :)")
