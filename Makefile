@@ -1,6 +1,6 @@
 current_dir := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-SOURCE ?= ../ck
+SOURCE ?= ../ck2
 BUILD ?= ../obj
 BUILD_NODEBUG ?=../obj_nodebug
 BUILD_SELINUX ?=../obj_selinux
@@ -8,7 +8,7 @@ BUILD_CM13 ?=../obj_cm13
 
 PACKAGE ?= $(current_dir)
 
-export USE_CCACHE=1
+export USE_CCACHE=0
 export CCACHE_DIR=../ck_ccache
 
 #ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_i686/bin/armv7a-linux-gnueabihf-
