@@ -22,26 +22,35 @@ cd $cur_dir
 cd /tmp
 
 if [ "$(busybox dd if=/dev/block/mmcblk0p15 skip=8388608 bs=1 count=3 | busybox grep -c $'\x1f\x8b\x08' )" == "0" ] ; then
-	gzip -9 recovery.cpio
-
-	dd if=/tmp/recovery.cpio.gz of=/dev/block/mmcblk0p15 bs=524288 seek=16
-
+	# gzip -9 recovery.cpio
+	# dd if=/tmp/recovery.cpio.gz of=/dev/block/mmcblk0p15 bs=524288 seek=16
+	dd if=/dev/zero of=/dev/block/mmcblk0p15 bs=524288
 fi
 
 
-# install default.prop
-
-mount /system
+mount /efs
 
 if test -f /ramdisk/recovery.cpio.gz ; then
-	exit
+	rm -f /ramdisk/recovery.cpio.gz
 fi
 
 if  test -f /ramdisk/recovery.cpio ; then
+	rm -f /ramdisk/recovery.cpio
+fi
+
+if test -f /efs/recovery.cpio.gz ; then
+	ln -sf /efs/recovery.cpio.gz /ramdisk/
 	exit
 fi
 
+if  test -f /efs/recovery.cpio ; then
+	ln -sf /efs/recovery.cpio /ramdisk/
+	exit
+fi
 
-cp /tmp/recovery.cpio.gz /ramdisk/recovery.cpio.gz
+gzip -9 recovery.cpio
+
+cp /tmp/recovery.cpio.gz /efs/recovery.cpio.gz
+ln -sf /efs/recovery.cpio.gz /ramdisk/
 
 rm /tmp/recovery.cpio.gz
