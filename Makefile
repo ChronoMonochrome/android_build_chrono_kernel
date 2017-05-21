@@ -1,7 +1,7 @@
 current_dir := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 SOURCE ?= ../ck2
-BUILD ?= ../obj
+BUILD ?= ../obj2
 BUILD_NODEBUG ?=../obj_nodebug
 BUILD_SELINUX ?=../obj_selinux
 BUILD_CM13 ?=../obj_cm13
@@ -14,10 +14,11 @@ export CCACHE_DIR=../ck_ccache
 #ARM_CC = /home/chrono/tools/opt/armv7a-linux-gnueabihf-gcc-5.2.0_i686/bin/armv7a-linux-gnueabihf-
 #ARM_CC = /media/chrono/Other/cross/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-
 #ARM_CC = /home/chrono/arm-cortexa9_neon-linux-gnueabihf-6.1.0/bin/arm-cortexa9_neon-linux-gnueabihf-
-ARM_CC ?= ../armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
+#ARM_CC ?= ../armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
 #ARM_CC = ../LinaroMod-arm-eabi-5.1/bin/arm-eabi-
 #ARM_CC = ../arm-cortex_a9-linux-gnueabihf-linaro_4.9.4-2015.06/bin/arm-eabi-
 #ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
+ARM_CC = /home/chrono/root/armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnueabihf-
 
 VERSION=$(shell git -C $(SOURCE) tag | grep 'r[0-9].[0-9]' | sort -V | tail -n1)
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
@@ -26,7 +27,7 @@ KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip
 KERNEL_NAME_CM13=chrono_kernel_$(VERSION)-cm13.zip
 KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
-ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z tmp modules.7z scripts init.d
+ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z tmp modules.7z scripts init.d recovery
 ZIP_LINE_LIGHT=META-INF boot.img modules.7z tmp scripts/main.sh \
 		scripts/remove_modules.sh scripts/unpack_modules.sh scripts/update_modules.sh \
 		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
@@ -141,7 +142,7 @@ package-modules: get_module_list
 
 package-ramdisk:
 	rm -f ramdisk.7z
-	7za a -t7z ramdisk.7z -m0=lzma2 -mx=2 -md=16m -m1=LZMA2:d=16m -mhe osfiles recovery
+	7za a -t7z ramdisk.7z -m0=lzma2 -mx=2 -md=16m -m1=LZMA2:d=16m -mhe osfiles
 
 package-full:
 	make -C $(current_dir) clean modules-install package-ramdisk package-modules

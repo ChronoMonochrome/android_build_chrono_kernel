@@ -44,3 +44,6 @@ else
 	mkdir -p $AUTOLOAD
 fi
 
+chmod 644 /system/lib/modules/*
+chmod 644 /system/lib/modules/autoload/*
+chmod 755 /system/lib/modules/autoload
