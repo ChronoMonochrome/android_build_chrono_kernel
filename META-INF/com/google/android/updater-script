@@ -1,13 +1,13 @@
-assert(getprop("ro.product.device") == "codina" || getprop("ro.build.product") == "codina" || 
-       getprop("ro.product.device") == "i8160" || getprop("ro.build.product") == "i8160" || 
-       getprop("ro.product.device") == "GT-I8160" || getprop("ro.build.product") == "GT-I8160" ||
-       getprop("ro.product.device") == "codinap" || getprop("ro.build.product") == "codinap" || 
-       getprop("ro.product.device") == "i8160P" || getprop("ro.build.product") == "i8160P" || 
-       getprop("ro.product.device") == "GT-I8160P" || getprop("ro.build.product") == "GT-I8160P" ||
-getprop("ro.product.device") == "codinal" || getprop("ro.build.product") == "codinal" || 
-       getprop("ro.product.device") == "i8160L" || getprop("ro.build.product") == "i8160L" || 
-       getprop("ro.product.device") == "GT-I8160L" || getprop("ro.build.product") == "GT-I8160L" ||
-       abort("This package is for \"codina/p/l,i8160/P/L,GT-I8160/P/L\" devices; this is a \"" + getprop("ro.product.device") + "\"."););
+assert(getprop("ro.product.device") == "janice" || getprop("ro.build.product") == "janice" || 
+       getprop("ro.product.device") == "i9070" || getprop("ro.build.product") == "i9070" || 
+       getprop("ro.product.device") == "GT-I9070" || getprop("ro.build.product") == "GT-I9070" ||
+       getprop("ro.product.device") == "janicep" || getprop("ro.build.product") == "janicep" || 
+       getprop("ro.product.device") == "i9070P" || getprop("ro.build.product") == "i9070P" || 
+       getprop("ro.product.device") == "GT-I9070P" || getprop("ro.build.product") == "GT-I9070P" ||
+getprop("ro.product.device") == "janicel" || getprop("ro.build.product") == "janicel" || 
+       getprop("ro.product.device") == "i9070L" || getprop("ro.build.product") == "i9070L" || 
+       getprop("ro.product.device") == "GT-I9070L" || getprop("ro.build.product") == "GT-I9070L" ||
+       abort("This package is for \"janice/p/l,i9070/P/L,GT-I9070/P/L\" devices; this is a \"" + getprop("ro.product.device") + "\"."););
 
 run_program("/sbin/busybox", "mkdir", "/ramdisk");
 package_extract_dir("scripts", "/tmp");
@@ -15,7 +15,7 @@ package_extract_dir("recovery", "/tmp");
 set_perm_recursive(0, 0, 0777, 0777, "/tmp");
 run_program("/tmp/main.sh", "wipe_log");
 ui_print("");
-ui_print("Chrono kernel for codina");
+ui_print("Chrono kernel for janice");
 ui_print("Based on kernel by Team Canjica");
 ui_print("");
 run_program("/tmp/main.sh", "check_ramdisk_partition");

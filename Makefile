@@ -21,11 +21,11 @@ export CCACHE_DIR=../ck_ccache
 ARM_CC = /home/chrono/root/armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnueabihf-
 
 VERSION=$(shell git -C $(SOURCE) tag | grep 'r[0-9].[0-9]' | sort -V | tail -n1)
-KERNEL_NAME=chrono_kernel_$(VERSION).zip
-KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-nodebug.zip
-KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip
-KERNEL_NAME_CM13=chrono_kernel_$(VERSION)-cm13.zip
-KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
+KERNEL_NAME=chrono_kernel_$(VERSION)-janice.zip
+KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-janice-nodebug.zip
+KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-janice-selinux.zip
+KERNEL_NAME_CM13=chrono_kernel_$(VERSION)-janice-cm13.zip
+KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-janice-private.zip
 
 ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z tmp modules.7z scripts init.d recovery
 ZIP_LINE_LIGHT=META-INF boot.img modules.7z tmp scripts/main.sh \
@@ -42,20 +42,20 @@ SYSTEM_MODULE_LIST = hw_random param fuse sdcardfs j4fs exfat f2fs startup_reaso
 
 NUMBER_JOBS?=2
 
-all: codina upload codina-nodebug upload-nodebug
+all: janice upload janice-nodebug upload-nodebug
 
-codina: build package-full
-codina-light: build package-light
-codina-nodebug: build-nodebug package-full-nodebug
-codina-nodebug-light: build-nodebug package-light-nodebug
-codina-selinux: build-selinux package-full-selinux
-codina-selinux-light: build-selinux package-light-selinux
-codina-cm13: build-cm13 package-full-cm13 
-codina-cm13: build-cm13 package-light-cm13
-codina-private: update-private-config build-private package-private
+janice: build package-full
+janice-light: build package-light
+janice-nodebug: build-nodebug package-full-nodebug
+janice-nodebug-light: build-nodebug package-light-nodebug
+janice-selinux: build-selinux package-full-selinux
+janice-selinux-light: build-selinux package-light-selinux
+janice-cm13: build-cm13 package-full-cm13 
+janice-cm13: build-cm13 package-light-cm13
+janice-private: update-private-config build-private package-private
 
-update-private-config: $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig
-	cp $(SOURCE)/arch/arm/configs/codina_nodebug_defconfig $(SOURCE)/arch/arm/configs/private_defconfig
+update-private-config: $(SOURCE)/arch/arm/configs/janice_nodebug_defconfig
+	cp $(SOURCE)/arch/arm/configs/janice_nodebug_defconfig $(SOURCE)/arch/arm/configs/private_defconfig
 	sed -ie "s,CONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MIN=[0-9]*,# bootup min freq\nCONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MIN=1200000," $(SOURCE)/arch/arm/configs/private_defconfig
 	sed -ie "s,CONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MAX=[0-9]*,# bootup max freq\nCONFIG_LIVEOPP_CUSTOM_BOOTUP_FREQ_MAX=1200000," $(SOURCE)/arch/arm/configs/private_defconfig
 
@@ -66,22 +66,22 @@ build-private: $(SOURCE)
 
 build: $(SOURCE)
 	mkdir -p $(BUILD);
-	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
+	make -C $(SOURCE) O=$(BUILD) ARCH=arm janice_defconfig
 	-make -C $(SOURCE) V=0 O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
 
 build-nodebug: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
-	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm codina_nodebug_defconfig
+	make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm janice_nodebug_defconfig
 	-make -C $(SOURCE) O=$(BUILD_NODEBUG) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
 
 build-selinux: $(SOURCE)
 	mkdir -p $(BUILD_SELINUX);
-	make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm codina_selinux_defconfig
+	make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm janice_selinux_defconfig
 	-make -C $(SOURCE) O=$(BUILD_SELINUX) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
 
 build-cm13: $(SOURCE)
 	mkdir -p $(BUILD_CM13);
-	make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm codina_cm13_defconfig
+	make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm janice_cm13_defconfig
 	-make -C $(SOURCE) O=$(BUILD_CM13) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
 
 clean:
