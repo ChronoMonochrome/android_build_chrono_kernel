@@ -1,7 +1,7 @@
 current_dir := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 SOURCE ?= ../ck2
-BUILD ?= ../obj2
+BUILD ?= ../obj3
 BUILD_NODEBUG ?=../obj_nodebug
 BUILD_SELINUX ?=../obj_selinux
 BUILD_CM13 ?=../obj_cm13

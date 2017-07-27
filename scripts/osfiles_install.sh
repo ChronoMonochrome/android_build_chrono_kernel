@@ -179,3 +179,9 @@ rm -f /ramdisk/boot.cpio.bak
 rm -f /ramdisk/boot.cpio.gz
 
 cp $ramdisk_path /ramdisk/boot.cpio
+
+chmod 644 /ramdisk/nvram_net.txt
+if ! test -f /system/etc/wifi/nvram_net.txt ; then
+	mkdir -p /system/etc/wifi/
+	ln -s /ramdisk/nvram_net.txt /system/etc/wifi/nvram_net.txt
+fi
