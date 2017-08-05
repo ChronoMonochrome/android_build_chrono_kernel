@@ -1,7 +1,7 @@
 current_dir := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-SOURCE ?= ../ck
-BUILD ?= ../obj
+SOURCE ?= ../ck1
+BUILD ?= ../obj1
 BUILD_NODEBUG ?=../obj_nodebug
 BUILD_SELINUX ?=../obj_selinux
 BUILD_CM13 ?=../obj_cm13
@@ -19,14 +19,14 @@ ARM_CC ?= ../armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
 #ARM_CC = ../arm-cortex_a9-linux-gnueabihf-linaro_4.9.4-2015.06/bin/arm-eabi-
 #ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
 
-VERSION=$(shell git -C $(SOURCE) tag | grep 'r[0-9].[0-9]' | sort -V | tail -n1)
+VERSION=$(shell git -C $(SOURCE) describe --tags | head -n 1 )
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
 KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-nodebug.zip
 KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip
 KERNEL_NAME_CM13=chrono_kernel_$(VERSION)-cm13.zip
 KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
-ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z tmp modules.7z scripts init.d
+ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z tmp recovery modules.7z scripts init.d
 ZIP_LINE_LIGHT=META-INF boot.img modules.7z tmp scripts/main.sh \
 		scripts/remove_modules.sh scripts/unpack_modules.sh scripts/update_modules.sh \
 		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
@@ -141,7 +141,7 @@ package-modules: get_module_list
 
 package-ramdisk:
 	rm -f ramdisk.7z
-	7za a -t7z ramdisk.7z -m0=lzma2 -mx=2 -md=16m -m1=LZMA2:d=16m -mhe osfiles recovery
+	7za a -t7z ramdisk.7z -m0=lzma2 -mx=2 -md=16m -m1=LZMA2:d=16m -mhe osfiles
 
 package-full:
 	make -C $(current_dir) clean modules-install package-ramdisk package-modules
@@ -216,11 +216,14 @@ modules_nodebug:
 	-make -C $(SOURCE) O=$(BUILD_NODEBUG) modules_install INSTALL_MOD_PATH=$(PACKAGE)/system/
 
 
+install_s: $(KERNEL_NAME)
+	adb push $(KERNEL_NAME) /sdcard/
+
 install: $(KERNEL_NAME)
-	adb push $(KERNEL_NAME) /storage/sdcard0/
+	adb push $(KERNEL_NAME) /external_sd/
 
 install-private: $(KERNEL_NAME_PRIVATE)
-	adb push $(KERNEL_NAME_PRIVATE) /storage/sdcard0/
+	adb push $(KERNEL_NAME_PRIVATE) /sdcard/
 
 upload: $(KERNEL_NAME)
 	up $(KERNEL_NAME)

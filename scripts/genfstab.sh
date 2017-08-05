@@ -22,7 +22,7 @@ VERSION_LINE=$(cat /system/build.prop | grep "ro.build.version.release" | cut -d
 VX=$(echo $VERSION_LINE | cut -d "." -f1)
 VY=$(echo $VERSION_LINE | cut -d "." -f2)
 
-if [ $VX == 6 ]; then
+if [ $VX -ge 6 ];  then
 	FSTAB_VER="2.0"
 fi
 
