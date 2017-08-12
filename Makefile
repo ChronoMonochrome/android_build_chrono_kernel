@@ -39,7 +39,7 @@ AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544
 SYSTEM_MODULE_LIST = hw_random param fuse sdcardfs j4fs exfat f2fs startup_reason #\
 	             #display-ws2401_dpi display-s6d27a1_dpi
 
-NUMBER_JOBS?=2
+NUMBER_JOBS?=3
 
 all: codina upload codina-nodebug upload-nodebug
 

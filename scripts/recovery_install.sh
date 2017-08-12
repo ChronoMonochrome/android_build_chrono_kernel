@@ -42,12 +42,5 @@ fi
 
 mount /system
 
-if test -f /ramdisk/recovery.cpio.gz ; then
-	rm /ramdisk/recovery.cpio.gz
-fi
-
-if  test -f /ramdisk/recovery.cpio ; then
-	rm /ramdisk/recovery.cpio
-fi
-
 rm /tmp/recovery.cpio.gz
+
