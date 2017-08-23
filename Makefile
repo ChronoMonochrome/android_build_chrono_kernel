@@ -1,7 +1,7 @@
 current_dir := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-SOURCE ?= ../ck1
-BUILD ?= ../obj1
+SOURCE ?= ../ck
+BUILD ?= ../obj
 BUILD_NODEBUG ?=../obj_nodebug
 BUILD_SELINUX ?=../obj_selinux
 BUILD_CM13 ?=../obj_cm13
@@ -35,8 +35,8 @@ HIDE=@
 
 PACKAGE_COMPLETED_LINE="Package is completed and installed to"
 
-AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544
-SYSTEM_MODULE_LIST = hw_random param fuse sdcardfs j4fs exfat f2fs startup_reason #\
+AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544 pllddr
+SYSTEM_MODULE_LIST = param fuse sdcardfs j4fs exfat f2fs #\
 	             #display-ws2401_dpi display-s6d27a1_dpi
 
 NUMBER_JOBS?=3

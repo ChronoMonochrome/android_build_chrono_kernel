@@ -76,8 +76,8 @@ fi
 #CACHE_F2FS=$CACHE" /cache f2fs rw,discard,nosuid,nodev,noatime,nodiratime,flush_merge,background_gc=off,inline_xattr,active_logs=2 wait"
 DATA_F2FS=$DATA" /data f2fs rw,discard,nosuid,nodev,noatime,nodiratime,flush_merge,background_gc=off,inline_xattr,active_logs=2 wait,nonremovable,encryptable=/efs/metadata"
 DATA_EXT4=$DATA" /data ext4 noatime,nosuid,nodev,discard,noauto_da_alloc,errors=panic wait,check,encryptable=/efs/metadata"
-SYSTEM_EXT4=$SYSTEM" /system ext4 ro,noatime,errors=panic wait"
-SYSTEM_F2FS=$SYSTEM" /system f2fs ro wait"
+SYSTEM_EXT4=$SYSTEM" /system ext4 rw,noatime,errors=panic wait"
+SYSTEM_F2FS=$SYSTEM" /system f2fs rw wait"
 
 PRELOAD_EXT4="/dev/block/mmcblk0p9 /preload ext4 ro,noatime,errors=panic wait"
 

@@ -1,48 +1,13 @@
-TYPE=$(busybox cat /sys/kernel/mcde/lcdclk | busybox grep -c "S6D")
+TYPE=$(cat /sys/kernel/mcde/lcdclk | grep -c "S6D")
 
 if [ "$TYPE" == "1" ] ; then
-	busybox echo lcdclk=30720000 > /sys/kernel/mcde/lcdclk
+	echo lcdclk=30720000 > /sys/kernel/mcde/lcdclk
 fi
 
-busybox chown 1000:1000 /sys/kernel/god_mode/god_mode
+chown 1000:1000 /sys/kernel/god_mode/god_mode
 
-if test -f /ramdisk/modules_list.txt; then   
-    again=""
-    while read line
-    do
-			busybox insmod /ramdisk/modules/$line.ko
-            if [ $? -ne 0 ] ; then
-                 again=$again" $line"
-            fi
-	done < /ramdisk/modules_list.txt
+test -f /ramdisk/10user.sh && sh /ramdisk/10user.sh
 
-    for line in $again
-    do
-            busybox insmod /ramdisk/modules/$line.ko
-            if [ $? -ne 0 ] ; then
-                 again1=$again1" $line"
-            fi
-    done
-
-    for line in $again1
-    do
-            busybox insmod /ramdisk/modules/$line.ko
-            if [ $? -ne 0 ] ; then
-                 again2=$again2" $line"
-            fi
-    done
-
-    for line in $again2
-    do
-            busybox insmod /ramdisk/modules/$line.ko
-            if [ $? -ne 0 ] ; then
-                 again3=$again3" $line"
-            fi
-    done
-
-    for line in $again3
-    do
-            busybox insmod /ramdisk/modules/$line.ko
-    done
-
+if test -f /ramdisk/.pllddr_oc_freq; then
+	PATH=/stage1 /ramdisk/sh /ramdisk/pllddr_oc.sh $(cat /ramdisk/.pllddr_oc_freq)
 fi
