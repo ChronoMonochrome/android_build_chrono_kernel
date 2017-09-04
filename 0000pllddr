@@ -1,0 +1,2 @@
+#!/system/bin/sh
+sleep 50 && /system/bin/sh /ramdisk/pllddr_oc.sh &
