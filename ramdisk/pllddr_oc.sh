@@ -89,7 +89,17 @@ pllddr_oc() {
 	prcmu_set_reg 64 $(printf "%x" $(( $MCDECLK_VAL & 0xff )) )
 
 	# wait for earlysuspend to trigger OC
-	sleep 5
+	time=0
+	while [ $(grep -c pending /sys/kernel/pllddr/pllddr) -ne 0 ] ;
+	do
+ 		sleep 0.1
+		time=$(( $time + 1 ))
+		if [ $time -ge 50 ]; then
+			break
+			# TODO: cancel overclock
+		fi
+	done
+	sleep 1
 
 	# enable MCDECLK
 	MCDECLK_VAL=$(prcmu_get_reg 64)
