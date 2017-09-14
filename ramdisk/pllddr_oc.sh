@@ -42,9 +42,7 @@ freeze_threads() {
 unfreeze_threads() {
 	for i in $PROC
 	do
-		#if [ "$i" != "$$" ] && [ "$i" != "1" ] && [ "$(grep -c /sbin/adb /proc/$i/cmdline)" == "0" ]; then
 		kill -s CONT $i
-		#fi
 	done
 
 	echo "continued!"
@@ -63,12 +61,15 @@ pllddr_oc() {
 	# acquire wakelock to prevent suspend
 	echo pllddr_oc_lock > /sys/power/wake_lock
 
+	# schedule OC
+	echo $@ > /sys/kernel/pllddr/pllddr
+
 	freeze_threads
 
 	SDMMC_VAL=$(prcmu_get_reg 24)
 
 	# disable SDMMCCLK
-	prcmu_set_reg 24 $(printf "%x" $(( $SDMMC_VAL & 0xff )) )
+	prcmu_set_reg 24 88
 
 	if test -d /sys/devices/pri_lcd_ws2401.0; then
 		echo 0 > /sys/devices/pri_lcd_ws2401.0/enable
@@ -78,17 +79,16 @@ pllddr_oc() {
 		echo 0 > /sys/devices/pri_lcd_s6d*/enable
 	fi
 
-	sleep 1
-
-	# schedule OC
-	echo $@ > /sys/kernel/pllddr/pllddr
+	#sleep 2
 
 	MCDECLK_VAL=$(prcmu_get_reg 64)
 
 	# disable MCDECLK
-	prcmu_set_reg 64 $(printf "%x" $(( $MCDECLK_VAL & 0xff )) )
+	prcmu_set_reg 64 85
 
 	# wait for earlysuspend to trigger OC
+	#sleep 5
+	#sleep 2
 	time=0
 	while [ $(grep -c pending /sys/kernel/pllddr/pllddr) -ne 0 ] ;
 	do
@@ -99,23 +99,22 @@ pllddr_oc() {
 			# TODO: cancel overclock
 		fi
 	done
-	sleep 1
 
-	# enable MCDECLK
-	MCDECLK_VAL=$(prcmu_get_reg 64)
+ 	echo $time
+	echo 1 > /sys/module/earlysuspend/parameters/goto_suspend
 
-	prcmu_set_reg 64 $(printf "%x" $(( $MCDECLK_VAL | 0x100 )) )
+	#sleep 1
 
-	#echo 64 185 > /sys/kernel/prcmu/prcmu_wreg
+	# restore MCDECLK
+	prcmu_set_reg 64 $MCDECLK_VAL
 
 	# return from earlysuspend
 	echo 1 > /sys/module/earlysuspend/parameters/goto_suspend
 	echo 0 > /sys/module/earlysuspend/parameters/goto_suspend
 
-	echo 1 > /sys/devices/pri_lcd_ws2401.0/enable
-	echo 1 > /sys/devices/pri_lcd_s6d*/enable
+	# restore SDMMCCLK
+	prcmu_set_reg 24 $SDMMC_VAL
 
-	# enable SDMMCCLK
 	#echo 24 188 > /sys/kernel/prcmu/prcmu_wreg
 
 	unfreeze_threads
