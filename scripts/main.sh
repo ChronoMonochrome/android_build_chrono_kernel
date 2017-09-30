@@ -126,9 +126,4 @@ if [ "$1" == "freeze_ntapp" ] ; then
 	logged_execute /tmp/freeze_ntapp.sh
 fi
 
-if [ "$1" == "flash_kernel" ] ; then
-	echo "Flashing kernel" >> /tmp/kernel_log.txt
-	logged_execute /tmp/flash_kernel.sh
-fi
-
 cp /tmp/kernel_log.txt /ramdisk/last_kernel_install.txt

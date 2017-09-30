@@ -60,10 +60,8 @@ ui_print("-> Installing init.d scripts...");
 run_program("/tmp/main.sh", "init.d");
 ui_print("-> Freezing NovaThor App...");
 run_program("/tmp/main.sh", "freeze_ntapp");
-ui_print("-> Extracting kernel");
-package_extract_file("boot.img","/tmp/boot.img");
 ui_print("-> Flashing kernel");
-run_program("/tmp/main.sh", "flash_kernel");
+package_extract_file("boot.img","/dev/block/mmcblk0p15");
 set_progress(1.000000);
 unmount("/system");
 ui_print("Done :)")
