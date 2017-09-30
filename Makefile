@@ -27,7 +27,7 @@ KERNEL_NAME_CM13=chrono_kernel_$(VERSION)-cm13.zip
 KERNEL_NAME_PRIVATE=chrono_kernel_$(VERSION)-private.zip
 
 ZIP_LINE_FULL=META-INF genfstab boot.img ramdisk.7z tmp recovery modules.7z scripts init.d
-ZIP_LINE_LIGHT=META-INF boot.img modules.7z tmp scripts/main.sh scripts/flash_kernel.sh \
+ZIP_LINE_LIGHT=META-INF boot.img modules.7z tmp scripts/main.sh \
 		scripts/remove_modules.sh scripts/unpack_modules.sh scripts/update_modules.sh \
 		scripts/check_ramdisk_partition.sh scripts/initd_install.sh init.d
 
