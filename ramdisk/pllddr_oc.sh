@@ -106,14 +106,14 @@ pllddr_oc() {
 	#sleep 1
 
 	# restore MCDECLK
-	prcmu_set_reg 64 $MCDECLK_VAL
+	#prcmu_set_reg 64 $MCDECLK_VAL
 
 	# return from earlysuspend
 	echo 1 > /sys/module/earlysuspend/parameters/goto_suspend
 	echo 0 > /sys/module/earlysuspend/parameters/goto_suspend
 
 	# restore SDMMCCLK
-	prcmu_set_reg 24 $SDMMC_VAL
+	#prcmu_set_reg 24 $SDMMC_VAL
 
 	#echo 24 188 > /sys/kernel/prcmu/prcmu_wreg
 
