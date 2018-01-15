@@ -65,6 +65,10 @@ if [ $VX == 8 ] ; then
 		echo "8.0"
         fi
 
+	if [ $VY == 1 ] ; then
+		echo "8.1"
+        fi
+
 	if test -f /system/lib/modules/uid_cputime.ko ; then
 		mv /system/lib/modules/uid_cputime.ko /ramdisk/modules/autoload
 	fi
