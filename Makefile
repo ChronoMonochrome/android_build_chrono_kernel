@@ -39,7 +39,8 @@ AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544 pllddr
 SYSTEM_MODULE_LIST = param fuse sdcardfs j4fs exfat f2fs #\
 	             #display-ws2401_dpi display-s6d27a1_dpi
 
-NUMBER_JOBS?=3
+NUMBER_JOBS?=8
+BUILD_DEBUG?="-k"
 
 all: codina upload codina-nodebug upload-nodebug
 
@@ -66,7 +67,7 @@ build-private: $(SOURCE)
 build: $(SOURCE)
 	mkdir -p $(BUILD);
 	make -C $(SOURCE) O=$(BUILD) ARCH=arm codina_defconfig
-	-make -C $(SOURCE) V=0 O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) -k
+	-make -C $(SOURCE) V=0 O=$(BUILD) ARCH=arm CROSS_COMPILE=$(ARM_CC)  -j$(NUMBER_JOBS) $(BUILD_DEBUG)
 
 build-nodebug: $(SOURCE)
 	mkdir -p $(BUILD_NODEBUG);
