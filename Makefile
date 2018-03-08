@@ -1,7 +1,9 @@
 current_dir := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
+#SOURCE ?= ../ste_kernel
+#BUILD ?= ../obj_ste
 SOURCE ?= ../ck
-BUILD ?= ../obj
+BUILD ?= ../obj-janice
 BUILD_NODEBUG ?=../obj_nodebug
 BUILD_SELINUX ?=../obj_selinux
 BUILD_CM13 ?=../obj_cm13
@@ -41,7 +43,7 @@ AUTOLOAD_LIST = cpufreq_zenx cpufreq_ondemandplus logger pn544
 SYSTEM_MODULE_LIST = hw_random param fuse sdcardfs j4fs exfat f2fs startup_reason #\
 	             #display-ws2401_dpi display-s6d27a1_dpi
 
-NUMBER_JOBS?=2
+NUMBER_JOBS?=8
 
 all: janice upload janice-nodebug upload-nodebug
 
@@ -51,7 +53,7 @@ janice-nodebug: build-nodebug package-full-nodebug
 janice-nodebug-light: build-nodebug package-light-nodebug
 janice-selinux: build-selinux package-full-selinux
 janice-selinux-light: build-selinux package-light-selinux
-janice-cm13: build-cm13 package-full-cm13 
+janice-cm13: build-cm13 package-full-cm13
 janice-cm13: build-cm13 package-light-cm13
 janice-private: update-private-config build-private package-private
 
