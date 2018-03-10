@@ -3,7 +3,8 @@ chmod 0644 /sys/module/lowmemorykiller/parameters/adj
 echo "0,3,6,10,13,15" > /sys/module/lowmemorykiller/parameters/adj
 
 chmod 0644 /sys/module/lowmemorykiller/parameters/minfree
-echo "4096,8048,10120,14280,18244,25000" > /sys/module/lowmemorykiller/parameters/minfree;
+echo "15000,17532,20065,22598,25131,30263" > /sys/module/lowmemorykiller/parameters/minfree;
 
-chmod 0444 /sys/module/lowmemorykiller/parameters/adj 
-chmod 0444 /sys/module/lowmemorykiller/parameters/minfree
+# Allow ROM to override settings above
+#chmod 0444 /sys/module/lowmemorykiller/parameters/adj 
+#chmod 0444 /sys/module/lowmemorykiller/parameters/minfree

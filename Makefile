@@ -23,7 +23,7 @@ export CCACHE_DIR=../ck_ccache
 ARM_CC ?= ../armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
 #ARM_CC = /home/chrono/root/armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnueabihf-
 
-VERSION=$(shell git -C $(SOURCE) tag | grep 'r[0-9].[0-9]' | sort -V | tail -n1)
+VERSION=$(shell git -C $(SOURCE) describe --tags | tail -n1 )
 KERNEL_NAME=chrono_kernel_$(VERSION)-janice.zip
 KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-janice-nodebug.zip
 KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-janice-selinux.zip

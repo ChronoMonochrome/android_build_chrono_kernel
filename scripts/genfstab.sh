@@ -15,7 +15,7 @@ DATA=/dev/block/mmcblk0p5
 SYSTEM=/dev/block/mmcblk0p3
 USE_CACHE=1
 USE_PRELOAD=0
-USE_SWAP=1
+USE_SWAP=0
 USE_INTSDCARD=1
 
 VERSION_LINE=$(cat /system/build.prop | grep "ro.build.version.release" | cut -d "=" -f2)
