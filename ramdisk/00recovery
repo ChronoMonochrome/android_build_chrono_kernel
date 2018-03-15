@@ -1,9 +1,3 @@
-TYPE=$(busybox cat /sys/kernel/mcde/lcdclk | busybox grep -c "S6D")
-
-if [ "$TYPE" == "1" ] ; then
-	busybox echo lcdclk=30720000 > /sys/kernel/mcde/lcdclk
-fi
-
 if test -f /ramdisk/fstab ; then
 	rm /etc/recovery.fstab
 	ln -fs /ramdisk/fstab /etc/recovery.fstab

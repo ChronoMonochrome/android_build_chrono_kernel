@@ -15,7 +15,7 @@ DATA=/dev/block/mmcblk0p5
 SYSTEM=/dev/block/mmcblk0p3
 USE_CACHE=1
 USE_PRELOAD=0
-USE_SWAP=0
+USE_SWAP=1
 USE_INTSDCARD=1
 
 VERSION_LINE=$(cat /system/build.prop | grep "ro.build.version.release" | cut -d "=" -f2)
@@ -76,8 +76,8 @@ fi
 #CACHE_F2FS=$CACHE" /cache f2fs rw,discard,nosuid,nodev,noatime,nodiratime,flush_merge,background_gc=off,inline_xattr,active_logs=2 wait"
 DATA_F2FS=$DATA" /data f2fs rw,discard,nosuid,nodev,noatime,nodiratime,flush_merge,background_gc=off,inline_xattr,active_logs=2 wait,nonremovable,encryptable=/efs/metadata"
 DATA_EXT4=$DATA" /data ext4 noatime,nosuid,nodev,discard,noauto_da_alloc,errors=panic wait,check,encryptable=/efs/metadata"
-SYSTEM_EXT4=$SYSTEM" /system ext4 ro,noatime,errors=panic wait"
-SYSTEM_F2FS=$SYSTEM" /system f2fs ro wait"
+SYSTEM_EXT4=$SYSTEM" /system ext4 rw,noatime,errors=panic wait"
+SYSTEM_F2FS=$SYSTEM" /system f2fs rw wait"
 
 PRELOAD_EXT4="/dev/block/mmcblk0p9 /preload ext4 ro,noatime,errors=panic wait"
 

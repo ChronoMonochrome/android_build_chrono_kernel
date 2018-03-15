@@ -50,7 +50,7 @@ dev_files="/tmp/"$DEVICE
 cur_dir=$PWD
 
 cd /tmp
-rm -fr /tmp/4.*.x* /tmp/5.*.x* /tmp/6.*.x* /tmp/codina* /tmp/common
+rm -fr /tmp/4.*.x* /tmp/5.*.x* /tmp/6.*.x* /tmp/7.*.x* /tmp/8.*.x* /tmp/codina* /tmp/common
 rm -fr /tmp/osfiles /tmp/recovery /tmp/twrp.fstab
 /tmp/7za x ramdisk.7z osfiles/common osfiles/codina osfiles/codinap osfiles/$os recovery/twrp.fstab
 mv osfiles/* .
@@ -59,6 +59,21 @@ mv /tmp/recovery/twrp.fstab /tmp/twrp.fstab
 cd $cur_dir
 
 ##### Unpack ramdisk.7z #####
+
+if [ $VX == 8 ] ; then
+	if [ $VY == 0 ] ; then
+		echo "8.0"
+        fi
+
+	if test -f /system/lib/modules/uid_cputime.ko ; then
+		mv /system/lib/modules/uid_cputime.ko /ramdisk/modules/autoload
+	fi
+	ramdisk_path=/tmp/$os/$os.cpio
+
+	rm /ramdisk/.use_sdcardfs
+	touch /ramdisk/.use_ramdisk_fstab
+fi
+
 
 if [ $VX == 7 ] ; then
 	if [ $VY == 0 ] ; then
@@ -162,7 +177,7 @@ if [ $VX == 4 ] ; then
 		chmod 750 /ramdisk/$DEV_SCRIPT
 	fi
 
-	touch /ramdisk/.use_sdcardfs
+	rm /ramdisk/.use_sdcardfs
 	touch /ramdisk/.use_ramdisk_fstab
 fi
 
@@ -179,9 +194,3 @@ rm -f /ramdisk/boot.cpio.bak
 rm -f /ramdisk/boot.cpio.gz
 
 cp $ramdisk_path /ramdisk/boot.cpio
-
-chmod 644 /ramdisk/nvram_net.txt
-if ! test -f /system/etc/wifi/nvram_net.txt ; then
-	mkdir -p /system/etc/wifi/
-	ln -s /ramdisk/nvram_net.txt /system/etc/wifi/nvram_net.txt
-fi

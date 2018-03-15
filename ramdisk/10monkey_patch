@@ -9,7 +9,7 @@ if ! busybox grep -q bootmode=2 /proc/cmdline ; then
 	busybox sed -i -e "s/ro.secure=1/ro.secure=0/" /default.prop
 
 	if test -f /ramdisk/fstab && test -f /ramdisk/.use_ramdisk_fstab ; then
-		busybox rm /fstab.samsungcodina
+		busybox rm /fstab.samsungjanice
 
 		if test -f /ramdisk/fstab_swap && test -f /ramdisk/.use_fstab_swap ; then
 			# swap /ramdisk/fstab_swap <---> /ramdisk/fstab
@@ -22,7 +22,7 @@ if ! busybox grep -q bootmode=2 /proc/cmdline ; then
 
 		fi
 
-		busybox ln -s /ramdisk/fstab /fstab.samsungcodina
+		busybox ln -s /ramdisk/fstab /fstab.samsungjanice
 	fi
 
 	if busybox grep -q ro.adb.secure /default.prop ; then
@@ -31,10 +31,20 @@ if ! busybox grep -q bootmode=2 /proc/cmdline ; then
 		busybox echo "ro.adb.secure=0" >> /default.prop
 	fi
 
+	if ! busybox grep -q bootmode=2 /proc/cmdline ; then
+		if test -f /ramdisk/.use_sdcardfs ; then
+			busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified /mnt/media_rw/sdcard1 /storage/sdcard1\n    oneshot#" /init.u8500.rc
+			busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified /mnt/media_rw/sdcard0 /storage/sdcard0\n    oneshot#" /init.u8500.rc
+
+			busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified /mnt/media_rw/sdcard1 /storage/sdcard1\n    oneshot#" /init.samsungjanice.rc
+			busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified /mnt/media_rw/sdcard0 /storage/sdcard0\n    oneshot#" /init.samsungjanice.rc
+		fi
+	fi
+
 else
 
 	if test -f /ramdisk/twrp.fstab && test -f /ramdisk/.use_ramdisk_recovery_fstab ; then
-		busybox rm /fstab.samsungcodina
+		busybox rm /fstab.samsungjanice
 		busybox rm /etc/twrp.fstab
 
 		if test -f /ramdisk/twrp.fstab_swap && test -f /ramdisk/.use_recovery_fstab_swap ; then
@@ -48,7 +58,7 @@ else
 
         fi
 
-        busybox ln -s /ramdisk/twrp.fstab /fstab.samsungcodina
+        busybox ln -s /ramdisk/twrp.fstab /fstab.samsungjanice
 		busybox mkdir -p /etc
 		busybox ln -s /ramdisk/twrp.fstab /etc/twrp.fstab
 
