@@ -1,31 +1,27 @@
-ENABLED=0
+#set -x
 
-if [ "$ENABLED" == "0" ] ; then
-    exit 0
-fi
+#if test -f /system/xbin/busybox; then
+#	BB=/system/xbin/busybox
+#fi
 
-if test -f /system/xbin/busybox; then
-	BB=/system/xbin/busybox
-fi
-
-SIZE=400
-NUMBLOCKS=1
-$BB echo $NUMBLOCKS > /sys/module/zram_num_devices_ctl/parameters/zram_num_devices
-$BB echo 0 > /proc/sys/vm/page-cluster
-$BB echo 100 > /proc/sys/vm/swappiness 
+#SIZE=100
+#NUMBLOCKS=2
+#$BB echo $NUMBLOCKS > /sys/module/zram_num_devices_ctl/parameters/zram_num_devices
+#$BB echo 0 > /proc/sys/vm/page-cluster
+#$BB echo 100 > /proc/sys/vm/swappiness 
 
 if ! test -d /sys/module/zram; then
        $BB insmod /system/lib/modules/zram.ko
 fi
 
-$BB echo 2458 > /sys/module/zram/parameters/max_zpage_size
+#$BB echo 2458 > /sys/module/zram/parameters/max_zpage_size
 
-let "NUMBLOCKS=$NUMBLOCKS - 1"
+#let "NUMBLOCKS=$NUMBLOCKS - 1"
 
-for i in $(seq 0 "$NUMBLOCKS")
-do
-    $BB echo $(( $SIZE * 1024 * 1024 )) > /sys/devices/virtual/block/zram$i/disksize 
-    $BB echo 1 > /sys/devices/virtual/block/zram$i/max_comp_streams
-    $BB mkswap /dev/block/zram$i
-    $BB swapon -p $(( $i * 100 )) /dev/block/zram$i
-done
+#for i in $(seq 0 "$NUMBLOCKS")
+#do
+#    $BB echo $(( $SIZE * 1024 * 1024 )) > /sys/devices/virtual/block/zram$i/disksize 
+#    $BB echo 1 > /sys/devices/virtual/block/zram$i/max_comp_streams
+#    $BB mkswap /dev/block/zram$i
+#    $BB swapon -p $(( $i * 100 )) /dev/block/zram$i
+#done
