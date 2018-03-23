@@ -1,0 +1,1 @@
+echo 1 > /sys/module/cpuidle_dbx500/parameters/force_max_depth

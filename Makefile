@@ -20,8 +20,8 @@ export CCACHE_DIR=../ck_ccache
 #ARM_CC = ../LinaroMod-arm-eabi-5.1/bin/arm-eabi-
 #ARM_CC = ../arm-cortex_a9-linux-gnueabihf-linaro_4.9.4-2015.06/bin/arm-eabi-
 #ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
-ARM_CC ?= ../armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
-#ARM_CC = /home/chrono/root/armv7a-linux-gnueabihf-gcc-5.2.0_with_isl_x86/bin/armv7a-linux-gnueabihf-
+#ARM_CC ?= ../armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
+ARM_CC = /media/disk/root/kernel/armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
 
 VERSION=$(shell git -C $(SOURCE) describe --tags | tail -n1 )
 KERNEL_NAME=chrono_kernel_$(VERSION)-janice.zip
@@ -94,7 +94,7 @@ clean:
 	rm -fr ramdisk/modules/*
 	mkdir -p ramdisk/modules/autoload
 	touch ramdisk/modules/autoload/.placeholder
-	rm -f boot.img
+	rm -f boot.img recovery.bin kernel.bin*
 	rm -f modules.7z
 	rm -f ramdisk.7z
 	
@@ -240,3 +240,15 @@ upload-cm13: $(KERNEL_NAME_CM13)
 
 upload-private: $(KERNEL_NAME_PRIVATE)
 	up $(KERNEL_NAME_PRIVATE)
+
+monolithic-kernel:
+	make clean build
+	cp -f $(BUILD)/arch/arm/boot/zImage $(PACKAGE)/boot.img
+	dd if=/dev/zero of=$(PACKAGE)/kernel bs=1M count=8
+	dd if=$(PACKAGE)/boot.img of=$(PACKAGE)/kernel.bin bs=1M conv=notrunc
+	# skip last 256kb block or md5sum will cause kernel image to be larger than 16 Mb
+	dd if=$(PACKAGE)/recovery/recovery.img of=$(PACKAGE)/recovery.bin bs=256k count=31
+	cat $(PACKAGE)/kernel $(PACKAGE)/recovery.bin > $(PACKAGE)/kernel.bin
+	md5sum $(PACKAGE)/kernel.bin >> $(PACKAGE)/kernel.bin
+	mv $(PACKAGE)/kernel.bin $(PACKAGE)/kernel.bin.md5
+	$(HIDE)echo "$(PACKAGE_COMPLETED_LINE) $(PACKAGE)/kernel.bin.md5"
