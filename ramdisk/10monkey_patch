@@ -39,6 +39,12 @@ if ! busybox grep -q bootmode=2 /proc/cmdline ; then
 			busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified /mnt/media_rw/sdcard1 /storage/sdcard1\n    oneshot#" /init.samsungjanice.rc
 			busybox sed -ie "s#/system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0#/sbin/busybox mount -t sdcardfs -o rw,nosuid,nodev,noatime,nodiratime,uid=1023,gid=1023,wgid=1023,derive=unified /mnt/media_rw/sdcard0 /storage/sdcard0\n    oneshot#" /init.samsungjanice.rc
 		fi
+
+		if test -f /ramdisk/perf.profiles.rc ; then
+			busybox rm /perf.profiles.rc
+			busybox ln -s /ramdisk/perf.profiles.rc /perf.profiles.rc
+		fi
+
 	fi
 
 else
