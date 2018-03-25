@@ -9,13 +9,13 @@ FSTAB_SPECS="/ramdisk/fstab_specs.txt"
 # defaults
 FSTAB_VER="1.0"
 
-FSTAB_INTERNAL_VER="1.1"
+FSTAB_INTERNAL_VER="1.2"
 DATA=/dev/block/mmcblk0p5
 #CACHE=/dev/block/mmcblk0p4
 SYSTEM=/dev/block/mmcblk0p3
 USE_CACHE=1
 USE_PRELOAD=0
-USE_SWAP=1
+USE_SWAP=0
 USE_INTSDCARD=1
 
 VERSION_LINE=$(cat /system/build.prop | grep "ro.build.version.release" | cut -d "=" -f2)

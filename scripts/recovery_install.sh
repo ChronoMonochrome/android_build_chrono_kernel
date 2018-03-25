@@ -17,13 +17,13 @@ fi
 
 ##### Unpack ramdisk.7z #####
 
-md5="$(busybox dd if=/dev/block/mmcblk0p15 skip=8388608 bs=1 count=10 | md5sum | cut -d ' ' -f1 )"
+#md5="$(busybox dd if=/dev/block/mmcblk0p15 skip=8388608 bs=1 count=10 | md5sum | cut -d ' ' -f1 )"
 #is_gzip="$(busybox dd if=/dev/block/mmcblk0p15 skip=8388608 bs=1 count=3 | busybox grep -c $'\x1f\x8b\x08' )"
 
 #if [ "$md5" == "4f05c2785cbcd1f144c2db58ea33f92d" ] || [ "$is_gzip" == "0" ] ; then
-if [ "$md5" != "70ffb4d6542d89504fa1e2340a1f5474" ] ; then
+#if [ "$md5" != "70ffb4d6542d89504fa1e2340a1f5474" ] ; then
 	dd if=/tmp/recovery.img of=/dev/block/mmcblk0p15 bs=524288 seek=16
-fi
+#fi
 
 #if [ "$is_gzip" == "1" ]; then
 #	busybox dd if=/dev/block/mmcblk0p15 bs=524288 skip=16 | busybox gzip -d > /recovery.cpio 2> /ramdisk/recovery.check

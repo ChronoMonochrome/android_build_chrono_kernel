@@ -3,6 +3,7 @@
 on property:sys.perf.profile=0
 # Powersave
 # CPU 200/500Mhz GPU 256Mhz
+    write /sys/kernel/liveopp/arm_step00 pll=0x0005011A
     write /sys/kernel/liveopp/arm_step01 ddropp=50
     write /sys/kernel/liveopp/arm_step01 pll=0x00050141
     write /sys/kernel/liveopp/arm_step01 varm=0x26
@@ -10,28 +11,39 @@ on property:sys.perf.profile=0
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 200000
     write /sys/kernel/mali/mali_boost_low 256000
     write /sys/kernel/mali/mali_boost_high 256000
+    write /sys/devices/system/cpu/cpufreq/dynamic/power_optimal_freq 800000
+    write /sys/devices/system/cpu/cpufreq/dynamic/max_non_oc_freq 1000000
+    write /sys/devices/system/cpu/cpufreq/dynamic/oc_freq_boost_ms 4000
 
 on property:sys.perf.profile=1
 # Balanced
-# CPU 200/800Mhz GPU 256/400Mhz
-    write /sys/kernel/liveopp/arm_step01 ddropp=100
-    write /sys/kernel/liveopp/arm_step01 varm=0x2A
-    write /sys/kernel/liveopp/arm_step01 pll=0x00050168
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 800000
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 200000
-    write /sys/kernel/mali/mali_boost_low 256000
-    write /sys/kernel/mali/mali_boost_high 399360
-
-on property:sys.perf.profile=2
-# Performance
-# CPU 200/1000Mhz GPU 250/500Mhz
+# CPU 400/800Mhz GPU 256/400Mhz
+    write /sys/kernel/liveopp/arm_step00 pll=0x00050134
     write /sys/kernel/liveopp/arm_step01 ddropp=100
     write /sys/kernel/liveopp/arm_step01 varm=0x2A
     write /sys/kernel/liveopp/arm_step01 pll=0x00050168
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1000000
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 200000
     write /sys/kernel/mali/mali_boost_low 256000
+    write /sys/kernel/mali/mali_boost_high 399360
+    write /sys/devices/system/cpu/cpufreq/dynamic/power_optimal_freq 800000
+    write /sys/devices/system/cpu/cpufreq/dynamic/max_non_oc_freq 1000000
+    write /sys/devices/system/cpu/cpufreq/dynamic/oc_freq_boost_ms 4000
+
+on property:sys.perf.profile=2
+# Performance
+# CPU 400/1000Mhz GPU 400/500Mhz
+    write /sys/kernel/liveopp/arm_step00 pll=0x00050134
+    write /sys/kernel/liveopp/arm_step01 ddropp=100
+    write /sys/kernel/liveopp/arm_step01 varm=0x2A
+    write /sys/kernel/liveopp/arm_step01 pll=0x00050168
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1000000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 200000
+    write /sys/kernel/mali/mali_boost_low 399360
     write /sys/kernel/mali/mali_boost_high 499200
+    write /sys/devices/system/cpu/cpufreq/dynamic/power_optimal_freq 0
+    write /sys/devices/system/cpu/cpufreq/dynamic/max_non_oc_freq 0
+    write /sys/devices/system/cpu/cpufreq/dynamic/oc_freq_boost_ms 0
 
 
 #### End CM Performance Profiles ####
