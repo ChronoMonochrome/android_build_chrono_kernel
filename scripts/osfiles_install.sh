@@ -181,6 +181,8 @@ if [ $VX == 4 ] ; then
 	touch /ramdisk/.use_ramdisk_fstab
 fi
 
+chmod 755 /ramdisk/perf.profiles.rc
+
 rm -f /ramdisk/boot.cpio.bak
 
 #if test -f /ramdisk/boot.cpio ; then
