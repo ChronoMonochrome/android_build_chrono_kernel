@@ -5,8 +5,10 @@ system/lib/modules/*.ko
 system/lib/modules/autoload/*.ko
 system/lib/modules/autoload/.placeholder
 boot.img
-zimage.7z
+*.7z
+kernel
 zimage/*
+modules.7z
 tmp/cmdline.txt
 tmp/new_cmdline.txt
 scripts/gen_cmdline_script.sh
