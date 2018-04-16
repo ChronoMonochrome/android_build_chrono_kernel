@@ -21,7 +21,7 @@ profile=$($BB cat /tmp/.sys.perf.profile)
 #echo $profile >> /ramdisk/.perf.log
 
 if [ "$profile" == "" ] ; then
-	profile=2
+	profile=1
 fi
 
 if test -f /tmp/.sys.perf.svc.first.boot ; then
@@ -35,6 +35,8 @@ fi
 if ! test -f /ramdisk/.sys.perf.profile ; then
     $BB echo 1 > /ramdisk/.sys.perf.profile
 fi
+
+CURRENT_PROFILE=$($BB cat /ramdisk/.sys.perf.profile)
 
 if [ "$CURRENT_PROFILE" == "0" ] ; then
     $BB echo pll=0x0005011A > /sys/kernel/liveopp/arm_step00
