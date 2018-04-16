@@ -55,12 +55,13 @@ if [ "$CURRENT_PROFILE" == "1" ] ; then
     $BB echo ddropp=100 > /sys/kernel/liveopp/arm_step01
     $BB echo pll=0x00050168 > /sys/kernel/liveopp/arm_step01
     $BB echo varm=0x2A > /sys/kernel/liveopp/arm_step01
-    $BB echo 1000000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    $BB echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     $BB echo 256000 > /sys/kernel/mali/mali_boost_low
     $BB echo 399360 > /sys/kernel/mali/mali_boost_high
     $BB echo 800000 > /sys/devices/system/cpu/cpufreq/dynamic/power_optimal_freq
-    $BB echo 1000000 > /sys/devices/system/cpu/cpufreq/dynamic/max_non_oc_freq
+    if [ "$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq)" == "400000" ] ; then
+        $BB echo 1000000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    fi
+    $BB echo 400000 > /sys/devices/system/cpu/cpufreq/dynamic/max_non_oc_freq
     $BB echo 4000 > /sys/devices/system/cpu/cpufreq/dynamic/oc_freq_boost_ms
 fi
 
@@ -69,8 +70,9 @@ if [ "$CURRENT_PROFILE" == "2" ] ; then
     $BB echo ddropp=100 > /sys/kernel/liveopp/arm_step01
     $BB echo pll=0x00050168 > /sys/kernel/liveopp/arm_step01
     $BB echo varm=0x2A > /sys/kernel/liveopp/arm_step01
-    $BB echo 1000000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    $BB echo 200000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    if [ $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq) -le 1000000 ] ; then
+        $BB echo 1000000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    fi
     $BB echo 399360 > /sys/kernel/mali/mali_boost_low
     $BB echo 499200 > /sys/kernel/mali/mali_boost_high
     $BB echo 0 > /sys/devices/system/cpu/cpufreq/dynamic/power_optimal_freq
