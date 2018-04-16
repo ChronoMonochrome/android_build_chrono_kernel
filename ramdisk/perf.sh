@@ -27,9 +27,6 @@ fi
 if test -f /tmp/.sys.perf.svc.first.boot ; then
     $BB echo $profile > /ramdisk/.sys.perf.profile
 else
-    #$BB echo $(date) "first boot" >> /ramdisk/.perf.log
-    touch /tmp/.sys.perf.dont.recurse
-    setprop sys.perf.profile $CURRENT_PROFILE
     #$BB echo $(date) "first boot = " $(getprop sys.perf.profile) >> /ramdisk/.perf.log
     $BB touch /tmp/.sys.perf.svc.first.boot
 fi
@@ -37,12 +34,6 @@ fi
 
 if ! test -f /ramdisk/.sys.perf.profile ; then
     $BB echo 1 > /ramdisk/.sys.perf.profile
-fi
-
-if [ "$(busybox getprop sys.perf.profile)" != "$CURRENT_PROFILE" ] ; then
-    touch /tmp/.sys.perf.dont.recurse
-    setprop sys.perf.profile $CURRENT_PROFILE
-    #echo $(date) "current=$CURRENT_PROFILE" >> /ramdisk/.perf.log
 fi
 
 if [ "$CURRENT_PROFILE" == "0" ] ; then
