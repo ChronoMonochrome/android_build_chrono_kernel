@@ -8,7 +8,6 @@ boot.img
 *.7z
 kernel
 zimage/*
-modules.7z
 tmp/cmdline.txt
 tmp/new_cmdline.txt
 scripts/gen_cmdline_script.sh
