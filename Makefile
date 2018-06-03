@@ -19,7 +19,7 @@ ARM_CC ?= ../armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
 #ARM_CC = ../arm-cortex_a9-linux-gnueabihf-linaro_4.9.4-2015.06/bin/arm-eabi-
 #ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
 
-VERSION=$(shell git -C $(SOURCE) describe --tags | head -n 1 )
+VERSION=$(shell git -C $(SOURCE) tag | grep "r[0-9].[0-9]" | sort | tail -n1)"-"$(shell git -C $(SOURCE) rev-parse --short HEAD)
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
 KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-nodebug.zip
 KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip

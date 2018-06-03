@@ -1,1 +1,1 @@
-/dev/block/mmcblk0p7                    /efs                ext4      noatime,nosuid,nodev,errors=panic                            wait,check
+/dev/block/mmcblk0p7                    /efs                ext4      noatime,nosuid,nodev,errors=panic                            check
