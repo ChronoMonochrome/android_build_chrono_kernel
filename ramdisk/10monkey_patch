@@ -1,10 +1,28 @@
 if ! busybox grep -q bootmode=2 /proc/cmdline ; then
-	busybox cp /init.rc /stage1/
+        if test -f /ramdisk/init.kernel.rc ; then
+		busybox rm -f /init.kernel.rc
+		busybox ln -s /ramdisk/init.kernel.rc /init.kernel.rc
+	fi
 
-	busybox echo "import /init.kernel.rc" > /init.rc
-	busybox echo "" >> /init.rc
+	if ! busybox grep -q "import /init.kernel.rc" init.rc ; then
+		busybox cp /init.rc /stage1/
+		busybox echo "import /init.kernel.rc" > /init.rc
+		busybox echo "" >> /init.rc
+		busybox cat /stage1/init.rc >> /init.rc
+	fi
 
-	busybox cat /stage1/init.rc >> /init.rc
+busybox cat <<EOF >> /init.rc
+
+service propfix /ramdisk/sh /ramdisk/30_property_fix
+    group root system
+    user root
+    oneshot
+    disabled
+
+on post-fs
+    start propfix
+
+EOF
 
 	busybox sed -i -e "s/ro.secure=1/ro.secure=0/" /default.prop
 

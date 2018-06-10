@@ -1,0 +1,12 @@
+#!/ramdisk/sh
+
+cd /dev/socket/property/
+
+sleep 50 && {
+    for i in *
+    do
+        setprop $i $(cat $i)
+    done
+} &
+
+touch /dev/socket/.property_fix

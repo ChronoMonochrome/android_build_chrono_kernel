@@ -1,0 +1,24 @@
+#!/ramdisk/sh
+
+cp /data/property /dev/socket/ -r
+cd /data/property
+for i in *
+do
+   if [ "$i" == "persist.sys.timezone" ] ; then
+      continue
+   fi
+   echo $i >> /dev/socket/.property_disable
+   rm -f $i
+done
+#mkdir -p /data/property
+#chmod 700 /data/property
+cd /dev/socket/property/
+for i in *
+do
+    cat $i > /data/property/$i
+    chmod 600 /data/property/$i
+done
+
+#sleep 90 && /ramdisk/sh /ramdisk/30_property_fix &
+
+#touch /dev/socket/.property_disable

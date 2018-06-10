@@ -20,4 +20,6 @@ chmod 755 /ramdisk/00userinit
 chmod 755 /ramdisk/00recovery
 chmod 755 /ramdisk/00lpm
 chmod 755 /ramdisk/10monkey_patch
+chmod 755 /ramdisk/20_property_disable
+chmod 755 /ramdisk/30_property_fix
 chmod 750 /ramdisk/init.kernel.rc
