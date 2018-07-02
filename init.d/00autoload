@@ -17,5 +17,5 @@ ro_system
 
 for i in $( ls $MODULES/*.ko )
 do
-	$BB insmod $i
+	$BB insmod $MODULES/$i
 done
