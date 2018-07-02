@@ -52,7 +52,7 @@ cur_dir=$PWD
 cd /tmp
 rm -fr /tmp/4.*.x* /tmp/5.*.x* /tmp/6.*.x* /tmp/7.*.x* /tmp/8.*.x* /tmp/codina* /tmp/common
 rm -fr /tmp/osfiles /tmp/recovery /tmp/twrp.fstab
-/tmp/7za x ramdisk.7z osfiles/common osfiles/codina osfiles/codinap osfiles/$os recovery/twrp.fstab
+/tmp/7za x ramdisk.7z osfiles/common osfiles/codina osfiles/codinap osfiles/$os osfiles/charger.cpio recovery/twrp.fstab
 mv osfiles/* .
 mv /tmp/recovery/twrp.fstab /tmp/twrp.fstab
 
@@ -194,3 +194,4 @@ rm -f /ramdisk/boot.cpio.bak
 rm -f /ramdisk/boot.cpio.gz
 
 cp $ramdisk_path /ramdisk/boot.cpio
+cp /tmp/charger.cpio /ramdisk
