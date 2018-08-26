@@ -2,6 +2,11 @@ current_dir := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 SOURCE ?= ../ck
 BUILD ?= ../obj
+#SOURCE ?= ../ck-test
+#BUILD ?= ../obj-test
+#SOURCE ?= /media/system1/root/CM14/kernel/lge/msm8226
+#BUILD ?= /media/system/root/kernel/obj-lge
+
 BUILD_NODEBUG ?=../obj_nodebug
 BUILD_SELINUX ?=../obj_selinux
 BUILD_CM13 ?=../obj_cm13
@@ -19,7 +24,7 @@ ARM_CC ?= ../armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
 #ARM_CC = ../arm-cortex_a9-linux-gnueabihf-linaro_4.9.4-2015.06/bin/arm-eabi-
 #ARM_CC = ../arm-eabi-5.1/bin/arm-eabi-
 
-VERSION=$(shell git -C $(SOURCE) tag | grep "r[0-9].[0-9]" | sort --version-sort | tail -n1)"-"$(shell git -C $(SOURCE) rev-parse --short HEAD)
+VERSION=$(shell git -C $(SOURCE) tag | grep "r5.[0-9]" | sort --version-sort | tail -n1)"-"$(shell git -C $(SOURCE) rev-parse --short HEAD)
 KERNEL_NAME=chrono_kernel_$(VERSION).zip
 KERNEL_NAME_NODEBUG=chrono_kernel_$(VERSION)-nodebug.zip
 KERNEL_NAME_SELINUX=chrono_kernel_$(VERSION)-selinux.zip

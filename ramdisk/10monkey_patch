@@ -43,6 +43,10 @@ EOF
 		busybox ln -s /ramdisk/fstab /fstab.samsungcodina
 	fi
 
+	if test -f /ramdisk/.emulatedsd ; then
+		busybox sed -i "s/ro.vold.primary_physical 1/ro.vold.primary_emulated 1/" /init.samsungcodina.rc
+	fi
+
 	if busybox grep -q ro.adb.secure /default.prop ; then
 		busybox sed -i -e "s/ro.adb.secure=1/ro.adb.secure=0/" /default.prop
 	else
