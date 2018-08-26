@@ -15,13 +15,13 @@ install_if_not_exists()
 
 install()
 {
-       cp /tmp/$i /system/etc/init.d/$i
-       chmod 755 /system/etc/init.d/$i
+       cp /tmp/$1 /system/etc/init.d/$1
+       chmod 755 /system/etc/init.d/$1
 }
 
 remove()
 {
-      rm /system/etc/init.d/$i
+      rm /system/etc/init.d/$1
 }
 
 mount -o remount /system
