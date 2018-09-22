@@ -10,3 +10,11 @@ if [ "$is_ramdisk_exists" -eq "0" ] ; then
 fi
 
 mount -t ext4 /dev/block/mmcblk0p17 /ramdisk
+if test -f /ramdisk/recovery.cpio.gz ; then
+        rm /ramdisk/recovery.cpio.gz
+fi
+
+if  test -f /ramdisk/recovery.cpio ; then
+        rm /ramdisk/recovery.cpio
+fi
+

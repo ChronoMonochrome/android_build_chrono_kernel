@@ -50,7 +50,7 @@ dev_files="/tmp/"$DEVICE
 cur_dir=$PWD
 
 cd /tmp
-rm -fr /tmp/4.*.x* /tmp/5.*.x* /tmp/6.*.x* /tmp/7.*.x* /tmp/8.*.x* /tmp/codina* /tmp/common
+rm -fr /tmp/4.*.x* /tmp/5.*.x* /tmp/6.*.x* /tmp/7.*.x* /tmp/8.*.x* /tmp/9.*.x* /tmp/codina* /tmp/common
 rm -fr /tmp/osfiles /tmp/recovery /tmp/twrp.fstab
 /tmp/7za x ramdisk.7z osfiles/common osfiles/codina osfiles/codinap osfiles/$os osfiles/charger.cpio recovery/twrp.fstab
 mv osfiles/* .
@@ -59,6 +59,19 @@ mv /tmp/recovery/twrp.fstab /tmp/twrp.fstab
 cd $cur_dir
 
 ##### Unpack ramdisk.7z #####
+if [ $VX == 9 ] ; then
+	if [ "$VY" == "" ] ; then
+             echo "9"
+        fi
+
+	if test -f /system/lib/modules/uid_cputime.ko ; then
+		mv /system/lib/modules/uid_cputime.ko /ramdisk/modules/autoload
+	fi
+	ramdisk_path=/tmp/$os/$os.cpio
+
+	rm /ramdisk/.use_sdcardfs
+	touch /ramdisk/.use_ramdisk_fstab
+fi
 
 if [ $VX == 8 ] ; then
 	if [ $VY == 0 ] ; then
@@ -180,9 +193,6 @@ if [ $VX == 4 ] ; then
 	touch /ramdisk/.use_sdcardfs
 	touch /ramdisk/.use_ramdisk_fstab
 fi
-
-chmod 755 /ramdisk/perf.sh
-chmod 750 /ramdisk/perf.profiles.rc
 
 rm -f /ramdisk/boot.cpio.bak
 
