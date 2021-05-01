@@ -23,6 +23,7 @@ export CCACHE_DIR=../ck_ccache
 #ARM_CC ?= ../armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
 #ARM_CC = /media/disk/root/kernel/armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
 ARM_CC ?= ../armv7a-linux-gnueabihf-5.2/bin/armv7a-linux-gnueabihf-
+#ARM_CC ?= /media/system1/root/CM13/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin/arm-eabi-
 
 VERSION=$(shell git -C $(SOURCE) tag | grep "r5.[0-9]" | sort --version-sort | tail -n1)"-"$(shell git -C $(SOURCE) rev-parse --short HEAD)
 KERNEL_NAME=chrono_kernel_$(VERSION)-janice.zip
